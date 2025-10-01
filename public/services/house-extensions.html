@@ -48,7 +48,8 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+    <link rel="preload" as="image" href="/assets/building-group-house.png" imagesrcset="/assets/building-group-house.png 1x" />
+
     <!-- Last Updated -->
     <meta name="last-modified" content="2025-08-25T22:42:52Z">
     
@@ -431,13 +432,16 @@
             text-decoration: underline;
         }
 
-        /* Hero Section */
+        /* Hero Section (fixed background, no overlay) */
         .hero {
-            background: linear-gradient(135deg, rgba(231, 76, 60, 0.9), rgba(52, 152, 219, 0.9)),
-                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23f8f9fa" width="1200" height="600"/><polygon fill="%23e74c3c" points="0,600 400,200 800,400 1200,100 1200,600"/><polygon fill="%233498db" opacity="0.7" points="200,600 600,150 1000,350 1200,50 1200,600"/></svg>');
-            padding: 8rem 0 6rem;
-            color: var(--white);
-            text-align: center;
+          background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('/assets/building-group-house.png');
+          background-size: cover, cover;
+          background-position: center, center;
+          background-repeat: no-repeat, no-repeat;
+          background-attachment: fixed, fixed; /* keep both layers fixed */
+          padding: 8rem 0 6rem;
+          color: var(--white);
+          text-align: center;
         }
 
         .hero-content h1 {
@@ -703,7 +707,46 @@
             border-top: 1px solid #34495e;
             color: #7f8c8d;
         }
+        /* Logo visuals (image + text) */
+        .logo {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-weight: 800;
+          color: var(--primary-color);
+          text-decoration: none;
+        }
+        .logo img {
+          height: 36px;   /* match to your header height */
+          width: auto;    /* keep aspect ratio */
+          display: block; /* prevent baseline gap */
+        }
+        .logo-text { line-height: 1; }
+        
+        /* Ensure the overlay content can position the close button */
+        .nav-content { position: relative; }
 
+        /* Close (X) button inside overlay */
+        .close-nav {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          background: transparent;
+          border: 2px solid rgba(255, 255, 255, 0.7);
+          color: #fff;
+          border-radius: 50%;
+          width: 44px;
+          height: 44px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.2rem;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+        .close-nav:hover { background: rgba(255, 255, 255, 0.15); }
+        
+        
         /* Responsive Design */
         @media (max-width: 768px) {
             .hero-content h1 {
@@ -727,40 +770,44 @@
                 padding: 1rem;
             }
         }
+        @media (max-width: 1024px) {
+            .hero { background-attachment: scroll; }
+        }
     </style>
 </head>
 <body>
     <!-- Header -->
     <header class="header">
-        <nav class="nav-container">
-            <a href="/" class="logo">
-                <i class="fas fa-hammer"></i>
-                Building Group
-            </a>
-            <button class="burger" id="burger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </nav>
+      <nav class="nav-container">
+        <a href="/" class="logo" aria-label="Building Group home">
+          <img src="/assets/logo-180.png" alt="Building Group logo" width="180" height="180" />
+          <span class="logo-text">Building Group</span>
+        </a>
+        <button class="burger" id="burger" aria-label="Open menu" aria-controls="navOverlay" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </nav>
     </header>
 
     <!-- Navigation Overlay -->
-    <div class="nav-overlay" id="navOverlay">
-        <div class="nav-content">
-            <ul class="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/about">About Us</a></li>
-                <li><a href="/services">Our Services</a></li>
-                <li><a href="/manchester">Manchester</a></li>
-                <li><a href="/liverpool">Liverpool</a></li>
-                <li><a href="/leeds">Leeds</a></li>
-                <li><a href="/cheshire">Cheshire</a></li>
-                <li><a href="/projects">Our Projects</a></li>
-                <li><a href="/contact">Contact Us</a></li>
-                <li><a href="/quote">Get Free Quote</a></li>
-            </ul>
-        </div>
+    <div class="nav-overlay" id="navOverlay" aria-hidden="true">
+      <div class="nav-content" role="dialog" aria-modal="true" aria-labelledby="menuTitle">
+        <!-- Close (X) button -->
+        <button class="close-nav" id="closeNav" aria-label="Close menu"><i class="fas fa-times"></i></button>
+
+        <ul class="nav-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/services">Our Services</a></li>
+          <li><a href="/manchester">Manchester</a></li>
+          <li><a href="/liverpool">Liverpool</a></li>
+          <li><a href="/leeds">Leeds</a></li>
+          <li><a href="/cheshire">Cheshire</a></li>
+          <li><a href="/projects">Our Projects</a></li>
+          <li><a href="/contact">Contact Us</a></li>
+          <li><a href="/quote">Get Free Quote</a></li>
+        </ul>
+      </div>
     </div>
 
     <!-- Breadcrumb -->
@@ -776,8 +823,7 @@
         </div>
     </section>
 
-    <!-- Hero Section -->
-    <section class="hero" style="background: linear-gradient(135deg, rgba(231, 76, 60, 0.9), rgba(52, 152, 219, 0.9)), url('/assets/professional-construction-team.jpg') center/cover no-repeat;">
+    <section class="hero">
         <div class="container">
             <div class="hero-content">
                 <h1>Professional House Extensions</h1>
@@ -1131,6 +1177,14 @@
                     <a href="/services/full-rewire">Full Rewiring</a>
                     <a href="/services/re-roofing">Re-Roofing</a>
                 </div>
+                <div class="footer-section">
+                  <h3>Manchester Extension Locations</h3>
+                  <a href="/services/manchester-house-extensions/manchester-city-extensions.html">Manchester City Extensions</a>
+                  <a href="/services/manchester-house-extensions/salford-house-extensions.html">Salford House Extensions</a>
+                  <a href="/services/manchester-house-extensions/stockport-house-extensions.html">Stockport House Extensions</a>
+                  <a href="/services/manchester-house-extensions/oldham-house-extensions.html">Oldham House Extensions</a>
+                  <a href="/services/manchester-house-extensions/sale-house-extensions.html">Sale House Extensions</a>
+                </div>
                 
                 <div class="footer-section">
                     <h3>Contact Information</h3>
@@ -1151,29 +1205,38 @@
         // Mobile Menu Toggle
         const burger = document.getElementById('burger');
         const navOverlay = document.getElementById('navOverlay');
-        
+        const closeNav = document.getElementById('closeNav'); // NEW
+
         burger.addEventListener('click', function() {
-            burger.classList.toggle('active');
-            navOverlay.classList.toggle('active');
-            document.body.style.overflow = navOverlay.classList.contains('active') ? 'hidden' : 'auto';
+          burger.classList.toggle('active');
+          navOverlay.classList.toggle('active');
+          document.body.style.overflow = navOverlay.classList.contains('active') ? 'hidden' : 'auto';
         });
 
-        // Close menu when clicking on overlay
+        // NEW: clicking the X closes the menu
+        if (closeNav) {
+          closeNav.addEventListener('click', function() {
+            burger.classList.remove('active');
+            navOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            burger.focus();
+          });
+        }
+
         navOverlay.addEventListener('click', function(e) {
-            if (e.target === navOverlay || e.target.tagName === 'A') {
-                burger.classList.remove('active');
-                navOverlay.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            }
+          if (e.target === navOverlay || e.target.tagName === 'A') {
+            burger.classList.remove('active');
+            navOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+          }
         });
 
-        // Keyboard navigation
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && navOverlay.classList.contains('active')) {
-                burger.classList.remove('active');
-                navOverlay.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            }
+          if (e.key === 'Escape' && navOverlay.classList.contains('active')) {
+            burger.classList.remove('active');
+            navOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+          }
         });
 
         // Smooth scroll for anchor links
