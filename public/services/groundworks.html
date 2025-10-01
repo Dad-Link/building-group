@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Groundworks & Foundations Manchester, Liverpool, Leeds & Cheshire | Building Group</title>
+    <meta name="description" content="Professional groundworks and foundation services across Manchester, Liverpool, Leeds & Cheshire. Excavation, concrete foundations, drainage, driveways, patios. Strip foundations, pad foundations, piled foundations. CITB certified groundwork contractors.">
+    <meta name="keywords" content="groundworks, foundations, excavation, concrete foundations, strip foundations, pad foundations, drainage systems, driveways, patios, groundwork contractors, manchester groundworks">
+    <meta name="author" content="Building Group">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.building-group.co.uk/services/groundworks">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Professional Groundworks & Foundations | Building Group">
+    <meta property="og:description" content="Expert groundworks and foundation services across North West England. Professional excavation, concrete foundations, and drainage by qualified contractors.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.building-group.co.uk/services/groundworks">
+    <meta property="og:image" content="https://www.building-group.co.uk/images/groundworks-hero.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Last Updated -->
+    <meta name="last-modified" content="2025-07-19T00:00:05Z">
+    
+    <!-- Schema Markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Groundworks & Foundations",
+        "description": "Professional groundworks services including excavation, concrete foundations, drainage, and site preparation",
+        "provider": {
+            "@type": "Organization",
+            "name": "Building Group",
+            "url": "https://www.building-group.co.uk/",
+            "telephone": "+44 7446 695 686",
+            "email": "info@building-group.co.uk"
+        },
+        "areaServed": [
+            {
+                "@type": "City",
+                "name": "Manchester"
+            },
+            {
+                "@type": "City",
+                "name": "Liverpool"
+            },
+            {
+                "@type": "City",
+                "name": "Leeds"
+            },
+            {
+                "@type": "State",
+                "name": "Cheshire"
+            }
+        ],
+        "offers": {
+            "@type": "Offer",
+            "availability": "https://schema.org/InStock",
+            "priceCurrency": "GBP",
+            "description": "Free site survey and groundworks quote"
+        }
+    }
+    </script>
+    
+    <style>
+        :root {
+            --primary-color: #e74c3c;
+            --primary-dark: #c0392b;
+            --secondary-color: #3498db;
+            --accent-color: #f39c12;
+            --dark-color: #2c3e50;
+            --darker-color: #1a252f;
+            --light-gray: #f8f9fa;
+            --medium-gray: #6c757d;
+            --border-color: #dee2e6;
+            --white: #ffffff;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --earth-color: #8b4513;
+            --shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            color: var(--dark-color);
+            overflow-x: hidden;
+            font-size: 16px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header & Navigation */
+        .header {
+            background: var(--white);
+            box-shadow: var(--shadow-md);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        .logo i {
+            margin-right: 0.5rem;
+            font-size: 2rem;
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Burger Menu */
+        .burger {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            z-index: 1001;
+        }
+        
+        .burger span {
+            width: 28px;
+            height: 3px;
+            background: var(--dark-color);
+            margin: 4px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+        
+        .burger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-6px, 7px);
+            background: var(--white);
+        }
+        
+        .burger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .burger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-6px, -7px);
+            background: var(--white);
+        }
+
+        /* Navigation Overlay */
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            overflow-y: auto;
+        }
+
+        .nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .nav-content {
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: block;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background: var(--light-gray);
+            padding: 1rem 0;
+            margin-top: 80px;
+        }
+
+        .breadcrumb-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--medium-gray);
+        }
+
+        .breadcrumb-nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .breadcrumb-nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.9), rgba(139, 69, 19, 0.9)),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%238b4513" width="1200" height="600"/><polygon fill="%23e74c3c" points="0,600 400,200 800,400 1200,100 1200,600"/><polygon fill="%23654321" opacity="0.7" points="200,600 600,150 1000,350 1200,50 1200,600"/></svg>');
+            padding: 8rem 0 6rem;
+            color: var(--white);
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 1.25rem 2.5rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(231, 76, 60, 0.5);
+        }
+
+        /* Content Sections */
+        .content-section {
+            padding: 5rem 0;
+        }
+
+        .content-section:nth-child(even) {
+            background: var(--light-gray);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            color: var(--dark-color);
+            text-align: center;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--medium-gray);
+            text-align: center;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .content-text h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .content-text p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            color: var(--medium-gray);
+        }
+
+        .content-text ul {
+            margin: 2rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .content-text li {
+            margin-bottom: 0.75rem;
+            color: var(--medium-gray);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h4 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        .feature-card p {
+            color: var(--medium-gray);
+            line-height: 1.6;
+        }
+
+        /* Foundation Types Grid */
+        .foundation-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin: 4rem 0;
+        }
+
+        .foundation-type {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+        }
+
+        .foundation-type:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.2);
+        }
+
+        .foundation-image {
+            height: 250px;
+            background: linear-gradient(135deg, var(--earth-color), var(--primary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 4rem;
+        }
+
+        .foundation-content {
+            padding: 2rem;
+        }
+
+        .foundation-content h4 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        .foundation-content p {
+            color: var(--medium-gray);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .foundation-features {
+            list-style: none;
+            padding: 0;
+        }
+
+        .foundation-features li {
+            padding: 0.5rem 0;
+            color: var(--medium-gray);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .foundation-features i {
+            color: var(--success-color);
+            width: 20px;
+        }
+
+        /* Equipment Section */
+        .equipment-section {
+            background: linear-gradient(135deg, var(--earth-color), #654321);
+            color: var(--white);
+            padding: 4rem 0;
+            margin: 4rem 0;
+            border-radius: 15px;
+        }
+
+        .equipment-content {
+            text-align: center;
+        }
+
+        .equipment-content h3 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .equipment-item {
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .equipment-item i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .equipment-item h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .equipment-item p {
+            line-height: 1.6;
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        /* Safety Section */
+        .safety-section {
+            background: linear-gradient(135deg, var(--warning-color), #e67e22);
+            color: var(--white);
+            padding: 3rem 0;
+            margin: 3rem 0;
+            border-radius: 15px;
+        }
+
+        .safety-content {
+            text-align: center;
+        }
+
+        .safety-content h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .safety-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+            color: var(--white);
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--darker-color);
+            color: var(--white);
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: #bdc3c7;
+            text-decoration: none;
+            line-height: 1.8;
+            margin-bottom: 0.5rem;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #34495e;
+            color: #7f8c8d;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .two-column {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .foundation-types {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .equipment-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+
+            .nav-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <a href="/" class="logo">
+                <i class="fas fa-hammer"></i>
+                Building Group
+            </a>
+            <button class="burger" id="burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Navigation Overlay -->
+    <div class="nav-overlay" id="navOverlay">
+        <div class="nav-content">
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About Us</a></li>
+                <li><a href="/services">Our Services</a></li>
+                <li><a href="/manchester">Manchester</a></li>
+                <li><a href="/liverpool">Liverpool</a></li>
+                <li><a href="/leeds">Leeds</a></li>
+                <li><a href="/cheshire">Cheshire</a></li>
+                <li><a href="/projects">Our Projects</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+                <li><a href="/quote">Get Free Quote</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <section class="breadcrumb">
+        <div class="container">
+            <nav class="breadcrumb-nav">
+                <a href="/"><i class="fas fa-home"></i> Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="/services">Services</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Groundworks & Foundations</span>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Professional Groundworks & Foundations</h1>
+                <p>Expert groundworks services across Manchester, Liverpool, Leeds & Cheshire. Excavation, concrete foundations, drainage systems, driveways, patios. Strip foundations, pad foundations, piled foundations by qualified groundwork contractors.</p>
+                <a href="/quote" class="cta-button">Get Your Free Quote</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Equipment Section -->
+    <section class="content-section">
+        <div class="container">
+            <div class="equipment-section">
+                <div class="equipment-content">
+                    <h3><i class="fas fa-tractor"></i> Professional Plant & Equipment</h3>
+                    <p style="margin-bottom: 2rem; font-size: 1.1rem;">We operate a comprehensive fleet of modern plant and equipment for all groundworks projects</p>
+                    
+                    <div class="equipment-grid">
+                        <div class="equipment-item">
+                            <i class="fas fa-tractor"></i>
+                            <h4>Mini & Midi Excavators</h4>
+                            <p>1-8 tonne excavators for precision digging</p>
+                        </div>
+                        <div class="equipment-item">
+                            <i class="fas fa-truck"></i>
+                            <h4>Tipper Lorries</h4>
+                            <p>Material delivery and waste removal</p>
+                        </div>
+                        <div class="equipment-item">
+                            <i class="fas fa-hammer"></i>
+                            <h4>Concrete Mixers</h4>
+                            <p>On-site concrete mixing and pouring</p>
+                        </div>
+                        <div class="equipment-item">
+                            <i class="fas fa-ruler"></i>
+                            <h4>Laser Levels</h4>
+                            <p>Precision leveling and surveying</p>
+                        </div>
+                        <div class="equipment-item">
+                            <i class="fas fa-wrench"></i>
+                            <h4>Compaction Equipment</h4>
+                            <p>Wacker plates and roller compactors</p>
+                        </div>
+                        <div class="equipment-item">
+                            <i class="fas fa-tools"></i>
+                            <h4>Hand Tools</h4>
+                            <p>Professional groundwork tools</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section class="content-section">
+        <div class="container">
+            <div class="two-column">
+                <div class="content-text">
+                    <h3>Expert Groundworks Contractors</h3>
+                    <p>Solid foundations are essential for any successful construction project. Our experienced groundworks team provides comprehensive excavation, foundation, and site preparation services across Manchester, Liverpool, Leeds, and Cheshire.</p>
+                    <p>From simple garden patios to complex commercial foundations, we handle projects of all sizes with precision and professionalism. Our qualified operators use modern plant equipment to deliver accurate, efficient groundworks that form the perfect base for your construction project.</p>
+                    <ul>
+                        <li>Site excavation and preparation</li>
+                        <li>Strip, pad, and piled foundations</li>
+                        <li>Drainage systems and sewers</li>
+                        <li>Driveways and hard standings</li>
+                        <li>Patios and paved areas</li>
+                        <li>Retaining walls and landscaping</li>
+                    </ul>
+                </div>
+                <div class="content-image">
+                    <div style="background: linear-gradient(135deg, var(--earth-color), var(--primary-color)); height: 400px; border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; text-align: center;">
+                        <div>
+                            <i class="fas fa-tractor" style="font-size: 4rem; margin-bottom: 1rem; opacity: 0.8;"></i>
+                            <h4>Professional Groundworks</h4>
+                            <p>CITB Certified • Modern Equipment • Precision Excavation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Foundation Types Section -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">Foundation Types & Solutions</h2>
+            <p class="section-subtitle">Professional foundation solutions for all construction projects</p>
+            
+            <div class="foundation-types">
+                <div class="foundation-type">
+                    <div class="foundation-image">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="foundation-content">
+                        <h4>Strip Foundations</h4>
+                        <p>Traditional concrete strip foundations ideal for most domestic and light commercial construction. Cost-effective solution for standard soil conditions.</p>
+                        <ul class="foundation-features">
+                            <li><i class="fas fa-check"></i> Domestic construction</li>
+                            <li><i class="fas fa-check"></i> Load-bearing walls</li>
+                            <li><i class="fas fa-check"></i> Standard soil conditions</li>
+                            <li><i class="fas fa-check"></i> Cost-effective solution</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="foundation-type">
+                    <div class="foundation-image">
+                        <i class="fas fa-square"></i>
+                    </div>
+                    <div class="foundation-content">
+                        <h4>Pad Foundations</h4>
+                        <p>Reinforced concrete pads for isolated loads such as columns and pillars. Perfect for steel frame buildings and structural support points.</p>
+                        <ul class="foundation-features">
+                            <li><i class="fas fa-check"></i> Column support</li>
+                            <li><i class="fas fa-check"></i> Steel frame construction</li>
+                            <li><i class="fas fa-check"></i> Isolated loads</li>
+                            <li><i class="fas fa-check"></i> Reinforced concrete</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="foundation-type">
+                    <div class="foundation-image">
+                        <i class="fas fa-arrows-alt-v"></i>
+                    </div>
+                    <div class="foundation-content">
+                        <h4>Piled Foundations</h4>
+                        <p>Deep foundation systems for challenging ground conditions or heavy loads. Mini-piled and driven pile solutions for maximum structural integrity.</p>
+                        <ul class="foundation-features">
+                            <li><i class="fas fa-check"></i> Poor ground conditions</li>
+                            <li><i class="fas fa-check"></i> Heavy structural loads</li>
+                            <li><i class="fas fa-check"></i> Deep foundation system</li>
+                            <li><i class="fas fa-check"></i> Maximum stability</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="foundation-type">
+                    <div class="foundation-image">
+                        <i class="fas fa-mountain"></i>
+                    </div>
+                    <div class="foundation-content">
+                        <h4>Raft Foundations</h4>
+                        <p>Large concrete slabs distributing loads over wide areas. Ideal for weak soils or where settlement needs to be minimized across the structure.</p>
+                        <ul class="foundation-features">
+                            <li><i class="fas fa-check"></i> Weak soil conditions</li>
+                            <li><i class="fas fa-check"></i> Large structural loads</li>
+                            <li><i class="fas fa-check"></i> Settlement prevention</li>
+                            <li><i class="fas fa-check"></i> Wide load distribution</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Services -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">Complete Groundworks Services</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-tractor"></i>
+                    </div>
+                    <h4>Site Excavation</h4>
+                    <p>Professional excavation services including bulk dig, foundation trenches, drainage runs, and site preparation using modern plant equipment.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h4>Foundation Construction</h4>
+                    <p>All foundation types including strip, pad, piled, and raft foundations. Reinforced concrete work with structural steel reinforcement.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <h4>Drainage Systems</h4>
+                    <p>Surface water drainage, foul sewers, storm water management, and soakaway installations. Complete drainage solutions for all projects.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-road"></i>
+                    </div>
+                    <h4>Driveways & Access</h4>
+                    <p>Concrete and block paved driveways, access roads, parking areas, and hard standings. Professional sub-base preparation and installation.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-th-large"></i>
+                    </div>
+                    <h4>Patios & Paving</h4>
+                    <p>Natural stone patios, block paving, concrete slabs, and decorative paving. Expert installation with proper foundation preparation.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-wall-brick"></i>
+                    </div>
+                    <h4>Retaining Walls</h4>
+                    <p>Concrete and block retaining walls, reinforced earth systems, and slope stabilization. Structural solutions for level changes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Safety Section -->
+    <section class="content-section">
+        <div class="container">
+            <div class="safety-section">
+                <div class="safety-content">
+                    <h3><i class="fas fa-hard-hat"></i> Safety & Compliance</h3>
+                    <p>All groundworks operations conducted to the highest safety standards with full risk assessments, method statements, and insurance coverage. Our operators are CITB certified with current CSCS cards and plant operator certifications. We comply with CDM regulations and maintain comprehensive health and safety documentation for all projects.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">Our Groundworks Process</h2>
+            <div class="two-column">
+                <div class="content-text">
+                    <h3>Site Survey & Planning</h3>
+                    <ul>
+                        <li><strong>Free Site Survey:</strong> Comprehensive assessment of ground conditions and access requirements</li>
+                        <li><strong>Soil Analysis:</strong> Ground investigation and soil testing where required for foundation design</li>
+                        <li><strong>Service Locations:</strong> Utility mapping and safe digging around existing services</li>
+                        <li><strong>Method Statements:</strong> Detailed work plans and risk assessments for safe execution</li>
+                        <li><strong>Fixed Price Quote:</strong> Comprehensive pricing with material quantities and plant costs</li>
+                    </ul>
+                    
+                    <h3 style="margin-top: 2rem;">Excavation & Construction</h3>
+                    <ul>
+                        <li><strong>Site Preparation:</strong> Vegetation clearance, topsoil strip, and level establishment</li>
+                        <li><strong>Precision Excavation:</strong> Accurate digging to design levels using laser control systems</li>
+                        <li><strong>Foundation Installation:</strong> Concrete pouring, reinforcement placement, and curing</li>
+                        <li><strong>Quality Control:</strong> Dimensional checks, compaction testing, and photographic records</li>
+                        <li><strong>Site Restoration:</strong> Landscaping, surface restoration, and waste removal</li>
+                    </ul>
+                </div>
+                <div class="content-image">
+                    <div style="background: var(--light-gray); height: 500px; border-radius: 15px; padding: 2rem; display: flex; flex-direction: column; justify-content: space-around;">
+                        <div style="background: white; padding: 1.5rem; border-radius: 10px; text-align: center; border-left: 4px solid var(--earth-color);">
+                            <i class="fas fa-search" style="color: var(--earth-color); font-size: 2rem; margin-bottom: 1rem;"></i>
+                            <h4>Site Survey</h4>
+                            <p>Ground investigation and planning</p>
+                        </div>
+                        <div style="background: white; padding: 1.5rem; border-radius: 10px; text-align: center; border-left: 4px solid var(--earth-color);">
+                            <i class="fas fa-tractor" style="color: var(--earth-color); font-size: 2rem; margin-bottom: 1rem;"></i>
+                            <h4>Professional Excavation</h4>
+                            <p>Precision digging and site preparation</p>
+                        </div>
+                        <div style="background: white; padding: 1.5rem; border-radius: 10px; text-align: center; border-left: 4px solid var(--earth-color);">
+                            <i class="fas fa-home" style="color: var(--earth-color); font-size: 2rem; margin-bottom: 1rem;"></i>
+                            <h4>Foundation Construction</h4>
+                            <p>Concrete work and reinforcement</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location Coverage -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">Groundworks Services Across North West England</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h4>Manchester & Greater Manchester</h4>
+                    <p>Professional groundworks across Manchester City Centre, Didsbury, Altrincham, Stockport, Oldham, Bolton, and all Greater Manchester areas.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-ship"></i>
+                    </div>
+                    <h4>Liverpool & Merseyside</h4>
+                    <p>Expert groundworks contractors serving Liverpool, Wirral, Southport, Birkenhead, and the wider Merseyside metropolitan area.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-landmark"></i>
+                    </div>
+                    <h4>Leeds & West Yorkshire</h4>
+                    <p>Comprehensive groundworks services throughout Leeds, Bradford, Harrogate, Wakefield, and the entire West Yorkshire region.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-tree"></i>
+                    </div>
+                    <h4>Cheshire</h4>
+                    <p>Quality groundworks across Chester, Warrington, Macclesfield, Crewe, and throughout the beautiful Cheshire countryside.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Need Professional Groundworks?</h2>
+            <p>Get your free site survey and no-obligation quote from our qualified groundworks team</p>
+            <a href="/quote" class="cta-button" style="background: white; color: var(--primary-color);">Book Free Site Survey</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Building Group</h3>
+                    <p>Professional groundworks and foundation specialists across Manchester, Liverpool, Leeds & Cheshire. Qualified contractors with modern equipment since 2008.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Our Services</h3>
+                    <a href="/services/house-building">New House Building</a>
+                    <a href="/services/house-renovations">House Renovations</a>
+                    <a href="/services/house-extensions">House Extensions</a>
+                    <a href="/services/loft-conversions">Loft Conversions</a>
+                    <a href="/services/groundworks">Groundworks & Foundations</a>
+                    <a href="/services/full-rewire">Full Rewiring</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Groundworks</h3>
+                    <p><i class="fas fa-phone"></i> +44 7446 695 686</p>
+                    <p><i class="fas fa-envelope"></i> info@building-group.co.uk</p>
+                    <p><i class="fas fa-tractor"></i> Professional Plant Equipment</p>
+                    <a href="/contact">Book Site Survey</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Building Group. All rights reserved. | Professional Groundworks Manchester, Liverpool, Leeds & Cheshire</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const burger = document.getElementById('burger');
+        const navOverlay = document.getElementById('navOverlay');
+        
+        burger.addEventListener('click', function() {
+            burger.classList.toggle('active');
+            navOverlay.classList.toggle('active');
+            document.body.style.overflow = navOverlay.classList.contains('active') ? 'hidden' : 'auto';
+        });
+
+        // Close menu when clicking on overlay
+        navOverlay.addEventListener('click', function(e) {
+            if (e.target === navOverlay || e.target.tagName === 'A') {
+                burger.classList.remove('active');
+                navOverlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && navOverlay.classList.contains('active')) {
+                burger.classList.remove('active');
+                navOverlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Add hover effects to foundation type cards
+        document.querySelectorAll('.foundation-type').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        console.log('Groundworks Page Loaded - Dad-Link - 2025-07-19T00:00:05Z');
+    </script>
+</body>
+</html>

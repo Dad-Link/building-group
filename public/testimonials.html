@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Testimonials - Building Group | Manchester, Liverpool, Leeds & Cheshire</title>
+    <meta name="description" content="Read genuine customer testimonials from Building Group projects across Manchester, Liverpool, Leeds & Cheshire. See real reviews from house builds, renovations, extensions, and construction projects. 4.9-star rated contractors.">
+    <meta name="keywords" content="building group testimonials, customer reviews, construction reviews, house building reviews, renovation testimonials, extension reviews, manchester builders reviews, liverpool builders testimonials">
+    <meta name="author" content="Building Group">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.buildinggroup.co.uk/testimonials">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Customer Testimonials - Building Group">
+    <meta property="og:description" content="See what our customers say about Building Group's construction services. Real reviews from satisfied clients across North West England.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.buildinggroup.co.uk/testimonials">
+    <meta property="og:image" content="https://www.buildinggroup.co.uk/images/testimonials-hero.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Last Updated -->
+    <meta name="last-modified" content="2025-07-19T00:20:43Z">
+    
+    <!-- Schema Markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Building Group",
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "reviewCount": "147",
+            "bestRating": "5",
+            "worstRating": "1"
+        },
+        "review": [
+            {
+                "@type": "Review",
+                "author": {
+                    "@type": "Person",
+                    "name": "Sarah Mitchell"
+                },
+                "reviewRating": {
+                    "@type": "Rating",
+                    "ratingValue": "5",
+                    "bestRating": "5"
+                },
+                "reviewBody": "Outstanding work on our house extension. The team was professional, punctual, and the quality exceeded our expectations."
+            }
+        ]
+    }
+    </script>
+    
+    <style>
+        :root {
+            --primary-color: #e74c3c;
+            --primary-dark: #c0392b;
+            --secondary-color: #3498db;
+            --accent-color: #f39c12;
+            --dark-color: #2c3e50;
+            --darker-color: #1a252f;
+            --light-gray: #f8f9fa;
+            --medium-gray: #6c757d;
+            --border-color: #dee2e6;
+            --white: #ffffff;
+            --success-color: #27ae60;
+            --info-color: #17a2b8;
+            --shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            color: var(--dark-color);
+            overflow-x: hidden;
+            font-size: 16px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header & Navigation */
+        .header {
+            background: var(--white);
+            box-shadow: var(--shadow-md);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        .logo i {
+            margin-right: 0.5rem;
+            font-size: 2rem;
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Burger Menu */
+        .burger {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            z-index: 1001;
+        }
+        
+        .burger span {
+            width: 28px;
+            height: 3px;
+            background: var(--dark-color);
+            margin: 4px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+        
+        .burger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-6px, 7px);
+            background: var(--white);
+        }
+        
+        .burger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .burger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-6px, -7px);
+            background: var(--white);
+        }
+
+        /* Navigation Overlay */
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            overflow-y: auto;
+        }
+
+        .nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .nav-content {
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: block;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background: var(--light-gray);
+            padding: 1rem 0;
+            margin-top: 80px;
+        }
+
+        .breadcrumb-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--medium-gray);
+        }
+
+        .breadcrumb-nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .breadcrumb-nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.9), rgba(52, 152, 219, 0.9)),
+                        url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1973&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 8rem 0 6rem;
+            color: var(--white);
+            text-align: center;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.8), rgba(52, 152, 219, 0.8));
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-stat {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Content Sections */
+        .content-section {
+            padding: 5rem 0;
+        }
+
+        .content-section:nth-child(even) {
+            background: var(--light-gray);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            color: var(--dark-color);
+            text-align: center;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--medium-gray);
+            text-align: center;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Testimonials Grid */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 2.5rem;
+            margin: 4rem 0;
+        }
+
+        .testimonial-card {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.2);
+        }
+
+        .testimonial-image {
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .project-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .testimonial-content {
+            padding: 2rem;
+        }
+
+        .rating {
+            display: flex;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .star {
+            color: var(--accent-color);
+            font-size: 1.2rem;
+        }
+
+        .testimonial-text {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--dark-color);
+            margin-bottom: 1.5rem;
+            font-style: italic;
+            position: relative;
+        }
+
+        .testimonial-text::before {
+            content: '"';
+            font-size: 4rem;
+            color: var(--primary-color);
+            position: absolute;
+            top: -1rem;
+            left: -0.5rem;
+            opacity: 0.3;
+            font-family: serif;
+        }
+
+        .customer-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .customer-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .customer-details h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 0.25rem;
+        }
+
+        .customer-location {
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+        }
+
+        .project-type {
+            color: var(--primary-color);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-top: 0.25rem;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: var(--dark-color);
+            color: var(--white);
+            padding: 4rem 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-description {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+        }
+
+        /* Video Testimonials */
+        .video-testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .video-card {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .video-thumbnail {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(231, 76, 60, 0.9);
+            color: var(--white);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .play-button:hover {
+            background: var(--primary-color);
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .video-info {
+            padding: 1.5rem;
+        }
+
+        .video-info h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+
+        .video-description {
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Review Platforms */
+        .review-platforms {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .platform-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .platform-logo {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .google { color: #4285f4; }
+        .trustpilot { color: #00b67a; }
+        .facebook { color: #1877f2; }
+        .checkatrade { color: #e60000; }
+
+        .platform-rating {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .platform-score {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+
+        .platform-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .platform-reviews {
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+            color: var(--white);
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--white);
+            color: var(--primary-color);
+            padding: 1.25rem 2.5rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 255, 255, 0.3);
+        }
+
+        
+        /* Footer */
+        .footer {
+            background: var(--darker-color);
+            color: var(--white);
+            padding: 4rem 0 2rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            padding: 0 2rem;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+        
+        .footer-section p,
+        .footer-section a {
+            color: #bdc3c7;
+            text-decoration: none;
+            line-height: 1.8;
+            margin-bottom: 0.5rem;
+            display: block;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-section a:hover {
+            color: var(--primary-color);
+            padding-left: 0.5rem;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: var(--primary-color);
+            color: var(--white);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .social-links a:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #34495e;
+            color: #7f8c8d;
+            font-size: 0.95rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .video-testimonials {
+                grid-template-columns: 1fr;
+            }
+
+            .review-platforms {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .nav-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <a href="/" class="logo">
+                <i class="fas fa-hammer"></i>
+                Building Group
+            </a>
+            <button class="burger" id="burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Navigation Overlay -->
+    <div class="nav-overlay" id="navOverlay">
+        <div class="nav-content">
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About Us</a></li>
+                <li><a href="/services">Our Services</a></li>
+                <li><a href="/manchester">Manchester</a></li>
+                <li><a href="/liverpool">Liverpool</a></li>
+                <li><a href="/leeds">Leeds</a></li>
+                <li><a href="/cheshire">Cheshire</a></li>
+                <li><a href="/projects">Our Projects</a></li>
+                <li><a href="/testimonials">Testimonials</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+                <li><a href="/quote">Get Free Quote</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <section class="breadcrumb">
+        <div class="container">
+            <nav class="breadcrumb-nav">
+                <a href="/"><i class="fas fa-home"></i> Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Testimonials</span>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Customer Testimonials</h1>
+                <p>Read genuine reviews from satisfied customers across Manchester, Liverpool, Leeds & Cheshire. See why Building Group is the trusted choice for construction projects throughout North West England.</p>
+                
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="stat-number">4.9</div>
+                        <div class="stat-label">Star Rating</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="stat-number">147</div>
+                        <div class="stat-label">Reviews</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="stat-number">500+</div>
+                        <div class="stat-label">Projects</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="stat-number">98%</div>
+                        <div class="stat-label">Satisfaction</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Review Platforms -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">Our Ratings Across Platforms</h2>
+            <p class="section-subtitle">Consistently excellent reviews across all major review platforms</p>
+            
+            <div class="review-platforms">
+                <div class="platform-card">
+                    <div class="platform-logo google">
+                        <i class="fab fa-google"></i>
+                    </div>
+                    <div class="platform-name">Google Reviews</div>
+                    <div class="platform-rating">
+                        <span class="platform-score">4.9</span>
+                        <div class="rating">
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                        </div>
+                    </div>
+                    <div class="platform-reviews">Based on 67 reviews</div>
+                </div>
+
+                <div class="platform-card">
+                    <div class="platform-logo trustpilot">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="platform-name">Trustpilot</div>
+                    <div class="platform-rating">
+                        <span class="platform-score">4.8</span>
+                        <div class="rating">
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                        </div>
+                    </div>
+                    <div class="platform-reviews">Based on 43 reviews</div>
+                </div>
+
+                <div class="platform-card">
+                    <div class="platform-logo facebook">
+                        <i class="fab fa-facebook"></i>
+                    </div>
+                    <div class="platform-name">Facebook</div>
+                    <div class="platform-rating">
+                        <span class="platform-score">4.9</span>
+                        <div class="rating">
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                        </div>
+                    </div>
+                    <div class="platform-reviews">Based on 37 reviews</div>
+                </div>
+
+                <div class="platform-card">
+                    <div class="platform-logo checkatrade">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="platform-name">Checkatrade</div>
+                    <div class="platform-rating">
+                        <span class="platform-score">4.9</span>
+                        <div class="rating">
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                        </div>
+                    </div>
+                    <div class="platform-reviews">Based on 28 reviews</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Testimonials -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">What Our Customers Say</h2>
+            <p class="section-subtitle">Real reviews from real projects across North West England</p>
+            
+            <div class="testimonials-grid">
+                <!-- Testimonial 1 - House Extension -->
+                <div class="testimonial-card">
+                    <div class="testimonial-image" style="background-image: url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
+                        <div class="project-badge">House Extension</div>
+                    </div>
+                    <div class="testimonial-content">
+                        <div class="rating">
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                        </div>
+                        <div class="testimonial-text">
+                            Outstanding work on our single-storey rear extension. The team was professional, punctual, and the quality exceeded our expectations. They managed everything from planning permission to the final finishes. Our new kitchen-dining space has transformed how we live.
+                        </div>
+                        <div class="customer-info">
+                            <div class="customer-avatar">SM</div>
+                            <div class="customer-details">
+                                <h4>Sarah Mitchell</h4>
+                                <div class="customer-location">Didsbury, Manchester</div>
+                                <div class="project-type">Single-Storey Extension</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 - Loft Conversion -->
+                <div class="testimonial-card">
+                    <div class="testimonial-image" style="background-image: url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
+                        <div class="project-badge">Loft Conversion</div>
+                    </div>
+                    <div class="testimonial-content">
+                        <div class="rating">
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                        </div>
+                        <div class="testimonial-text">
+                            Incredible transformation of our loft into a master bedroom with en-suite. The dormer conversion was completed on time and within budget. The team's attention to detail and craftsmanship is exceptional. Couldn't be happier with the result.
+                        </div>
+                        <div class="customer-info">
+                            <div class="customer-avatar">DT</div>
+                            <div class="customer-details">
+                                <h4>David Thompson</h4>
+                                <div class="customer-location">Altrincham, Manchester</div>
+                                <div class="project-type">Dormer Loft Conversion</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 - Full Renovation -->
+                <div class="testimonial-card">
+                    <div class="testimonial-image" style="background-image: url('https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
+                        <div class="project-badge">Renovation</div>
+                    </div>
+                    <div class="testimonial-content">
+                        <div class="rating">
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                        </div>
+                        <div class="testimonial-text">
+                            Complete renovation of our Victorian terrace in Liverpool. Building Group coordinated everything perfectly - from structural work to interior design. The project management was excellent, and we always knew what was happening. Highly recommended.
+                        </div>
+                        <div class="customer-info">
+                            <div class="customer-avatar">EW</div>
+                            <div class="customer-details">
+                                <h4>Emily Wilson</h4>
+                                <div class="customer-location">West Derby, Liverpool</div>
+                                <div class="project-type">Full House Renovation</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 4 - Kitchen Fitting -->
+                <div class="testimonial-card">
+                    <div class="testimonial-image" style="background-image: url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
+                        <div class="project-badge">Kitchen</div>
+                    </div>
+                    <div class="testimonial-content">
+                        <div class="rating">
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                        </div>
+                        <div class="testimonial-text">
+                            Beautiful kitchen installation with exceptional attention to detail. The design service was brilliant - they helped us create exactly what we wanted within our budget. The fitters were skilled and tidy. We love our new kitchen!
+                        </div>
+                        <div class="customer-info">
+                            <div class="customer-avatar">MJ</div>
+                            <div class="customer-details">
+                                <h4>Michael Johnson</h4>
+                                <div class="customer-location">Headingley, Leeds</div>
+                                <div class="project-type">Kitchen Installation</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 5 - New Build -->
+                <div class="testimonial-card">
+                    <div class="testimonial-image" style="background-image: url('https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
+                        <div class="project-badge">New Build</div>
+                    </div>
+                    <div class="testimonial-content">
+                        <div class="rating">
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                        </div>
+                        <div class="testimonial-text">
+                            Our dream home built to perfection. From the initial design consultation to handing over the keys, Building Group exceeded every expectation. The quality of workmanship and materials is outstanding. Thank you for making our dream a reality.
+                        </div>
+                        <div class="customer-info">
+                            <div class="customer-avatar">JB</div>
+                            <div class="customer-details">
+                                <h4>James Brown</h4>
+                                <div class="customer-location">Wilmslow, Cheshire</div>
+                                <div class="project-type">New House Build</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 6 - Electrical Work -->
+                <div class="testimonial-card">
+                    <div class="testimonial-image" style="background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
+                        <div class="project-badge">Rewiring</div>
+                    </div>
+                    <div class="testimonial-content">
+                        <div class="rating">
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                            <i class="fas fa-star star"></i>
+                        </div>
+                        <div class="testimonial-text">
+                            Complete house rewire carried out efficiently with minimal disruption. The NICEIC certified electricians were professional and explained everything clearly. All certificates provided and the work passed building control inspection first time. Excellent service.
+                        </div>
+                        <div class="customer-info">
+                            <div class="customer-avatar">LC</div>
+                            <div class="customer-details">
+                                <h4>Lisa Carter</h4>
+                                <div class="customer-location">Stockport, Manchester</div>
+                                <div class="project-type">Full House Rewiring</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Testimonials -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">Video Testimonials</h2>
+            <p class="section-subtitle">Hear directly from our satisfied customers</p>
+            
+            <div class="video-testimonials">
+                <div class="video-card">
+                    <div class="video-thumbnail" style="background-image: url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');">
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h4>Manchester Extension Project</h4>
+                        <p class="video-description">Sarah and Mark discuss their house extension project and experience working with Building Group in Didsbury, Manchester.</p>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumbnail" style="background-image: url('https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');">
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h4>Liverpool Renovation Success</h4>
+                        <p class="video-description">Complete Victorian house renovation in Liverpool. The homeowners share their transformation story.</p>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumbnail" style="background-image: url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');">
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h4>Cheshire New Build</h4>
+                        <p class="video-description">Custom home build in Cheshire from foundations to completion. A family's dream home journey.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="stats-section">
+        <div class="container">
+            <h2 class="section-title" style="color: var(--white);">Customer Satisfaction Statistics</h2>
+            <p class="section-subtitle" style="color: rgba(255,255,255,0.8);">The numbers speak for themselves</p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-value">4.9</div>
+                    <div class="stat-description">Average Rating Across All Platforms</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-thumbs-up"></i>
+                    </div>
+                    <div class="stat-value">98%</div>
+                    <div class="stat-description">Customer Satisfaction Rate</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-redo"></i>
+                    </div>
+                    <div class="stat-value">89%</div>
+                    <div class="stat-description">Repeat & Referral Customers</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-value">96%</div>
+                    <div class="stat-description">Projects Completed On Time</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-pound-sign"></i>
+                    </div>
+                    <div class="stat-value">94%</div>
+                    <div class="stat-description">Projects Within Budget</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <div class="stat-value">100%</div>
+                    <div class="stat-description">Quality Guarantee Coverage</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Join Our Satisfied Customers?</h2>
+            <p>Experience the Building Group difference for your next construction project</p>
+            <a href="/quote" class="cta-button">Get Your Free Quote</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Building Group</h3>
+                <p>North West England's premier house builders and construction contractors. CITB certified, building regulations compliant, serving Manchester, Liverpool, Leeds, and Cheshire with excellence since 2008.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Our Services</h3>
+                <a href="/services/house-building">New House Building</a>
+                <a href="/services/house-renovations">House Renovations</a>
+                <a href="/services/house-extensions">House Extensions</a>
+                <a href="/services/full-rewire">Full Rewiring</a>
+                <a href="/services/re-roofing">Re-Roofing</a>
+                <a href="/services/commercial-construction">Commercial Construction</a>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Service Locations</h3>
+                <a href="/manchester">Manchester & Greater Manchester</a>
+                <a href="/liverpool">Liverpool & Merseyside</a>
+                <a href="/leeds">Leeds & West Yorkshire</a>
+                <a href="/cheshire">Cheshire & Surrounding Areas</a>
+                <a href="/locations">View All Locations</a>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Contact Information</h3>
+                <p><i class="fas fa-phone"></i> +44 7446 695 686</p>
+                <p><i class="fas fa-envelope"></i> info@building-group.co.uk</p>
+                <p><i class="fas fa-map-marker-alt"></i> North West England & Yorkshire</p>
+                <p><i class="fas fa-certificate"></i> CITB Certified & Insured</p>
+                <a href="quote.html">Get Your Free Quote</a>
+                <a href="/account/signup.html">Admin S</a>
+                <a href="/account/login.html">Login</a>
+
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 Building Group. All rights reserved. | CITB Certified Construction Contractors | Building Regulations Compliant</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const burger = document.getElementById('burger');
+        const navOverlay = document.getElementById('navOverlay');
+        
+        burger.addEventListener('click', function() {
+            burger.classList.toggle('active');
+            navOverlay.classList.toggle('active');
+            document.body.style.overflow = navOverlay.classList.contains('active') ? 'hidden' : 'auto';
+        });
+
+        // Close menu when clicking on overlay
+        navOverlay.addEventListener('click', function(e) {
+            if (e.target === navOverlay || e.target.tagName === 'A') {
+                burger.classList.remove('active');
+                navOverlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && navOverlay.classList.contains('active')) {
+                burger.classList.remove('active');
+                navOverlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Add hover effects to testimonial cards
+        document.querySelectorAll('.testimonial-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Video play button functionality
+        document.querySelectorAll('.video-thumbnail').forEach(thumbnail => {
+            thumbnail.addEventListener('click', function() {
+                // In a real implementation, this would open a video modal or redirect to video
+                alert('Video testimonial would play here. Integration with YouTube, Vimeo, or custom video player.');
+            });
+        });
+
+        // Animate stats on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe testimonial cards for animation
+        document.querySelectorAll('.testimonial-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+
+        console.log('Testimonials Page Loaded - Dad-Link - 2025-07-19T00:20:43Z');
+    </script>
+</body>
+</html>

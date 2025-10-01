@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote Details | Building Group | Quote Management</title>
+    <meta name="description" content="Detailed view of construction quote with breakdown, terms, and client information.">
+    
+    <!-- FIREBASE-COMPATIBLE CSP -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self'; 
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' 
+            https://www.gstatic.com 
+            https://www.googleapis.com 
+            https://apis.google.com;
+        connect-src 'self' 
+            https://identitytoolkit.googleapis.com 
+            https://www.googleapis.com 
+            https://securetoken.googleapis.com 
+            https://buildinggroup-4f8b9-default-rtdb.firebaseio.com 
+            https://firestore.googleapis.com 
+            https://buildinggroup-4f8b9.firebasestorage.app;
+        img-src 'self' data:;
+        style-src 'self' 'unsafe-inline' 
+            https://fonts.googleapis.com 
+            https://cdnjs.cloudflare.com;
+        font-src 'self' 
+            https://fonts.gstatic.com 
+            https://cdnjs.cloudflare.com;
+    ">
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <!-- Last Updated -->
+    <meta name="last-modified" content="2025-07-19T13:07:40Z">
+    
+    <style>
+        /* Base styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary-color: #e74c3c;
+            --primary-dark: #c0392b;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #17a2b8;
+            --text-color: #2c3e50;
+            --text-secondary: #6c757d;
+            --text-light: #95a5a6;
+            --background-color: #f8fafc;
+            --background-secondary: #ecf0f1;
+            --card-background: #ffffff;
+            --border-color: #dee2e6;
+            --border-light: #f1f3f4;
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.15);
+            --gradient-quotes: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            --gradient-success: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+        }
+        
+        [data-theme="dark"] {
+            --text-color: #ffffff;
+            --text-secondary: #bdc3c7;
+            --text-light: #95a5a6;
+            --background-color: #0f0f0f;
+            --background-secondary: #1a1a1a;
+            --card-background: #1e1e1e;
+            --border-color: #333333;
+            --border-light: #2a2a2a;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            :root[data-theme="auto"] {
+                --text-color: #ffffff;
+                --text-secondary: #bdc3c7;
+                --text-light: #95a5a6;
+                --background-color: #0f0f0f;
+                --background-secondary: #1a1a1a;
+                --card-background: #1e1e1e;
+                --border-color: #333333;
+                --border-light: #2a2a2a;
+            }
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        /* Loading State */
+        .loading-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 50vh;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border-color);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Quote Header */
+        .quote-header {
+            background: var(--card-background);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .back-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .quote-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+        
+        .quote-number {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .status-badge.pending {
+            background: rgba(243, 156, 18, 0.1);
+            color: var(--warning-color);
+        }
+        
+        .status-badge.accepted {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success-color);
+        }
+        
+        .status-badge.rejected {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--danger-color);
+        }
+        
+        .status-badge.expired {
+            background: rgba(149, 165, 166, 0.1);
+            color: #95a5a6;
+        }
+        
+        /* Quote Meta */
+        .quote-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .meta-item {
+            text-align: center;
+            padding: 1rem;
+            background: var(--background-secondary);
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+        
+        .meta-item:hover {
+            transform: translateY(-2px);
+        }
+        
+        .meta-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .meta-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+        
+        /* Quote Sections */
+        .quote-section {
+            background: var(--card-background);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .section-icon {
+            width: 30px;
+            height: 30px;
+            background: var(--gradient-quotes);
+            color: white;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+        
+        /* Customer Details */
+        .customer-details {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        
+        .customer-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: var(--background-secondary);
+            border-radius: 8px;
+        }
+        
+        .customer-label {
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+        
+        .customer-value {
+            color: var(--text-color);
+            font-weight: 500;
+        }
+        
+        /* Quote Breakdown */
+        .breakdown-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .breakdown-table th,
+        .breakdown-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .breakdown-table th {
+            background: var(--background-secondary);
+            color: var(--text-color);
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .breakdown-table tr:hover {
+            background: var(--background-secondary);
+        }
+        
+        .breakdown-description {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+        
+        .breakdown-total {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        /* Total Summary */
+        .total-summary {
+            background: var(--background-secondary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        
+        .summary-row:last-child {
+            margin-bottom: 0;
+            padding-top: 0.75rem;
+            border-top: 2px solid var(--border-color);
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        
+        .summary-label {
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+        
+        .summary-value {
+            color: var(--text-color);
+            font-weight: 700;
+        }
+        
+        .summary-value.total {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+        }
+        
+        /* Terms and Notes */
+        .terms-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .terms-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-light);
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .terms-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success-color);
+            font-weight: 700;
+        }
+        
+        .terms-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .notes-content {
+            background: var(--background-secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--warning-color);
+            margin-top: 1rem;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-success {
+            background: var(--gradient-success);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: var(--warning-color);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: var(--background-secondary);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Alert Messages */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: none;
+        }
+        
+        .alert.show {
+            display: block;
+        }
+        
+        .alert-success {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success-color);
+            border: 1px solid rgba(39, 174, 96, 0.2);
+        }
+        
+        .alert-error {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--danger-color);
+            border: 1px solid rgba(231, 76, 60, 0.2);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem 0.5rem;
+            }
+            
+            .quote-title {
+                font-size: 2rem;
+            }
+            
+            .back-btn {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-bottom: 1rem;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quote-meta {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .breakdown-table {
+                font-size: 0.85rem;
+            }
+            
+            .breakdown-table th,
+            .breakdown-table td {
+                padding: 0.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .quote-meta {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+        
+        /* Focus Styles for Accessibility */
+        *:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Alert Messages -->
+        <div class="alert alert-error" id="errorAlert" role="alert"></div>
+        <div class="alert alert-success" id="successAlert" role="alert"></div>
+
+        <!-- Loading State -->
+        <div class="loading-container" id="loadingContainer">
+            <div class="spinner"></div>
+        </div>
+
+        <!-- Quote Content (hidden initially) -->
+        <div id="quoteContent" style="display: none;">
+            <!-- Quote Header -->
+            <div class="quote-header fade-in">
+                <a href="/account/quotes.html" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Quotes
+                </a>
+                
+                <div class="status-badge" id="quoteStatus">Pending</div>
+                
+                <h1 class="quote-title" id="quoteTitle">Loading Quote...</h1>
+                <div class="quote-number" id="quoteNumber">Quote #: Loading...</div>
+                
+                <div class="quote-meta">
+                    <div class="meta-item">
+                        <div class="meta-value" id="quoteAmount">£0</div>
+                        <div class="meta-label">Quote Amount</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-value" id="quoteCreated">-</div>
+                        <div class="meta-label">Created Date</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-value" id="quoteValidUntil">-</div>
+                        <div class="meta-label">Valid Until</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-value" id="quoteLocation">-</div>
+                        <div class="meta-label">Location</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                <!-- Left Column -->
+                <div>
+                    <!-- Quote Breakdown -->
+                    <div class="quote-section fade-in">
+                        <div class="section-title">
+                            <div class="section-icon">
+                                <i class="fas fa-list-alt"></i>
+                            </div>
+                            Quote Breakdown
+                        </div>
+                        
+                        <table class="breakdown-table" id="breakdownTable">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Qty</th>
+                                    <th>Rate</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="breakdownBody">
+                                <!-- Breakdown items will be populated here -->
+                            </tbody>
+                        </table>
+                        
+                        <div class="total-summary">
+                            <div class="summary-row">
+                                <span class="summary-label">Subtotal:</span>
+                                <span class="summary-value" id="subtotalAmount">£0.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">VAT (<span id="vatRate">20</span>%):</span>
+                                <span class="summary-value" id="vatAmount">£0.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">Total Amount:</span>
+                                <span class="summary-value total" id="totalAmount">£0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Terms & Conditions -->
+                    <div class="quote-section fade-in">
+                        <div class="section-title">
+                            <div class="section-icon">
+                                <i class="fas fa-file-contract"></i>
+                            </div>
+                            Terms & Conditions
+                        </div>
+                        
+                        <ul class="terms-list" id="termsList">
+                            <!-- Terms will be populated here -->
+                        </ul>
+                    </div>
+                    
+                    <!-- Notes -->
+                    <div class="quote-section fade-in">
+                        <div class="section-title">
+                            <div class="section-icon">
+                                <i class="fas fa-sticky-note"></i>
+                            </div>
+                            Additional Notes
+                        </div>
+                        
+                        <div class="notes-content" id="notesContent">
+                            No additional notes provided.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div>
+                    <!-- Customer Details -->
+                    <div class="quote-section fade-in">
+                        <div class="section-title">
+                            <div class="section-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            Customer Details
+                        </div>
+                        
+                        <div class="customer-details">
+                            <div class="customer-item">
+                                <span class="customer-label">Name:</span>
+                                <span class="customer-value" id="customerName">Loading...</span>
+                            </div>
+                            <div class="customer-item">
+                                <span class="customer-label">Email:</span>
+                                <span class="customer-value" id="customerEmail">Loading...</span>
+                            </div>
+                            <div class="customer-item">
+                                <span class="customer-label">Phone:</span>
+                                <span class="customer-value" id="customerPhone">Loading...</span>
+                            </div>
+                            <div class="customer-item">
+                                <span class="customer-label">Address:</span>
+                                <span class="customer-value" id="customerAddress">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Actions -->
+                    <div class="quote-section fade-in">
+                        <div class="section-title">
+                            <div class="section-icon">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            Actions
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" id="editQuoteBtn">
+                                <i class="fas fa-edit"></i>
+                                Edit Quote
+                            </button>
+                            <button class="btn btn-success" id="acceptQuoteBtn" style="display: none;">
+                                <i class="fas fa-check"></i>
+                                Accept Quote
+                            </button>
+                            <button class="btn btn-warning" id="sendQuoteBtn">
+                                <i class="fas fa-paper-plane"></i>
+                                Send Quote
+                            </button>
+                            <button class="btn btn-secondary" id="printQuoteBtn">
+                                <i class="fas fa-print"></i>
+                                Print Quote
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBI1M38HZH8-xY3nfoKmqoitmggq3C8zKE",
+            authDomain: "buildinggroup-4f8b9.firebaseapp.com",
+            projectId: "buildinggroup-4f8b9",
+            storageBucket: "buildinggroup-4f8b9.firebasestorage.app",
+            messagingSenderId: "353000992011",
+            appId: "1:353000992011:web:c834310d7d79dd1bf0c60e",
+            measurementId: "G-DF11Q5PZRT"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        
+        // Global variables
+        let currentUser = null;
+        let currentQuote = null;
+        let quoteId = null;
+        
+        // Get quote ID from URL
+        function getQuoteIdFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const idFromParams = urlParams.get('id');
+            const idFromStorage = localStorage.getItem('selectedQuoteId');
+            
+            return idFromParams || idFromStorage;
+        }
+        
+        // Alert Functions
+        function showAlert(type, message) {
+            const alert = document.getElementById(`${type}Alert`);
+            alert.textContent = message;
+            alert.classList.add('show');
+            
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 5000);
+        }
+        
+        // User Authentication Check
+        function checkAuthState() {
+            return new Promise((resolve) => {
+                const unsubscribe = auth.onAuthStateChanged((user) => {
+                    unsubscribe();
+                    if (user && user.emailVerified) {
+                        currentUser = user;
+                        resolve(true);
+                    } else {
+                        showAlert('error', 'Please login to view quote details');
+                        setTimeout(() => {
+                            window.location.href = '/account/login.html';
+                        }, 2000);
+                        resolve(false);
+                    }
+                });
+            });
+        }
+        
+        // Load Quote Details
+        async function loadQuoteDetails() {
+            if (!currentUser || !quoteId) return;
+            
+            try {
+                const quoteDoc = await db.collection('users').doc(currentUser.uid)
+                    .collection('quotes').doc(quoteId).get();
+                
+                if (!quoteDoc.exists) {
+                    showAlert('error', 'Quote not found');
+                    setTimeout(() => {
+                        window.location.href = '/account/quotes.html';
+                    }, 2000);
+                    return;
+                }
+                
+                currentQuote = {
+                    id: quoteDoc.id,
+                    ...quoteDoc.data()
+                };
+                
+                // Hide loading and show content
+                document.getElementById('loadingContainer').style.display = 'none';
+                document.getElementById('quoteContent').style.display = 'block';
+                
+                // Populate quote details
+                populateQuoteDetails();
+                
+                console.log('Quote loaded:', currentQuote);
+                
+            } catch (error) {
+                console.error('Error loading quote:', error);
+                showAlert('error', 'Failed to load quote details');
+            }
+        }
+        
+        // Populate Quote Details
+        function populateQuoteDetails() {
+            if (!currentQuote) return;
+            
+            // Header information
+            document.getElementById('quoteTitle').textContent =
+                currentQuote.quoteTitle || 'Untitled Quote';
+            
+            document.getElementById('quoteNumber').textContent =
+                `Quote #: ${currentQuote.quoteNumber || 'N/A'}`;
+            
+            // Status badge
+            const statusBadge = document.getElementById('quoteStatus');
+            let status = currentQuote.status || 'pending';
+            
+            // Check if expired
+            if (status === 'pending' && currentQuote.validUntil && new Date(currentQuote.validUntil) < new Date()) {
+                status = 'expired';
+            }
+            
+            statusBadge.textContent = status.toUpperCase();
+            statusBadge.className = `status-badge ${status}`;
+            
+            // Meta information
+            const quoteAmount = currentQuote.totalAmount || currentQuote.quoteAmount || 0;
+            document.getElementById('quoteAmount').textContent = `£${quoteAmount.toLocaleString()}`;
+            
+            document.getElementById('quoteCreated').textContent =
+                currentQuote.createdAt ? new Date(currentQuote.createdAt.toDate()).toLocaleDateString() : 'Unknown';
+            
+            document.getElementById('quoteValidUntil').textContent =
+                currentQuote.validUntil ? new Date(currentQuote.validUntil).toLocaleDateString() : 'Not set';
+            
+            document.getElementById('quoteLocation').textContent =
+                (currentQuote.location || 'unknown').charAt(0).toUpperCase() + (currentQuote.location || 'unknown').slice(1);
+            
+            // Customer details
+            const customer = currentQuote.customer || {};
+            document.getElementById('customerName').textContent =
+                customer.fullName || `${customer.firstName} ${customer.lastName}` || 'Unknown Customer';
+            
+            document.getElementById('customerEmail').textContent = customer.email || 'No email';
+            document.getElementById('customerPhone').textContent = customer.phone || 'No phone';
+            document.getElementById('customerAddress').textContent = customer.address || 'No address';
+            
+            // Quote breakdown
+            populateBreakdown();
+            
+            // Terms and conditions
+            populateTerms();
+            
+            // Notes
+            populateNotes();
+            
+            // Show accept button if pending
+            if (status === 'pending') {
+                document.getElementById('acceptQuoteBtn').style.display = 'inline-flex';
+            }
+        }
+        
+        // Populate Breakdown
+        function populateBreakdown() {
+            const breakdownBody = document.getElementById('breakdownBody');
+            const breakdown = currentQuote.breakdown || [];
+            
+            if (breakdown.length === 0) {
+                breakdownBody.innerHTML = `
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: var(--text-secondary);">
+                            No breakdown items available
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            breakdownBody.innerHTML = breakdown.map(item => `
+                <tr>
+                    <td>
+                        <div>
+                            <strong>${item.item}</strong>
+                            ${item.description ? `<div class="breakdown-description">${item.description}</div>` : ''}
+                        </div>
+                    </td>
+                    <td>${item.quantity}</td>
+                    <td>£${item.rate.toFixed(2)}</td>
+                    <td class="breakdown-total">£${item.total.toFixed(2)}</td>
+                </tr>
+            `).join('');
+            
+            // Update totals
+            const subtotal = breakdown.reduce((sum, item) => sum + item.total, 0);
+            const vatRate = currentQuote.vatRate || 20;
+            const vatAmount = (subtotal * vatRate) / 100;
+            const totalAmount = subtotal + vatAmount;
+            
+            document.getElementById('subtotalAmount').textContent = `£${subtotal.toFixed(2)}`;
+            document.getElementById('vatRate').textContent = vatRate;
+            document.getElementById('vatAmount').textContent = `£${vatAmount.toFixed(2)}`;
+            document.getElementById('totalAmount').textContent = `£${totalAmount.toFixed(2)}`;
+        }
+        
+        // Populate Terms
+        function populateTerms() {
+            const termsList = document.getElementById('termsList');
+            const terms = currentQuote.terms || [
+                'Quote valid for 30 days from date of issue',
+                '50% deposit required to commence work',
+                'Final payment due on completion',
+                'All work guaranteed for 12 months',
+                'Materials included as specified'
+            ];
+            
+            termsList.innerHTML = terms.map(term => `<li>${term}</li>`).join('');
+        }
+        
+        // Populate Notes
+        function populateNotes() {
+            const notesContent = document.getElementById('notesContent');
+            const notes = currentQuote.notes || 'No additional notes provided.';
+            
+            notesContent.textContent = notes;
+        }
+        
+        // Edit Quote
+        function editQuote() {
+            localStorage.setItem('editQuoteId', quoteId);
+            window.location.href = `/account/add-quote.html?edit=${quoteId}`;
+        }
+        
+        // Accept Quote
+        async function acceptQuote() {
+            if (!currentUser || !quoteId) return;
+            
+            const confirmAccept = confirm('Are you sure you want to accept this quote? This will change the status to accepted.');
+            if (!confirmAccept) return;
+            
+            try {
+                await db.collection('users').doc(currentUser.uid)
+                    .collection('quotes').doc(quoteId).update({
+                        status: 'accepted',
+                        acceptedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                
+                showAlert('success', 'Quote accepted successfully!');
+                
+                // Reload quote details
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Error accepting quote:', error);
+                showAlert('error', 'Failed to accept quote');
+            }
+        }
+        
+        // Send Quote
+        function sendQuote() {
+            showAlert('info', 'Quote sending functionality would be implemented here (email integration)');
+        }
+        
+        // Print Quote
+        function printQuote() {
+            window.print();
+        }
+        
+        // Event Listeners
+        document.getElementById('editQuoteBtn').addEventListener('click', editQuote);
+        document.getElementById('acceptQuoteBtn').addEventListener('click', acceptQuote);
+        document.getElementById('sendQuoteBtn').addEventListener('click', sendQuote);
+        document.getElementById('printQuoteBtn').addEventListener('click', printQuote);
+        
+        // Initialize Page
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('Quote Details Page Loaded - 2025-07-19T13:07:40Z');
+            console.log('Current User: Dad-Link');
+            
+            // Get quote ID
+            quoteId = getQuoteIdFromURL();
+            
+            if (!quoteId) {
+                showAlert('error', 'No quote ID specified');
+                setTimeout(() => {
+                    window.location.href = '/account/quotes.html';
+                }, 2000);
+                return;
+            }
+            
+            console.log('Loading quote:', quoteId);
+            
+            // Check authentication
+            const isAuthenticated = await checkAuthState();
+            if (!isAuthenticated) return;
+            
+            // Load quote details
+            await loadQuoteDetails();
+            
+            console.log('🚀 Quote Details System Ready!');
+            console.log('✓ Firebase Integration ✓ Detailed Breakdown');
+            console.log('✓ Customer Details ✓ Terms & Conditions');
+        });
+        
+        console.log('🏗️ Building Group Quote Details System Initialized!');
+        console.log('📊 Features: Quote Breakdown, Customer Details, Terms Management');
+        console.log('🔄 Actions: Edit, Accept, Send, Print');
+        console.log('🔥 Firebase Integration: Active | 👤 User: Dad-Link');
+        console.log('⏰ Current Date/Time: 2025-07-19 13:07:40 UTC');
+    </script>
+</body>
+</html>

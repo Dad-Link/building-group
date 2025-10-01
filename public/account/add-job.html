@@ -1,0 +1,2186 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Job | Building Group | Job Management System</title>
+    <meta name="description" content="Create new construction jobs with Building Group job management system. Add customer details, project specifications, materials, and schedules for professional job tracking.">
+    <meta name="keywords" content="add job, construction job, building project, job management, project tracking">
+    <meta name="author" content="Building Group">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.googleapis.com;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <!-- Last Updated -->
+    <meta name="last-modified" content="2025-07-19T12:10:25Z">
+    
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Enhanced Theme System - CSS Variables */
+        :root {
+            --primary-color: #e74c3c;
+            --primary-dark: #c0392b;
+            --primary-light: #ec7063;
+            --secondary-color: #3498db;
+            --accent-color: #f39c12;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #17a2b8;
+            --text-color: #2c3e50;
+            --text-secondary: #6c757d;
+            --text-light: #95a5a6;
+            --background-color: #f8fafc;
+            --background-secondary: #ecf0f1;
+            --card-background: #ffffff;
+            --input-background: #ffffff;
+            --border-color: #dee2e6;
+            --border-light: #f1f3f4;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.15);
+            --shadow-xl: 0 16px 64px rgba(0,0,0,0.2);
+            --gradient-primary: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            --gradient-secondary: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            --gradient-success: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+        }
+        
+        /* Dark Theme Variables */
+        [data-theme="dark"] {
+            --text-color: #ffffff;
+            --text-secondary: #bdc3c7;
+            --text-light: #95a5a6;
+            --background-color: #0f0f0f;
+            --background-secondary: #1a1a1a;
+            --card-background: #1e1e1e;
+            --input-background: #2a2a2a;
+            --border-color: #333333;
+            --border-light: #2a2a2a;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
+            --shadow-xl: 0 16px 64px rgba(0,0,0,0.6);
+        }
+        
+        /* Auto Theme Detection */
+        @media (prefers-color-scheme: dark) {
+            :root[data-theme="auto"] {
+                --text-color: #ffffff;
+                --text-secondary: #bdc3c7;
+                --text-light: #95a5a6;
+                --background-color: #0f0f0f;
+                --background-secondary: #1a1a1a;
+                --card-background: #1e1e1e;
+                --input-background: #2a2a2a;
+                --border-color: #333333;
+                --border-light: #2a2a2a;
+                --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
+                --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+                --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
+                --shadow-xl: 0 16px 64px rgba(0,0,0,0.6);
+            }
+        }
+        
+        /* Base Elements */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: var(--background-color);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--card-background);
+            box-shadow: var(--shadow-md);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .back-btn {
+            background: var(--background-secondary);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+        }
+        
+        .header-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .theme-toggle {
+            background: var(--background-secondary);
+            color: var(--text-color);
+            border: 2px solid var(--border-color);
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .theme-toggle:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: scale(1.1);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+        
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 2rem 0;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Job Form */
+        .job-form-container {
+            background: var(--card-background);
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .form-header h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-header p {
+            opacity: 0.9;
+        }
+        
+        .job-form {
+            padding: 2rem;
+        }
+        
+        .form-section {
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--background-secondary);
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .section-icon {
+            width: 35px;
+            height: 35px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .form-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 0.95rem;
+        }
+        
+        .form-label.required::after {
+            content: '*';
+            color: var(--danger-color);
+            margin-left: 3px;
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.875rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            background: var(--input-background);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .form-input:valid, .form-select:valid {
+            border-color: var(--success-color);
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .form-input-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .input-prefix {
+            background: var(--background-secondary);
+            border: 2px solid var(--border-color);
+            border-right: none;
+            padding: 0.875rem;
+            border-radius: 8px 0 0 8px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+        
+        .form-input-group .form-input {
+            border-radius: 0 8px 8px 0;
+            border-left: none;
+        }
+        
+        .form-help {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+        
+        /* Priority and Status Badges */
+        .priority-selector, .status-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .priority-option, .status-option {
+            position: relative;
+        }
+        
+        .priority-radio, .status-radio {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .priority-label, .status-label {
+            display: block;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .priority-radio:checked + .priority-label,
+        .status-radio:checked + .status-label {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .priority-label.high {
+            border-color: var(--danger-color);
+            color: var(--danger-color);
+        }
+        
+        .priority-radio:checked + .priority-label.high {
+            background: var(--danger-color);
+            border-color: var(--danger-color);
+        }
+        
+        .priority-label.medium {
+            border-color: var(--warning-color);
+            color: var(--warning-color);
+        }
+        
+        .priority-radio:checked + .priority-label.medium {
+            background: var(--warning-color);
+            border-color: var(--warning-color);
+        }
+        
+        .priority-label.low {
+            border-color: var(--success-color);
+            color: var(--success-color);
+        }
+        
+        .priority-radio:checked + .priority-label.low {
+            background: var(--success-color);
+            border-color: var(--success-color);
+        }
+        
+        /* Materials Section */
+        .materials-list {
+            margin-top: 1rem;
+        }
+        
+        .material-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr auto;
+            gap: 0.5rem;
+            align-items: end;
+            margin-bottom: 0.5rem;
+            padding: 1rem;
+            background: var(--card-background);
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+        }
+        
+        .remove-material {
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .remove-material:hover {
+            background: #c0392b;
+            transform: scale(1.05);
+        }
+        
+        .add-material {
+            background: var(--gradient-secondary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .add-material:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+        }
+        
+        /* Alert Messages */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: none;
+            animation: slideInDown 0.3s ease;
+        }
+        
+        .alert.show {
+            display: block;
+        }
+        
+        .alert-success {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success-color);
+            border: 1px solid rgba(39, 174, 96, 0.2);
+        }
+        
+        .alert-error {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--danger-color);
+            border: 1px solid rgba(231, 76, 60, 0.2);
+        }
+        
+        .alert-warning {
+            background: rgba(243, 156, 18, 0.1);
+            color: var(--warning-color);
+            border: 1px solid rgba(243, 156, 18, 0.2);
+        }
+        
+        .alert-info {
+            background: rgba(23, 162, 184, 0.1);
+            color: var(--info-color);
+            border: 1px solid rgba(23, 162, 184, 0.2);
+        }
+        
+        /* Form Actions */
+        .form-actions {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--background-secondary);
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.875rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-align: center;
+            justify-content: center;
+            min-width: 140px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+        
+        .btn-success {
+            background: var(--gradient-success);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: var(--background-color);
+            color: var(--text-color);
+            border: 2px solid var(--border-color);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--background-secondary);
+            border-color: var(--primary-color);
+        }
+        
+        .btn:disabled {
+            background: var(--text-light) !important;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        
+        .btn-loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+        
+        .btn-loading .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Job Summary */
+        .job-summary {
+            background: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .summary-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .summary-item {
+            text-align: center;
+            padding: 1rem;
+            background: var(--background-secondary);
+            border-radius: 8px;
+        }
+        
+        .summary-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.25rem;
+        }
+        
+        .summary-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Animations */
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+        
+        /* Enhanced Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .header-left, .header-right {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .form-row-2, .form-row-3 {
+                grid-template-columns: 1fr;
+            }
+            
+            .material-item {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .priority-selector, .status-selector {
+                grid-template-columns: 1fr;
+            }
+            
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .job-form {
+                padding: 1rem;
+            }
+            
+            .form-section {
+                padding: 1rem;
+            }
+            
+            .container {
+                padding: 0 0.5rem;
+            }
+        }
+        
+        /* High Contrast Mode Support */
+        @media (prefers-contrast: high) {
+            :root {
+                --border-color: #000000;
+                --shadow-md: 0 4px 12px rgba(0,0,0,0.5);
+            }
+            
+            [data-theme="dark"] {
+                --border-color: #ffffff;
+                --shadow-md: 0 4px 12px rgba(255,255,255,0.3);
+            }
+        }
+        
+        /* Reduced Motion Support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* Focus Styles for Accessibility */
+        *:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-left">
+                    <a href="/account/my-dash.html" class="back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Dashboard
+                    </a>
+                    <h1 class="header-title">Add New Job</h1>
+                </div>
+                
+                <div class="header-right">
+                    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <div class="user-info">
+                        <div class="user-avatar" id="userAvatar">DL</div>
+                        <span id="userName">Dad-Link</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h2 class="page-title">Create New Construction Job</h2>
+                <p class="page-subtitle">
+                    Add all the details for your new building project including customer information,
+                    project specifications, materials, and scheduling.
+                </p>
+            </div>
+
+            <!-- Alert Messages -->
+            <div class="alert alert-error" id="errorAlert" role="alert"></div>
+            <div class="alert alert-success" id="successAlert" role="alert"></div>
+            <div class="alert alert-warning" id="warningAlert" role="alert"></div>
+            <div class="alert alert-info" id="infoAlert" role="alert"></div>
+
+            <!-- Job Form Container -->
+            <div class="job-form-container">
+                <div class="form-header">
+                    <h3>Job Creation Form</h3>
+                    <p>Complete all required fields to create your new construction project</p>
+                </div>
+
+                <form class="job-form" id="jobForm" novalidate>
+                    <!-- Customer Information -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <div class="section-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            Customer Information
+                        </div>
+
+                        <div class="form-row-2">
+                            <div class="form-group">
+                                <label for="customerFirstName" class="form-label required">First Name</label>
+                                <input
+                                    type="text"
+                                    id="customerFirstName"
+                                    name="customerFirstName"
+                                    class="form-input"
+                                    placeholder="Customer's first name"
+                                    required
+                                    autocomplete="given-name"
+                                    maxlength="50"
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label for="customerLastName" class="form-label required">Last Name</label>
+                                <input
+                                    type="text"
+                                    id="customerLastName"
+                                    name="customerLastName"
+                                    class="form-input"
+                                    placeholder="Customer's last name"
+                                    required
+                                    autocomplete="family-name"
+                                    maxlength="50"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="form-row-2">
+                            <div class="form-group">
+                                <label for="customerEmail" class="form-label">Email Address</label>
+                                <input
+                                    type="email"
+                                    id="customerEmail"
+                                    name="customerEmail"
+                                    class="form-input"
+                                    placeholder="customer@example.com"
+                                    autocomplete="email"
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label for="customerPhone" class="form-label required">Phone Number</label>
+                                <input
+                                    type="tel"
+                                    id="customerPhone"
+                                    name="customerPhone"
+                                    class="form-input"
+                                    placeholder="01234 567890"
+                                    required
+                                    autocomplete="tel"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customerAddress" class="form-label required">Full Address</label>
+                            <textarea
+                                id="customerAddress"
+                                name="customerAddress"
+                                class="form-textarea"
+                                placeholder="Enter the complete address including postcode"
+                                required
+                                rows="3"
+                                maxlength="500"
+                            ></textarea>
+                            <div class="form-help">Include street address, city, and postcode</div>
+                        </div>
+                    </div>
+
+                    <!-- Job Information -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <div class="section-icon">
+                                <i class="fas fa-hammer"></i>
+                            </div>
+                            Job Information
+                        </div>
+
+                        <div class="form-group">
+                            <label for="jobTitle" class="form-label required">Job Title</label>
+                            <input
+                                type="text"
+                                id="jobTitle"
+                                name="jobTitle"
+                                class="form-input"
+                                placeholder="e.g., Kitchen Extension, Bathroom Renovation"
+                                required
+                                maxlength="100"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="jobType" class="form-label required">Job Type</label>
+                            <select
+                                id="jobType"
+                                name="jobType"
+                                class="form-select"
+                                required
+                            >
+                                <option value="">Select job type</option>
+                                <option value="house-extension">House Extension</option>
+                                <option value="bathroom-fitting">Bathroom Fitting</option>
+                                <option value="kitchen-installation">Kitchen Installation</option>
+                                <option value="loft-conversion">Loft Conversion</option>
+                                <option value="new-build">New Build</option>
+                                <option value="renovation">Renovation</option>
+                                <option value="roofing">Roofing Work</option>
+                                <option value="electrical">Electrical Work</option>
+                                <option value="plumbing">Plumbing Work</option>
+                                <option value="landscaping">Landscaping</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="jobDescription" class="form-label required">Job Description</label>
+                            <textarea
+                                id="jobDescription"
+                                name="jobDescription"
+                                class="form-textarea"
+                                placeholder="Detailed description of the work to be completed"
+                                required
+                                rows="4"
+                                maxlength="1000"
+                            ></textarea>
+                            <div class="form-help">Provide as much detail as possible about the scope of work</div>
+                        </div>
+
+                        <div class="form-row-3">
+                            <div class="form-group">
+                                <label for="jobLocation" class="form-label required">Service Area</label>
+                                <select
+                                    id="jobLocation"
+                                    name="jobLocation"
+                                    class="form-select"
+                                    required
+                                >
+                                    <option value="">Select location</option>
+                                    <option value="manchester">Manchester</option>
+                                    <option value="liverpool">Liverpool</option>
+                                    <option value="leeds">Leeds</option>
+                                    <option value="cheshire">Cheshire</option>
+                                    <option value="stockport">Stockport</option>
+                                    <option value="bolton">Bolton</option>
+                                    <option value="warrington">Warrington</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Priority Level</label>
+                                <div class="priority-selector">
+                                    <div class="priority-option">
+                                        <input type="radio" id="priorityLow" name="priority" value="low" class="priority-radio" checked>
+                                        <label for="priorityLow" class="priority-label low">Low</label>
+                                    </div>
+                                    <div class="priority-option">
+                                        <input type="radio" id="priorityMedium" name="priority" value="medium" class="priority-radio">
+                                        <label for="priorityMedium" class="priority-label medium">Medium</label>
+                                    </div>
+                                    <div class="priority-option">
+                                        <input type="radio" id="priorityHigh" name="priority" value="high" class="priority-radio">
+                                        <label for="priorityHigh" class="priority-label high">High</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Initial Status</label>
+                                <div class="status-selector">
+                                    <div class="status-option">
+                                        <input type="radio" id="statusQuoted" name="status" value="quoted" class="status-radio" checked>
+                                        <label for="statusQuoted" class="status-label">Quoted</label>
+                                    </div>
+                                    <div class="status-option">
+                                        <input type="radio" id="statusApproved" name="status" value="approved" class="status-radio">
+                                        <label for="statusApproved" class="status-label">Approved</label>
+                                    </div>
+                                    <div class="status-option">
+                                        <input type="radio" id="statusActive" name="status" value="active" class="status-radio">
+                                        <label for="statusActive" class="status-label">Active</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Financial Information -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <div class="section-icon">
+                                <i class="fas fa-pound-sign"></i>
+                            </div>
+                            Financial Information
+                        </div>
+
+                        <div class="form-row-2">
+                            <div class="form-group">
+                                <label for="estimatedCost" class="form-label">Estimated Cost</label>
+                                <div class="form-input-group">
+                                    <span class="input-prefix">£</span>
+                                    <input
+                                        type="number"
+                                        id="estimatedCost"
+                                        name="estimatedCost"
+                                        class="form-input"
+                                        placeholder="0.00"
+                                        min="0"
+                                        step="0.01"
+                                    >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="quotedAmount" class="form-label">Quoted Amount</label>
+                                <div class="form-input-group">
+                                    <span class="input-prefix">£</span>
+                                    <input
+                                        type="number"
+                                        id="quotedAmount"
+                                        name="quotedAmount"
+                                        class="form-input"
+                                        placeholder="0.00"
+                                        min="0"
+                                        step="0.01"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="paymentTerms" class="form-label">Payment Terms</label>
+                            <select
+                                id="paymentTerms"
+                                name="paymentTerms"
+                                class="form-select"
+                            >
+                                <option value="">Select payment terms</option>
+                                <option value="50-50">50% Deposit, 50% on Completion</option>
+                                <option value="30-70">30% Deposit, 70% on Completion</option>
+                                <option value="25-75">25% Deposit, 75% on Completion</option>
+                                <option value="staged">Staged Payments</option>
+                                <option value="monthly">Monthly Payments</option>
+                                <option value="completion">Payment on Completion</option>
+                                <option value="other">Other (specify in notes)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Scheduling -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <div class="section-icon">
+                                <i class="fas fa-calendar"></i>
+                            </div>
+                            Scheduling
+                        </div>
+
+                        <div class="form-row-3">
+                            <div class="form-group">
+                                <label for="startDate" class="form-label">Planned Start Date</label>
+                                <input
+                                    type="date"
+                                    id="startDate"
+                                    name="startDate"
+                                    class="form-input"
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label for="endDate" class="form-label">Planned End Date</label>
+                                <input
+                                    type="date"
+                                    id="endDate"
+                                    name="endDate"
+                                    class="form-input"
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label for="estimatedDuration" class="form-label">Estimated Duration (days)</label>
+                                <input
+                                    type="number"
+                                    id="estimatedDuration"
+                                    name="estimatedDuration"
+                                    class="form-input"
+                                    placeholder="0"
+                                    min="1"
+                                    max="365"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="workingHours" class="form-label">Working Hours</label>
+                            <select
+                                id="workingHours"
+                                name="workingHours"
+                                class="form-select"
+                            >
+                                <option value="">Select working hours</option>
+                                <option value="8-5">8:00 AM - 5:00 PM</option>
+                                <option value="7-4">7:00 AM - 4:00 PM</option>
+                                <option value="9-6">9:00 AM - 6:00 PM</option>
+                                <option value="flexible">Flexible</option>
+                                <option value="weekends">Weekends Available</option>
+                                <option value="other">Other (specify in notes)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Materials List -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <div class="section-icon">
+                                <i class="fas fa-boxes"></i>
+                            </div>
+                            Materials & Supplies
+                        </div>
+
+                        <div class="materials-list" id="materialsList">
+                            <!-- Materials will be added dynamically -->
+                        </div>
+
+                        <button type="button" class="add-material" id="addMaterial">
+                            <i class="fas fa-plus"></i>
+                            Add Material
+                        </button>
+                    </div>
+
+                    <!-- Additional Notes -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <div class="section-icon">
+                                <i class="fas fa-sticky-note"></i>
+                            </div>
+                            Additional Information
+                        </div>
+
+                        <div class="form-group">
+                            <label for="specialRequirements" class="form-label">Special Requirements</label>
+                            <textarea
+                                id="specialRequirements"
+                                name="specialRequirements"
+                                class="form-textarea"
+                                placeholder="Any special requirements, access issues, or important notes"
+                                rows="3"
+                                maxlength="500"
+                            ></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="internalNotes" class="form-label">Internal Notes</label>
+                            <textarea
+                                id="internalNotes"
+                                name="internalNotes"
+                                class="form-textarea"
+                                placeholder="Internal notes for staff (not visible to customer)"
+                                rows="3"
+                                maxlength="500"
+                            ></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Job Summary -->
+                    <div class="job-summary" id="jobSummary" style="display: none;">
+                        <div class="summary-title">
+                            <i class="fas fa-chart-pie"></i>
+                            Job Summary
+                        </div>
+                        <div class="summary-grid">
+                            <div class="summary-item">
+                                <div class="summary-value" id="summaryQuotedAmount">£0.00</div>
+                                <div class="summary-label">Quoted Amount</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-value" id="summaryDuration">0 days</div>
+                                <div class="summary-label">Duration</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-value" id="summaryMaterials">0 items</div>
+                                <div class="summary-label">Materials</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-value" id="summaryPriority">Low</div>
+                                <div class="summary-label">Priority</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <div>
+                            <button type="button" class="btn btn-secondary" id="saveDraft">
+                                <i class="fas fa-save"></i>
+                                Save Draft
+                            </button>
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <button type="button" class="btn btn-secondary" id="previewJob">
+                                <i class="fas fa-eye"></i>
+                                Preview
+                            </button>
+                            <button type="submit" class="btn btn-success" id="createJob">
+                                <i class="fas fa-check"></i>
+                                Create Job
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBI1M38HZH8-xY3nfoKmqoitmggq3C8zKE",
+            authDomain: "buildinggroup-4f8b9.firebaseapp.com",
+            projectId: "buildinggroup-4f8b9",
+            storageBucket: "buildinggroup-4f8b9.firebasestorage.app",
+            messagingSenderId: "353000992011",
+            appId: "1:353000992011:web:c834310d7d79dd1bf0c60e",
+            measurementId: "G-DF11Q5PZRT"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        
+        // Global variables
+        let currentUser = null;
+        let materialCount = 0;
+        
+        // Theme Management
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        let currentTheme = localStorage.getItem('theme') || 'auto';
+        html.setAttribute('data-theme', currentTheme);
+        updateThemeIcon();
+        
+        themeToggle.addEventListener('click', () => {
+            switch(currentTheme) {
+                case 'auto':
+                    currentTheme = 'light';
+                    break;
+                case 'light':
+                    currentTheme = 'dark';
+                    break;
+                case 'dark':
+                    currentTheme = 'auto';
+                    break;
+            }
+            
+            html.setAttribute('data-theme', currentTheme);
+            localStorage.setItem('theme', currentTheme);
+            updateThemeIcon();
+        });
+        
+        function updateThemeIcon() {
+            const icon = themeToggle.querySelector('i');
+            switch(currentTheme) {
+                case 'light':
+                    icon.className = 'fas fa-sun';
+                    break;
+                case 'dark':
+                    icon.className = 'fas fa-moon';
+                    break;
+                case 'auto':
+                    icon.className = 'fas fa-adjust';
+                    break;
+            }
+        }
+        
+        // Alert Functions
+        function showAlert(type, message) {
+            hideAllAlerts();
+            const alert = document.getElementById(`${type}Alert`);
+            alert.textContent = message;
+            alert.classList.add('show');
+            
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 8000);
+        }
+        
+        function hideAllAlerts() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => alert.classList.remove('show'));
+        }
+        
+        // User Authentication Check
+        function checkAuthState() {
+            return new Promise((resolve) => {
+                const unsubscribe = auth.onAuthStateChanged((user) => {
+                    unsubscribe();
+                    if (user && user.emailVerified) {
+                        currentUser = user;
+                        loadUserData();
+                        resolve(true);
+                    } else {
+                        showAlert('error', 'Please login to access this page');
+                        setTimeout(() => {
+                            window.location.href = '/account/login.html';
+                        }, 2000);
+                        resolve(false);
+                    }
+                });
+            });
+        }
+        
+        async function loadUserData() {
+            try {
+                const userDoc = await db.collection('users').doc(currentUser.uid).get();
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    
+                    // Update UI
+                    document.getElementById('userName').textContent = userData.firstName || 'User';
+                    document.getElementById('userAvatar').textContent = (userData.firstName?.[0] || 'U') + (userData.lastName?.[0] || '');
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+        
+        // Material Management
+        function addMaterial() {
+            materialCount++;
+            const materialsList = document.getElementById('materialsList');
+            
+            const materialItem = document.createElement('div');
+            materialItem.className = 'material-item';
+            materialItem.innerHTML = `
+                <div class="form-group">
+                    <label class="form-label">Material/Item</label>
+                    <input 
+                        type="text" 
+                        name="materialName_${materialCount}" 
+                        class="form-input material-name" 
+                        placeholder="e.g., Bricks, Cement, Wood"
+                        maxlength="100"
+                    >
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Quantity</label>
+                    <input 
+                        type="number" 
+                        name="materialQuantity_${materialCount}" 
+                        class="form-input material-quantity" 
+                        placeholder="0"
+                        min="1"
+                    >
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Unit</label>
+                    <select name="materialUnit_${materialCount}" class="form-select material-unit">
+                        <option value="">Select unit</option>
+                        <option value="pieces">Pieces</option>
+                        <option value="boxes">Boxes</option>
+                        <option value="bags">Bags</option>
+                        <option value="metres">Metres</option>
+                        <option value="square-metres">Square Metres</option>
+                        <option value="cubic-metres">Cubic Metres</option>
+                        <option value="litres">Litres</option>
+                        <option value="kilos">Kilos</option>
+                        <option value="tonnes">Tonnes</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Cost (£)</label>
+                    <input 
+                        type="number" 
+                        name="materialCost_${materialCount}" 
+                        class="form-input material-cost" 
+                        placeholder="0.00"
+                        min="0"
+                        step="0.01"
+                    >
+                </div>
+                <div class="form-group">
+                    <label class="form-label">&nbsp;</label>
+                    <button type="button" class="remove-material" onclick="removeMaterial(this)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            
+            materialsList.appendChild(materialItem);
+            materialItem.classList.add('fade-in');
+            updateJobSummary();
+        }
+        
+        function removeMaterial(button) {
+            const materialItem = button.closest('.material-item');
+            materialItem.remove();
+            updateJobSummary();
+        }
+        
+        // Job Summary Updates
+        function updateJobSummary() {
+            const quotedAmount = document.getElementById('quotedAmount').value || 0;
+            const estimatedDuration = document.getElementById('estimatedDuration').value || 0;
+            const materials = document.querySelectorAll('.material-item').length;
+            const priority = document.querySelector('input[name="priority"]:checked')?.value || 'low';
+            
+            document.getElementById('summaryQuotedAmount').textContent = `£${parseFloat(quotedAmount).toFixed(2)}`;
+            document.getElementById('summaryDuration').textContent = `${estimatedDuration} days`;
+            document.getElementById('summaryMaterials').textContent = `${materials} items`;
+            document.getElementById('summaryPriority').textContent = priority.charAt(0).toUpperCase() + priority.slice(1);
+            
+            // Show summary if there's content
+            if (quotedAmount || estimatedDuration || materials) {
+                document.getElementById('jobSummary').style.display = 'block';
+            }
+        }
+        
+        // Form Validation
+        function validateForm() {
+            const required = [
+                'customerFirstName',
+                'customerLastName',
+                'customerPhone',
+                'customerAddress',
+                'jobTitle',
+                'jobType',
+                'jobDescription',
+                'jobLocation'
+            ];
+            
+            for (const fieldId of required) {
+                const field = document.getElementById(fieldId);
+                if (!field.value.trim()) {
+                    showAlert('error', `${field.previousElementSibling.textContent.replace('*', '').trim()} is required`);
+                    field.focus();
+                    return false;
+                }
+            }
+            
+            // Validate email if provided
+            const email = document.getElementById('customerEmail').value;
+            if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showAlert('error', 'Please enter a valid email address');
+                document.getElementById('customerEmail').focus();
+                return false;
+            }
+            
+            // Validate dates
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            if (startDate && endDate && new Date(startDate) >= new Date(endDate)) {
+                showAlert('error', 'End date must be after start date');
+                document.getElementById('endDate').focus();
+                return false;
+            }
+            
+            return true;
+        }
+        
+        // Collect Form Data
+        function collectFormData() {
+            const form = document.getElementById('jobForm');
+            const formData = new FormData(form);
+            
+            // Collect materials
+            const materials = [];
+            const materialItems = document.querySelectorAll('.material-item');
+            
+            materialItems.forEach((item, index) => {
+                const name = item.querySelector('.material-name').value;
+                const quantity = item.querySelector('.material-quantity').value;
+                const unit = item.querySelector('.material-unit').value;
+                const cost = item.querySelector('.material-cost').value;
+                
+                if (name.trim()) {
+                    materials.push({
+                        name: name.trim(),
+                        quantity: parseInt(quantity) || 0,
+                        unit: unit,
+                        cost: parseFloat(cost) || 0
+                    });
+                }
+            });
+            
+            // Calculate totals
+            const materialsCost = materials.reduce((total, material) => total + (material.cost * material.quantity), 0);
+            
+            // Build job data
+            const jobData = {
+                // Job ID and metadata
+                jobNumber: generateJobNumber(),
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                createdBy: currentUser.uid,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                
+                // Customer information
+                customer: {
+                    firstName: formData.get('customerFirstName').trim(),
+                    lastName: formData.get('customerLastName').trim(),
+                    fullName: `${formData.get('customerFirstName').trim()} ${formData.get('customerLastName').trim()}`,
+                    email: formData.get('customerEmail')?.trim() || null,
+                    phone: formData.get('customerPhone').trim(),
+                    address: formData.get('customerAddress').trim()
+                },
+                
+                // Job details
+                jobTitle: formData.get('jobTitle').trim(),
+                jobType: formData.get('jobType'),
+                description: formData.get('jobDescription').trim(),
+                location: formData.get('jobLocation'),
+                priority: formData.get('priority') || 'low',
+                status: formData.get('status') || 'quoted',
+                
+                // Financial
+                estimatedCost: parseFloat(formData.get('estimatedCost')) || 0,
+                quotedAmount: parseFloat(formData.get('quotedAmount')) || 0,
+                paymentTerms: formData.get('paymentTerms') || null,
+                materialsCost: materialsCost,
+                
+                // Scheduling
+                startDate: formData.get('startDate') || null,
+                endDate: formData.get('endDate') || null,
+                estimatedDuration: parseInt(formData.get('estimatedDuration')) || 0,
+                workingHours: formData.get('workingHours') || null,
+                
+                // Materials
+                materials: materials,
+                materialsCount: materials.length,
+                
+                // Additional
+                specialRequirements: formData.get('specialRequirements')?.trim() || null,
+                internalNotes: formData.get('internalNotes')?.trim() || null,
+                
+                // Tracking
+                viewCount: 0,
+                lastViewed: null,
+                completionPercentage: 0,
+                
+                // Search indexing
+                searchTerms: [
+                    formData.get('customerFirstName').toLowerCase(),
+                    formData.get('customerLastName').toLowerCase(),
+                    formData.get('jobTitle').toLowerCase(),
+                    formData.get('jobType'),
+                    formData.get('jobLocation')
+                ].filter(term => term && term.trim())
+            };
+            
+            return jobData;
+        }
+        
+        function generateJobNumber() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const time = String(now.getTime()).slice(-4);
+            
+            return `JOB-${year}${month}${day}-${time}`;
+        }
+        
+        // Save to Firebase
+        async function saveJobToFirebase(jobData, isDraft = false) {
+            try {
+                if (isDraft) {
+                    jobData.isDraft = true;
+                    jobData.status = 'draft';
+                }
+                
+                const docRef = await db.collection('users').doc(currentUser.uid).collection('jobs').add(jobData);
+                
+                // Also add to customers collection if new customer
+                const customerExists = await db.collection('users')
+                    .doc(currentUser.uid)
+                    .collection('customers')
+                    .where('email', '==', jobData.customer.email || 'no-email')
+                    .where('phone', '==', jobData.customer.phone)
+                    .get();
+                
+                if (customerExists.empty) {
+                    await db.collection('users').doc(currentUser.uid).collection('customers').add({
+                        ...jobData.customer,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        jobsCount: 1,
+                        totalSpent: jobData.quotedAmount || 0,
+                        lastJobDate: firebase.firestore.FieldValue.serverTimestamp(),
+                        status: 'active'
+                    });
+                }
+                
+                return docRef.id;
+                
+            } catch (error) {
+                console.error('Error saving job:', error);
+                throw error;
+            }
+        }
+        
+        // Event Listeners
+        document.getElementById('addMaterial').addEventListener('click', addMaterial);
+        
+        // Update summary when key fields change
+        ['quotedAmount', 'estimatedDuration'].forEach(id => {
+            document.getElementById(id).addEventListener('input', updateJobSummary);
+        });
+        
+        document.querySelectorAll('input[name="priority"]').forEach(radio => {
+            radio.addEventListener('change', updateJobSummary);
+        });
+        
+        // Save Draft
+        document.getElementById('saveDraft').addEventListener('click', async function() {
+            const button = this;
+            button.classList.add('btn-loading');
+            button.innerHTML = '<div class="spinner"></div>Saving Draft...';
+            button.disabled = true;
+            
+            try {
+                if (!currentUser) {
+                    showAlert('error', 'Please login to save job');
+                    return;
+                }
+                
+                const jobData = collectFormData();
+                const jobId = await saveJobToFirebase(jobData, true);
+                
+                showAlert('success', `Job draft saved successfully! Job ID: ${jobData.jobNumber}`);
+                
+                // Store draft ID for later use
+                localStorage.setItem('lastDraftId', jobId);
+                
+            } catch (error) {
+                console.error('Error saving draft:', error);
+                showAlert('error', 'Failed to save draft. Please try again.');
+            } finally {
+                button.classList.remove('btn-loading');
+                button.innerHTML = '<i class="fas fa-save"></i>Save Draft';
+                button.disabled = false;
+            }
+        });
+        
+        // Preview Job
+        document.getElementById('previewJob').addEventListener('click', function() {
+            if (!validateForm()) return;
+            
+            const jobData = collectFormData();
+            showJobPreview(jobData);
+        });
+        
+        function showJobPreview(jobData) {
+            const previewContent = `
+                <div style="background: var(--card-background); padding: 2rem; border-radius: 12px; max-width: 600px; margin: 2rem auto; box-shadow: var(--shadow-lg);">
+                    <div style="text-align: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid var(--border-color);">
+                        <h2 style="color: var(--primary-color); margin-bottom: 0.5rem;">${jobData.jobTitle}</h2>
+                        <p style="color: var(--text-secondary);">Job Number: ${jobData.jobNumber}</p>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                        <div>
+                            <h3 style="color: var(--text-color); margin-bottom: 1rem; font-size: 1.2rem;">Customer Details</h3>
+                            <p><strong>Name:</strong> ${jobData.customer.fullName}</p>
+                            <p><strong>Phone:</strong> ${jobData.customer.phone}</p>
+                            ${jobData.customer.email ? `<p><strong>Email:</strong> ${jobData.customer.email}</p>` : ''}
+                            <p><strong>Address:</strong> ${jobData.customer.address}</p>
+                        </div>
+                        <div>
+                            <h3 style="color: var(--text-color); margin-bottom: 1rem; font-size: 1.2rem;">Job Details</h3>
+                            <p><strong>Type:</strong> ${jobData.jobType.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}</p>
+                            <p><strong>Location:</strong> ${jobData.location.charAt(0).toUpperCase() + jobData.location.slice(1)}</p>
+                            <p><strong>Priority:</strong> ${jobData.priority.charAt(0).toUpperCase() + jobData.priority.slice(1)}</p>
+                            <p><strong>Status:</strong> ${jobData.status.charAt(0).toUpperCase() + jobData.status.slice(1)}</p>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: var(--text-color); margin-bottom: 1rem; font-size: 1.2rem;">Description</h3>
+                        <p style="background: var(--background-secondary); padding: 1rem; border-radius: 8px; line-height: 1.6;">${jobData.description}</p>
+                    </div>
+                    
+                    ${jobData.quotedAmount || jobData.estimatedCost ? `
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: var(--text-color); margin-bottom: 1rem; font-size: 1.2rem;">Financial</h3>
+                        ${jobData.estimatedCost ? `<p><strong>Estimated Cost:</strong> £${jobData.estimatedCost.toFixed(2)}</p>` : ''}
+                        ${jobData.quotedAmount ? `<p><strong>Quoted Amount:</strong> £${jobData.quotedAmount.toFixed(2)}</p>` : ''}
+                        ${jobData.materialsCost ? `<p><strong>Materials Cost:</strong> £${jobData.materialsCost.toFixed(2)}</p>` : ''}
+                    </div>` : ''}
+                    
+                    ${jobData.startDate || jobData.endDate || jobData.estimatedDuration ? `
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: var(--text-color); margin-bottom: 1rem; font-size: 1.2rem;">Schedule</h3>
+                        ${jobData.startDate ? `<p><strong>Start Date:</strong> ${new Date(jobData.startDate).toLocaleDateString()}</p>` : ''}
+                        ${jobData.endDate ? `<p><strong>End Date:</strong> ${new Date(jobData.endDate).toLocaleDateString()}</p>` : ''}
+                        ${jobData.estimatedDuration ? `<p><strong>Duration:</strong> ${jobData.estimatedDuration} days</p>` : ''}
+                    </div>` : ''}
+                    
+                    ${jobData.materials.length ? `
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: var(--text-color); margin-bottom: 1rem; font-size: 1.2rem;">Materials (${jobData.materials.length} items)</h3>
+                        <div style="background: var(--background-secondary); padding: 1rem; border-radius: 8px;">
+                            ${jobData.materials.map(material => `
+                                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--border-light);">
+                                    <span>${material.name} (${material.quantity} ${material.unit})</span>
+                                    <span>£${(material.cost * material.quantity).toFixed(2)}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>` : ''}
+                    
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button onclick="closePreview()" style="background: var(--primary-color); color: white; border: none; padding: 0.75rem 2rem; border-radius: 8px; cursor: pointer; font-weight: 600;">Close Preview</button>
+                    </div>
+                </div>
+            `;
+            
+            // Create preview overlay
+            const overlay = document.createElement('div');
+            overlay.id = 'previewOverlay';
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                z-index: 9999;
+                overflow-y: auto;
+                padding: 2rem 1rem;
+            `;
+            overlay.innerHTML = previewContent;
+            
+            document.body.appendChild(overlay);
+            
+            // Close on overlay click
+            overlay.addEventListener('click', function(e) {
+                if (e.target === overlay) {
+                    closePreview();
+                }
+            });
+        }
+        
+        window.closePreview = function() {
+            const overlay = document.getElementById('previewOverlay');
+            if (overlay) {
+                overlay.remove();
+            }
+        };
+        
+        // Create Job (Main Submit)
+        document.getElementById('jobForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!validateForm()) return;
+            
+            const button = document.getElementById('createJob');
+            button.classList.add('btn-loading');
+            button.innerHTML = '<div class="spinner"></div>Creating Job...';
+            button.disabled = true;
+            
+            try {
+                if (!currentUser) {
+                    showAlert('error', 'Please login to create job');
+                    return;
+                }
+                
+                const jobData = collectFormData();
+                const jobId = await saveJobToFirebase(jobData, false);
+                
+                showAlert('success', `Job created successfully! Job Number: ${jobData.jobNumber}`);
+                
+                // Store success data
+                localStorage.setItem('lastCreatedJob', JSON.stringify({
+                    jobId: jobId,
+                    jobNumber: jobData.jobNumber,
+                    customerName: jobData.customer.fullName,
+                    createdAt: new Date().toISOString()
+                }));
+                
+                // Clear form or redirect
+                setTimeout(() => {
+                    if (confirm('Job created successfully! Would you like to create another job?')) {
+                        // Reset form
+                        document.getElementById('jobForm').reset();
+                        document.getElementById('materialsList').innerHTML = '';
+                        materialCount = 0;
+                        document.getElementById('jobSummary').style.display = 'none';
+                        hideAllAlerts();
+                        window.scrollTo(0, 0);
+                    } else {
+                        // Redirect to dashboard or jobs list
+                        window.location.href = '/account/my-dash.html';
+                    }
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Error creating job:', error);
+                showAlert('error', 'Failed to create job. Please try again.');
+            } finally {
+                button.classList.remove('btn-loading');
+                button.innerHTML = '<i class="fas fa-check"></i>Create Job';
+                button.disabled = false;
+            }
+        });
+        
+        // Auto-save functionality
+        let autoSaveTimeout;
+        
+        function autoSaveDraft() {
+            clearTimeout(autoSaveTimeout);
+            autoSaveTimeout = setTimeout(async () => {
+                if (!currentUser) return;
+                
+                try {
+                    const jobData = collectFormData();
+                    
+                    // Only auto-save if there's meaningful content
+                    if (jobData.customer.firstName || jobData.jobTitle) {
+                        const existingDraftId = localStorage.getItem('autoSaveDraftId');
+                        
+                        if (existingDraftId) {
+                            // Update existing draft
+                            await db.collection('users').doc(currentUser.uid)
+                                .collection('jobs').doc(existingDraftId).update({
+                                    ...jobData,
+                                    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                                    isAutoSave: true
+                                });
+                        } else {
+                            // Create new auto-save draft
+                            const docRef = await db.collection('users').doc(currentUser.uid)
+                                .collection('jobs').add({
+                                    ...jobData,
+                                    isDraft: true,
+                                    isAutoSave: true,
+                                    status: 'draft'
+                                });
+                            localStorage.setItem('autoSaveDraftId', docRef.id);
+                        }
+                        
+                        console.log('Auto-saved draft');
+                    }
+                } catch (error) {
+                    console.error('Auto-save error:', error);
+                }
+            }, 30000); // Auto-save every 30 seconds
+        }
+        
+        // Add auto-save listeners to key fields
+        document.querySelectorAll('input, select, textarea').forEach(field => {
+            field.addEventListener('input', autoSaveDraft);
+            field.addEventListener('change', autoSaveDraft);
+        });
+        
+        // Phone number formatting
+        document.getElementById('customerPhone').addEventListener('input', function() {
+            let value = this.value.replace(/\D/g, '');
+            
+            // UK phone number formatting
+            if (value.startsWith('44')) {
+                value = '+44 ' + value.slice(2, 5) + ' ' + value.slice(5, 8) + ' ' + value.slice(8);
+            } else if (value.startsWith('0')) {
+                value = value.slice(0, 5) + ' ' + value.slice(5, 8) + ' ' + value.slice(8);
+            }
+            
+            this.value = value;
+        });
+        
+        // Date validation
+        document.getElementById('startDate').addEventListener('change', function() {
+            const startDate = new Date(this.value);
+            const endDateField = document.getElementById('endDate');
+            
+            if (endDateField.value) {
+                const endDate = new Date(endDateField.value);
+                if (startDate >= endDate) {
+                    endDateField.value = '';
+                    showAlert('warning', 'Please select an end date after the start date');
+                }
+            }
+            
+            // Auto-calculate duration if both dates are set
+            if (endDateField.value) {
+                const endDate = new Date(endDateField.value);
+                const diffTime = Math.abs(endDate - startDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                document.getElementById('estimatedDuration').value = diffDays;
+                updateJobSummary();
+            }
+        });
+        
+        document.getElementById('endDate').addEventListener('change', function() {
+            const endDate = new Date(this.value);
+            const startDateField = document.getElementById('startDate');
+            
+            if (startDateField.value) {
+                const startDate = new Date(startDateField.value);
+                if (endDate <= startDate) {
+                    this.value = '';
+                    showAlert('warning', 'End date must be after the start date');
+                    return;
+                }
+                
+                // Auto-calculate duration
+                const diffTime = Math.abs(endDate - startDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                document.getElementById('estimatedDuration').value = diffDays;
+                updateJobSummary();
+            }
+        });
+        
+        // Cost calculations
+        document.getElementById('estimatedCost').addEventListener('input', function() {
+            const estimated = parseFloat(this.value) || 0;
+            const quotedField = document.getElementById('quotedAmount');
+            
+            // Auto-suggest quoted amount if not set
+            if (!quotedField.value && estimated > 0) {
+                quotedField.value = (estimated * 1.2).toFixed(2); // 20% markup suggestion
+                updateJobSummary();
+            }
+        });
+        
+        // Job type specific suggestions
+        document.getElementById('jobType').addEventListener('change', function() {
+            const jobType = this.value;
+            const durationField = document.getElementById('estimatedDuration');
+            const workingHoursField = document.getElementById('workingHours');
+            
+            // Suggest typical durations for job types
+            const typicalDurations = {
+                'bathroom-fitting': 7,
+                'kitchen-installation': 10,
+                'house-extension': 21,
+                'loft-conversion': 14,
+                'new-build': 90,
+                'renovation': 30,
+                'roofing': 5,
+                'electrical': 3,
+                'plumbing': 2,
+                'landscaping': 7
+            };
+            
+            if (typicalDurations[jobType] && !durationField.value) {
+                durationField.value = typicalDurations[jobType];
+                updateJobSummary();
+            }
+            
+            // Set typical working hours
+            if (!workingHoursField.value) {
+                workingHoursField.value = '8-5';
+            }
+        });
+        
+        // Load draft if exists
+        async function loadExistingDraft() {
+            const draftId = localStorage.getItem('autoSaveDraftId');
+            if (!draftId || !currentUser) return;
+            
+            try {
+                const draftDoc = await db.collection('users').doc(currentUser.uid)
+                    .collection('jobs').doc(draftId).get();
+                
+                if (draftDoc.exists && draftDoc.data().isDraft) {
+                    const shouldLoad = confirm('We found a saved draft. Would you like to load it?');
+                    if (shouldLoad) {
+                        const draftData = draftDoc.data();
+                        populateFormFromData(draftData);
+                        showAlert('info', 'Draft loaded successfully');
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading draft:', error);
+            }
+        }
+        
+        function populateFormFromData(data) {
+            // Customer information
+            if (data.customer) {
+                document.getElementById('customerFirstName').value = data.customer.firstName || '';
+                document.getElementById('customerLastName').value = data.customer.lastName || '';
+                document.getElementById('customerEmail').value = data.customer.email || '';
+                document.getElementById('customerPhone').value = data.customer.phone || '';
+                document.getElementById('customerAddress').value = data.customer.address || '';
+            }
+            
+            // Job information
+            document.getElementById('jobTitle').value = data.jobTitle || '';
+            document.getElementById('jobType').value = data.jobType || '';
+            document.getElementById('jobDescription').value = data.description || '';
+            document.getElementById('jobLocation').value = data.location || '';
+            
+            // Set priority and status
+            if (data.priority) {
+                document.querySelector(`input[name="priority"][value="${data.priority}"]`).checked = true;
+            }
+            if (data.status) {
+                document.querySelector(`input[name="status"][value="${data.status}"]`).checked = true;
+            }
+            
+            // Financial
+            document.getElementById('estimatedCost').value = data.estimatedCost || '';
+            document.getElementById('quotedAmount').value = data.quotedAmount || '';
+            document.getElementById('paymentTerms').value = data.paymentTerms || '';
+            
+            // Scheduling
+            document.getElementById('startDate').value = data.startDate || '';
+            document.getElementById('endDate').value = data.endDate || '';
+            document.getElementById('estimatedDuration').value = data.estimatedDuration || '';
+            document.getElementById('workingHours').value = data.workingHours || '';
+            
+            // Additional notes
+            document.getElementById('specialRequirements').value = data.specialRequirements || '';
+            document.getElementById('internalNotes').value = data.internalNotes || '';
+            
+            // Materials
+            if (data.materials && data.materials.length) {
+                data.materials.forEach((material, index) => {
+                    addMaterial();
+                    const lastMaterial = document.querySelector('.material-item:last-child');
+                    lastMaterial.querySelector('.material-name').value = material.name;
+                    lastMaterial.querySelector('.material-quantity').value = material.quantity;
+                    lastMaterial.querySelector('.material-unit').value = material.unit;
+                    lastMaterial.querySelector('.material-cost').value = material.cost;
+                });
+            }
+            
+            updateJobSummary();
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+S to save draft
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                document.getElementById('saveDraft').click();
+            }
+            
+            // Ctrl+Enter to create job
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                if (validateForm()) {
+                    document.getElementById('createJob').click();
+                }
+            }
+            
+            // Escape to clear current field
+            if (e.key === 'Escape') {
+                if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+                    document.activeElement.value = '';
+                }
+            }
+        });
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('Add Job Page Loaded - 2025-07-19T12:15:48Z');
+            console.log('Current User: Dad-Link');
+            
+            // Check authentication
+            const isAuthenticated = await checkAuthState();
+            if (!isAuthenticated) return;
+            
+            // Set current date as minimum for date fields
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('startDate').setAttribute('min', today);
+            document.getElementById('endDate').setAttribute('min', today);
+            
+            // Load existing draft if available
+            setTimeout(() => {
+                loadExistingDraft();
+            }, 1000);
+            
+            // Focus first field
+            document.getElementById('customerFirstName').focus();
+            
+            console.log('🚀 Add Job System Ready!');
+            console.log('✓ Firebase Integration ✓ Form Validation ✓ Auto-save');
+            console.log('✓ Material Management ✓ Job Preview ✓ Draft System');
+            console.log('✓ Customer Integration ✓ Cost Calculations');
+        });
+        
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function(e) {
+            // Save draft if there's content
+            const hasContent = document.getElementById('customerFirstName').value ||
+                              document.getElementById('jobTitle').value;
+            
+            if (hasContent && currentUser) {
+                // Quick auto-save attempt
+                autoSaveDraft();
+            }
+        });
+        
+        // Performance monitoring
+        function trackFormPerformance() {
+            const loadTime = performance.now();
+            console.log(`Add Job form loaded in: ${loadTime.toFixed(2)}ms`);
+            
+            // Track form completion time
+            let formStartTime = Date.now();
+            let fieldsCompleted = 0;
+            
+            document.querySelectorAll('input, select, textarea').forEach(field => {
+                field.addEventListener('focus', function() {
+                    if (fieldsCompleted === 0) {
+                        formStartTime = Date.now();
+                    }
+                });
+                
+                field.addEventListener('blur', function() {
+                    if (this.value.trim()) {
+                        fieldsCompleted++;
+                    }
+                });
+            });
+            
+            document.getElementById('createJob').addEventListener('click', function() {
+                const completionTime = Date.now() - formStartTime;
+                console.log(`Form completion time: ${completionTime}ms`);
+                console.log(`Fields completed: ${fieldsCompleted}`);
+            });
+        }
+        
+        trackFormPerformance();
+        
+        console.log('🏗️ Building Group Add Job System Initialized!');
+        console.log('📋 Features Ready: Customer Management, Job Creation, Materials Tracking');
+        console.log('💾 Auto-save: Every 30 seconds | 🔄 Draft Recovery: Available');
+        console.log('📊 Integration: Firebase Firestore | 👤 User: Dad-Link');
+        console.log('⏰ Timestamp: 2025-07-19T12:15:48Z');
+    </script>
+</body>
+</html>

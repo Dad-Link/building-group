@@ -1,0 +1,2236 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Details | Building Group | Employee Profile Management</title>
+    <meta name="description" content="Detailed employee profile with performance tracking, project history, skills management, and team coordination for construction staff across Manchester, Liverpool, Leeds & Cheshire.">
+    <meta name="keywords" content="staff details, employee profile, team member, performance tracking, construction worker">
+    <meta name="author" content="Building Group">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- FIREBASE-COMPATIBLE CSP -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self'; 
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' 
+            https://www.gstatic.com 
+            https://www.googleapis.com 
+            https://apis.google.com;
+        connect-src 'self' 
+            https://identitytoolkit.googleapis.com 
+            https://www.googleapis.com 
+            https://securetoken.googleapis.com 
+            https://buildinggroup-4f8b9-default-rtdb.firebaseio.com 
+            https://firestore.googleapis.com 
+            https://buildinggroup-4f8b9.firebasestorage.app
+            wss://s-usc1c-nss-2077.firebaseio.com;
+        img-src 'self' data: 
+            https://www.gstatic.com 
+            https://fonts.gstatic.com;
+        style-src 'self' 'unsafe-inline' 
+            https://fonts.googleapis.com 
+            https://cdnjs.cloudflare.com;
+        font-src 'self' 
+            https://fonts.gstatic.com 
+            https://cdnjs.cloudflare.com;
+        frame-src 'self' 
+            https://buildinggroup-4f8b9.firebaseapp.com;
+    ">
+    
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <!-- Last Updated -->
+    <meta name="last-modified" content="2025-07-19T15:19:02Z">
+    
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Enhanced Theme System */
+        :root {
+            --primary-color: #e74c3c;
+            --primary-dark: #c0392b;
+            --primary-light: #ec7063;
+            --secondary-color: #3498db;
+            --accent-color: #f39c12;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #17a2b8;
+            --text-color: #2c3e50;
+            --text-secondary: #6c757d;
+            --text-light: #95a5a6;
+            --background-color: #f8fafc;
+            --background-secondary: #ecf0f1;
+            --card-background: #ffffff;
+            --input-background: #ffffff;
+            --border-color: #dee2e6;
+            --border-light: #f1f3f4;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.15);
+            --shadow-xl: 0 16px 64px rgba(0,0,0,0.2);
+            --gradient-primary: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            --gradient-secondary: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            --gradient-success: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            --gradient-staff: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
+            --gradient-performance: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+        }
+        
+        /* Dark Theme Variables */
+        [data-theme="dark"] {
+            --text-color: #ffffff;
+            --text-secondary: #bdc3c7;
+            --text-light: #95a5a6;
+            --background-color: #0f0f0f;
+            --background-secondary: #1a1a1a;
+            --card-background: #1e1e1e;
+            --input-background: #2a2a2a;
+            --border-color: #333333;
+            --border-light: #2a2a2a;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
+            --shadow-xl: 0 16px 64px rgba(0,0,0,0.6);
+        }
+        
+        /* Auto Theme Detection */
+        @media (prefers-color-scheme: dark) {
+            :root[data-theme="auto"] {
+                --text-color: #ffffff;
+                --text-secondary: #bdc3c7;
+                --text-light: #95a5a6;
+                --background-color: #0f0f0f;
+                --background-secondary: #1a1a1a;
+                --card-background: #1e1e1e;
+                --input-background: #2a2a2a;
+                --border-color: #333333;
+                --border-light: #2a2a2a;
+                --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
+                --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+                --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
+                --shadow-xl: 0 16px 64px rgba(0,0,0,0.6);
+            }
+        }
+        
+        /* Base Elements */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: var(--background-color);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--card-background);
+            box-shadow: var(--shadow-md);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .back-btn {
+            background: var(--background-secondary);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+        }
+        
+        .header-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .theme-toggle {
+            background: var(--background-secondary);
+            color: var(--text-color);
+            border: 2px solid var(--border-color);
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .theme-toggle:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: scale(1.1);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+        
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 2rem 0;
+        }
+        
+        /* Loading State */
+        .loading-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 50vh;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border-color);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Staff Profile Header */
+        .staff-profile-header {
+            background: var(--card-background);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .staff-profile-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-staff);
+        }
+        
+        .profile-actions {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .profile-main-content {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .profile-avatar-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: var(--gradient-staff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+        }
+        
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        
+        .staff-status-indicator {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 4px solid var(--card-background);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+        
+        .status-available {
+            background: var(--success-color);
+        }
+        
+        .status-busy {
+            background: var(--warning-color);
+        }
+        
+        .status-unavailable {
+            background: var(--danger-color);
+        }
+        
+        .profile-info {
+            flex: 1;
+        }
+        
+        .staff-name {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+        
+        .staff-role {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .staff-department {
+            background: var(--gradient-secondary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+        
+        .staff-quick-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .quick-stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: var(--background-secondary);
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+        }
+        
+        .quick-stat-item:hover {
+            transform: translateY(-2px);
+        }
+        
+        .quick-stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 0.25rem;
+        }
+        
+        .quick-stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+        
+        .profile-actions-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .action-btn {
+            padding: 0.75rem 1.25rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            text-decoration: none;
+            text-align: center;
+            justify-content: center;
+            min-width: 150px;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-edit {
+            background: var(--gradient-secondary);
+            color: white;
+        }
+        
+        .btn-schedule {
+            background: var(--gradient-success);
+            color: white;
+        }
+        
+        .btn-assign {
+            background: var(--gradient-performance);
+            color: white;
+        }
+        
+        .btn-message {
+            background: var(--gradient-staff);
+            color: white;
+        }
+        
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+        
+        /* Section Cards */
+        .section-card {
+            background: var(--card-background);
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .section-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .section-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .section-icon.contact {
+            background: var(--gradient-staff);
+        }
+        
+        .section-icon.performance {
+            background: var(--gradient-performance);
+        }
+        
+        .section-icon.projects {
+            background: var(--gradient-secondary);
+        }
+        
+        .section-icon.skills {
+            background: var(--gradient-success);
+        }
+        
+        .section-icon.timeline {
+            background: var(--info-color);
+        }
+        
+        .section-count {
+            background: var(--background-secondary);
+            color: var(--text-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .section-content {
+            padding: 1.5rem;
+        }
+        
+        /* Contact Information */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--background-secondary);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-item:hover {
+            background: var(--border-light);
+            transform: translateY(-1px);
+        }
+        
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-staff);
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .contact-details {
+            flex: 1;
+        }
+        
+        .contact-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+        
+        .contact-value {
+            font-size: 1rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+        
+        .contact-action {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .contact-action:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+        
+        /* Performance Metrics */
+        .performance-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .performance-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--background-secondary);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .performance-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-performance);
+        }
+        
+        .performance-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .performance-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .performance-trend {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .performance-trend.positive {
+            color: var(--success-color);
+        }
+        
+        .performance-trend.negative {
+            color: var(--danger-color);
+        }
+        
+        .performance-trend.neutral {
+            color: var(--text-secondary);
+        }
+        
+        /* Skills Section */
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .skill-tag {
+            background: var(--gradient-success);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .skill-tag:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .skill-level {
+            background: rgba(255,255,255,0.2);
+            padding: 0.25rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+        
+        .qualifications-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .qualification-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-light);
+            transition: background 0.3s ease;
+        }
+        
+        .qualification-item:last-child {
+            border-bottom: none;
+        }
+        
+        .qualification-item:hover {
+            background: var(--background-secondary);
+        }
+        
+        .qualification-icon {
+            width: 30px;
+            height: 30px;
+            background: var(--gradient-success);
+            color: white;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+        
+        .qualification-name {
+            flex: 1;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .qualification-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-valid {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success-color);
+        }
+        
+        .status-expired {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--danger-color);
+        }
+        
+        /* Project History */
+        .project-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .project-item {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .project-item:last-child {
+            border-bottom: none;
+        }
+        
+        .project-item:hover {
+            background: var(--background-secondary);
+            transform: translateX(4px);
+        }
+        
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+        
+        .project-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 0.25rem;
+        }
+        
+        .project-date {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .project-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-active {
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--secondary-color);
+        }
+        
+        .status-completed {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success-color);
+        }
+        
+        .project-role {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--gradient-staff);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding: 1rem 0;
+            margin-bottom: 1rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -22px;
+            top: 1rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            border: 3px solid var(--card-background);
+        }
+        
+        .timeline-date {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 0.25rem;
+        }
+        
+        .timeline-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+        
+        .empty-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .empty-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .empty-description {
+            font-size: 0.9rem;
+        }
+        
+        /* Alert Messages */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: none;
+            animation: slideInDown 0.3s ease;
+        }
+        
+        .alert.show {
+            display: block;
+        }
+        
+        .alert-success {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success-color);
+            border: 1px solid rgba(39, 174, 96, 0.2);
+        }
+        
+        .alert-error {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--danger-color);
+            border: 1px solid rgba(231, 76, 60, 0.2);
+        }
+        
+        .alert-warning {
+            background: rgba(243, 156, 18, 0.1);
+            color: var(--warning-color);
+            border: 1px solid rgba(243, 156, 18, 0.2);
+        }
+        
+        .alert-info {
+            background: rgba(23, 162, 184, 0.1);
+            color: var(--info-color);
+            border: 1px solid rgba(23, 162, 184, 0.2);
+        }
+        
+        /* Status Update Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal {
+            background: var(--card-background);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+        
+        .btn-modal {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-cancel {
+            background: var(--background-secondary);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+        
+        .btn-confirm {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        /* Animations */
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+        
+        /* Enhanced Responsive Design */
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .header-left, .header-right {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .profile-main-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            .profile-actions {
+                position: relative;
+                top: auto;
+                right: auto;
+                justify-content: center;
+                margin-top: 1rem;
+            }
+            
+            .staff-quick-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .performance-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 0.5rem;
+            }
+            
+            .main-content {
+                padding: 1rem 0;
+            }
+            
+            .staff-quick-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-actions-section {
+                width: 100%;
+            }
+            
+            .action-btn {
+                min-width: auto;
+                width: 100%;
+            }
+        }
+        
+        /* Focus Styles for Accessibility */
+        *:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-left">
+                    <a href="/account/staff.html" class="back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Staff
+                    </a>
+                    <h1 class="header-title">Staff Details</h1>
+                </div>
+                
+                <div class="header-right">
+                    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <div class="user-info">
+                        <div class="user-avatar" id="userAvatar">DL</div>
+                        <span id="userName">Dad-Link</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Alert Messages -->
+            <div class="alert alert-error" id="errorAlert" role="alert"></div>
+            <div class="alert alert-success" id="successAlert" role="alert"></div>
+            <div class="alert alert-warning" id="warningAlert" role="alert"></div>
+            <div class="alert alert-info" id="infoAlert" role="alert"></div>
+
+            <!-- Loading State -->
+            <div class="loading-container" id="loadingContainer">
+                <div class="spinner"></div>
+            </div>
+
+            <!-- Staff Content (hidden initially) -->
+            <div id="staffContent" style="display: none;">
+                <!-- Staff Profile Header -->
+                <div class="staff-profile-header fade-in">
+                    <div class="profile-main-content">
+                        <div class="profile-avatar-section">
+                            <div class="profile-avatar" id="staffAvatar">
+                                <span id="staffInitials">JD</span>
+                                <div class="staff-status-indicator status-available" id="staffStatusIndicator">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-info">
+                            <h1 class="staff-name" id="staffName">Loading...</h1>
+                            <div class="staff-role" id="staffRole">Loading...</div>
+                            <div class="staff-department" id="staffDepartment">Loading...</div>
+                            
+                            <div class="staff-quick-stats">
+                                <div class="quick-stat-item">
+                                    <div class="quick-stat-value" id="staffRating">0%</div>
+                                    <div class="quick-stat-label">Performance</div>
+                                </div>
+                                <div class="quick-stat-item">
+                                    <div class="quick-stat-value" id="staffProjects">0</div>
+                                    <div class="quick-stat-label">Projects</div>
+                                </div>
+                                <div class="quick-stat-item">
+                                    <div class="quick-stat-value" id="staffExperience">0</div>
+                                    <div class="quick-stat-label">Years Exp.</div>
+                                </div>
+                                <div class="quick-stat-item">
+                                    <div class="quick-stat-value" id="staffRate">£0</div>
+                                    <div class="quick-stat-label">Hourly Rate</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-actions-section">
+                            <a href="#" class="action-btn btn-edit" id="editStaffBtn">
+                                <i class="fas fa-edit"></i>
+                                Edit Profile
+                            </a>
+                            <button class="action-btn btn-schedule" id="scheduleStaffBtn">
+                                <i class="fas fa-calendar"></i>
+                                View Schedule
+                            </button>
+                            <button class="action-btn btn-assign" id="assignProjectBtn">
+                                <i class="fas fa-tasks"></i>
+                                Assign Project
+                            </button>
+                            <button class="action-btn btn-message" id="messageStaffBtn">
+                                <i class="fas fa-envelope"></i>
+                                Send Message
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-grid">
+                    <!-- Left Column -->
+                    <div>
+                        <!-- Contact Information -->
+                        <div class="section-card fade-in">
+                            <div class="section-header">
+                                <div class="section-title">
+                                    <div class="section-icon contact">
+                                        <i class="fas fa-address-card"></i>
+                                    </div>
+                                    Contact Information
+                                </div>
+                            </div>
+                            <div class="section-content">
+                                <div class="contact-grid">
+                                    <div class="contact-item">
+                                        <div class="contact-icon">
+                                            <i class="fas fa-envelope"></i>
+                                        </div>
+                                        <div class="contact-details">
+                                            <div class="contact-label">Email Address</div>
+                                            <div class="contact-value" id="staffEmail">Loading...</div>
+                                        </div>
+                                        <button class="contact-action" onclick="sendEmail()">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="contact-item">
+                                        <div class="contact-icon">
+                                            <i class="fas fa-phone"></i>
+                                        </div>
+                                        <div class="contact-details">
+                                            <div class="contact-label">Phone Number</div>
+                                            <div class="contact-value" id="staffPhone">Loading...</div>
+                                        </div>
+                                        <button class="contact-action" onclick="callStaff()">
+                                            <i class="fas fa-phone-alt"></i>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="contact-item">
+                                        <div class="contact-icon">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                        </div>
+                                        <div class="contact-details">
+                                            <div class="contact-label">Home Address</div>
+                                            <div class="contact-value" id="staffAddress">Loading...</div>
+                                        </div>
+                                        <button class="contact-action" onclick="openDirections()">
+                                            <i class="fas fa-directions"></i>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="contact-item">
+                                        <div class="contact-icon">
+                                            <i class="fas fa-phone-square"></i>
+                                        </div>
+                                        <div class="contact-details">
+                                            <div class="contact-label">Emergency Contact</div>
+                                            <div class="contact-value" id="staffEmergencyContact">Loading...</div>
+                                        </div>
+                                        <button class="contact-action" onclick="callEmergencyContact()">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Performance Metrics -->
+                        <div class="section-card fade-in">
+                            <div class="section-header">
+                                <div class="section-title">
+                                    <div class="section-icon performance">
+                                        <i class="fas fa-chart-line"></i>
+                                    </div>
+                                    Performance Metrics
+                                </div>
+                            </div>
+                            <div class="section-content">
+                                <div class="performance-grid">
+                                    <div class="performance-item">
+                                        <div class="performance-value" id="performanceRating">95%</div>
+                                        <div class="performance-label">Overall Rating</div>
+                                        <div class="performance-trend positive" id="ratingTrend">
+                                            <i class="fas fa-arrow-up"></i>
+                                            <span>+3% this month</span>
+                                        </div>
+                                    </div>
+                                    <div class="performance-item">
+                                        <div class="performance-value" id="onTimeCompletion">92%</div>
+                                        <div class="performance-label">On-Time Completion</div>
+                                        <div class="performance-trend positive" id="completionTrend">
+                                            <i class="fas fa-arrow-up"></i>
+                                            <span>Consistent</span>
+                                        </div>
+                                    </div>
+                                    <div class="performance-item">
+                                        <div class="performance-value" id="qualityScore">4.8</div>
+                                        <div class="performance-label">Quality Score</div>
+                                        <div class="performance-trend positive" id="qualityTrend">
+                                            <i class="fas fa-star"></i>
+                                            <span>Excellent</span>
+                                        </div>
+                                    </div>
+                                    <div class="performance-item">
+                                        <div class="performance-value" id="safetyRecord">98%</div>
+                                        <div class="performance-label">Safety Record</div>
+                                        <div class="performance-trend positive" id="safetyTrend">
+                                            <i class="fas fa-shield-alt"></i>
+                                            <span>Outstanding</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Projects -->
+                        <div class="section-card fade-in">
+                            <div class="section-header">
+                                <div class="section-title">
+                                    <div class="section-icon projects">
+                                        <i class="fas fa-hammer"></i>
+                                    </div>
+                                    Recent Projects
+                                </div>
+                                <div class="section-count" id="projectsCount">0</div>
+                            </div>
+                            <div class="section-content">
+                                <div class="project-list" id="projectsList">
+                                    <div class="empty-state">
+                                        <div class="empty-icon">
+                                            <i class="fas fa-hammer"></i>
+                                        </div>
+                                        <div class="empty-title">No Projects Found</div>
+                                        <div class="empty-description">This staff member hasn't been assigned to any projects yet</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div>
+                        <!-- Skills & Qualifications -->
+                        <div class="section-card fade-in">
+                            <div class="section-header">
+                                <div class="section-title">
+                                    <div class="section-icon skills">
+                                        <i class="fas fa-tools"></i>
+                                    </div>
+                                    Skills & Qualifications
+                                </div>
+                                <div class="section-count" id="skillsCount">0</div>
+                            </div>
+                            <div class="section-content">
+                                <h4 style="color: var(--text-color); margin-bottom: 1rem; font-size: 1.1rem;">Key Skills</h4>
+                                <div class="skills-grid" id="skillsGrid">
+                                    <!-- Skills will be populated here -->
+                                </div>
+                                
+                                <h4 style="color: var(--text-color); margin: 2rem 0 1rem; font-size: 1.1rem;">Certifications</h4>
+                                <ul class="qualifications-list" id="qualificationsList">
+                                    <!-- Qualifications will be populated here -->
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Employment Timeline -->
+                        <div class="section-card fade-in">
+                            <div class="section-header">
+                                <div class="section-title">
+                                    <div class="section-icon timeline">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    Employment Timeline
+                                </div>
+                            </div>
+                            <div class="section-content">
+                                <div class="timeline" id="employmentTimeline">
+                                    <!-- Timeline items will be populated here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Status Update Modal -->
+    <div class="modal-overlay" id="statusModal">
+        <div class="modal">
+            <h3 class="modal-title">Update Staff Status</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">Change the current availability status for this staff member.</p>
+            
+            <div style="margin: 1rem 0;">
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">New Status:</label>
+                <select id="newStatus" style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: 8px; background: var(--input-background); color: var(--text-color);">
+                    <option value="available">Available</option>
+                    <option value="busy">Busy/On-Site</option>
+                    <option value="unavailable">Unavailable</option>
+                </select>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn-modal btn-cancel" onclick="closeStatusModal()">Cancel</button>
+                <button class="btn-modal btn-confirm" onclick="updateStaffStatus()">Update Status</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBI1M38HZH8-xY3nfoKmqoitmggq3C8zKE",
+            authDomain: "buildinggroup-4f8b9.firebaseapp.com",
+            projectId: "buildinggroup-4f8b9",
+            storageBucket: "buildinggroup-4f8b9.firebasestorage.app",
+            messagingSenderId: "353000992011",
+            appId: "1:353000992011:web:c834310d7d79dd1bf0c60e",
+            measurementId: "G-DF11Q5PZRT"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        
+        // Global variables
+        let currentUser = null;
+        let currentStaff = null;
+        let staffId = null;
+        let staffProjects = [];
+        
+        // Theme Management
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        let currentTheme = localStorage.getItem('theme') || 'auto';
+        html.setAttribute('data-theme', currentTheme);
+        updateThemeIcon();
+        
+        themeToggle.addEventListener('click', () => {
+            switch(currentTheme) {
+                case 'auto':
+                    currentTheme = 'light';
+                    break;
+                case 'light':
+                    currentTheme = 'dark';
+                    break;
+                case 'dark':
+                    currentTheme = 'auto';
+                    break;
+            }
+            
+            html.setAttribute('data-theme', currentTheme);
+            localStorage.setItem('theme', currentTheme);
+            updateThemeIcon();
+        });
+        
+        function updateThemeIcon() {
+            const icon = themeToggle.querySelector('i');
+            switch(currentTheme) {
+                case 'light':
+                    icon.className = 'fas fa-sun';
+                    break;
+                case 'dark':
+                    icon.className = 'fas fa-moon';
+                    break;
+                case 'auto':
+                    icon.className = 'fas fa-adjust';
+                    break;
+            }
+        }
+        
+        // Get staff ID from URL
+        function getStaffIdFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const idFromParams = urlParams.get('id');
+            const idFromStorage = localStorage.getItem('selectedStaffId');
+            
+            return idFromParams || idFromStorage;
+        }
+        
+        // Alert Functions
+        function showAlert(type, message) {
+            const alert = document.getElementById(`${type}Alert`);
+            alert.textContent = message;
+            alert.classList.add('show');
+            
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 5000);
+        }
+        
+        // User Authentication Check
+        function checkAuthState() {
+            return new Promise((resolve) => {
+                const unsubscribe = auth.onAuthStateChanged((user) => {
+                    unsubscribe();
+                    if (user && user.emailVerified) {
+                        currentUser = user;
+                        loadUserData();
+                        resolve(true);
+                    } else {
+                        showAlert('error', 'Please login to view staff details');
+                        setTimeout(() => {
+                            window.location.href = '/account/login.html';
+                        }, 2000);
+                        resolve(false);
+                    }
+                });
+            });
+        }
+        
+        async function loadUserData() {
+            try {
+                const userDoc = await db.collection('users').doc(currentUser.uid).get();
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    
+                    // Update UI
+                    document.getElementById('userName').textContent = userData.firstName || 'User';
+                    document.getElementById('userAvatar').textContent = (userData.firstName?.[0] || 'U') + (userData.lastName?.[0] || '');
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+        
+        // Load Staff Details
+        async function loadStaffDetails() {
+            if (!currentUser || !staffId) return;
+            
+            try {
+                const staffDoc = await db.collection('users').doc(currentUser.uid)
+                    .collection('staff').doc(staffId).get();
+                
+                if (!staffDoc.exists) {
+                    showAlert('error', 'Staff member not found');
+                    setTimeout(() => {
+                        window.location.href = '/account/staff.html';
+                    }, 2000);
+                    return;
+                }
+                
+                currentStaff = {
+                    id: staffDoc.id,
+                    ...staffDoc.data()
+                };
+                
+                // Hide loading and show content
+                document.getElementById('loadingContainer').style.display = 'none';
+                document.getElementById('staffContent').style.display = 'block';
+                
+                // Populate staff details
+                populateStaffDetails();
+                
+                // Load related data
+                await Promise.all([
+                    loadStaffProjects(),
+                ]);
+                
+                console.log('Staff member loaded:', currentStaff);
+                
+            } catch (error) {
+                console.error('Error loading staff member:', error);
+                showAlert('error', 'Failed to load staff details');
+            }
+        }
+        
+        // Populate Staff Details
+        function populateStaffDetails() {
+            if (!currentStaff) return;
+            
+            // Profile header
+            const fullName = currentStaff.fullName || `${currentStaff.firstName} ${currentStaff.lastName}`;
+            const initials = (currentStaff.firstName?.[0] || '') + (currentStaff.lastName?.[0] || '');
+            
+            document.getElementById('staffName').textContent = fullName;
+            document.getElementById('staffInitials').textContent = initials;
+            document.getElementById('staffRole').textContent = currentStaff.role || 'Team Member';
+            document.getElementById('staffDepartment').textContent = (currentStaff.department || 'General').toUpperCase();
+            
+            // Status indicator
+            const statusIndicator = document.getElementById('staffStatusIndicator');
+            let status = currentStaff.status || 'available';
+            let statusIcon = 'fas fa-check';
+            
+            statusIndicator.className = `staff-status-indicator status-${status}`;
+            
+            switch(status) {
+                case 'available':
+                    statusIcon = 'fas fa-check';
+                    break;
+                case 'busy':
+                case 'onsite':
+                    statusIcon = 'fas fa-hard-hat';
+                    break;
+                case 'unavailable':
+                    statusIcon = 'fas fa-times';
+                    break;
+            }
+            
+            statusIndicator.innerHTML = `<i class="${statusIcon}"></i>`;
+            
+            // Quick stats
+            const rating = currentStaff.rating || 0;
+            const ratingPercentage = Math.round(rating * 20);
+            document.getElementById('staffRating').textContent = `${ratingPercentage}%`;
+            document.getElementById('staffProjects').textContent = currentStaff.completedProjects || 0;
+            document.getElementById('staffExperience').textContent = currentStaff.experienceYears || 0;
+            document.getElementById('staffRate').textContent = `£${(currentStaff.hourlyRate || 0).toFixed(0)}`;
+            
+            // Contact information
+            document.getElementById('staffEmail').textContent = currentStaff.email || 'No email provided';
+            document.getElementById('staffPhone').textContent = currentStaff.phone || 'No phone provided';
+            document.getElementById('staffAddress').textContent = currentStaff.address || 'No address provided';
+            
+            // Emergency contact
+            if (currentStaff.emergencyContact) {
+                const emergencyText = `${currentStaff.emergencyContact.name} (${currentStaff.emergencyContact.relationship}) - ${currentStaff.emergencyContact.phone}`;
+                document.getElementById('staffEmergencyContact').textContent = emergencyText;
+            } else {
+                document.getElementById('staffEmergencyContact').textContent = 'No emergency contact';
+            }
+            
+            // Performance metrics
+            document.getElementById('performanceRating').textContent = `${ratingPercentage}%`;
+            document.getElementById('onTimeCompletion').textContent = `${currentStaff.onTimeCompletion || 100}%`;
+            document.getElementById('qualityScore').textContent = (currentStaff.rating || 0).toFixed(1);
+            document.getElementById('safetyRecord').textContent = `${currentStaff.safetyRecord || 98}%`;
+            
+            // Skills and qualifications
+            populateSkillsAndQualifications();
+            
+            // Employment timeline
+            populateEmploymentTimeline();
+            
+            // Update edit button link
+            document.getElementById('editStaffBtn').href = `/account/add-staff.html?edit=${staffId}`;
+        }
+        
+        // Populate Skills and Qualifications
+        function populateSkillsAndQualifications() {
+            const skillsGrid = document.getElementById('skillsGrid');
+            const qualificationsList = document.getElementById('qualificationsList');
+            const skillsCount = document.getElementById('skillsCount');
+            
+            // Skills
+            const skills = currentStaff.skills || [];
+            skillsCount.textContent = skills.length;
+            
+            if (skills.length === 0) {
+                skillsGrid.innerHTML = '<div style="color: var(--text-secondary); font-style: italic;">No skills listed</div>';
+            } else {
+                skillsGrid.innerHTML = skills.map(skill => `
+                    <div class="skill-tag">
+                        <i class="fas fa-tools"></i>
+                        <span>${skill}</span>
+                    </div>
+                `).join('');
+            }
+            
+            // Qualifications
+            const qualifications = currentStaff.qualifications || [];
+            
+            if (qualifications.length === 0) {
+                qualificationsList.innerHTML = '<li style="color: var(--text-secondary); font-style: italic; padding: 1rem;">No qualifications listed</li>';
+            } else {
+                qualificationsList.innerHTML = qualifications.map(qualification => `
+                    <li class="qualification-item">
+                        <div class="qualification-icon">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <div class="qualification-name">${qualification}</div>
+                        <div class="qualification-status status-valid">Valid</div>
+                    </li>
+                `).join('');
+            }
+        }
+        
+        // Populate Employment Timeline
+        function populateEmploymentTimeline() {
+            const timeline = document.getElementById('employmentTimeline');
+            const timelineEvents = [];
+            
+            // Add employment start
+            if (currentStaff.startDate) {
+                timelineEvents.push({
+                    date: new Date(currentStaff.startDate),
+                    title: 'Employment Started',
+                    description: `Joined as ${currentStaff.role || 'Team Member'} in ${currentStaff.department || 'General'} department`
+                });
+            }
+            
+            // Add created date
+            if (currentStaff.createdAt) {
+                timelineEvents.push({
+                    date: currentStaff.createdAt.toDate(),
+                    title: 'Profile Created',
+                    description: 'Employee profile added to system'
+                });
+            }
+            
+            // Sort by date (newest first)
+            timelineEvents.sort((a, b) => b.date - a.date);
+            
+            if (timelineEvents.length === 0) {
+                timeline.innerHTML = '<div style="color: var(--text-secondary); font-style: italic; padding-left: 0;">No timeline events available</div>';
+            } else {
+                timeline.innerHTML = timelineEvents.map(event => `
+                    <div class="timeline-item">
+                        <div class="timeline-date">${event.date.toLocaleDateString()}</div>
+                        <div class="timeline-title">${event.title}</div>
+                        <div class="timeline-description">${event.description}</div>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        // Load Staff Projects
+        async function loadStaffProjects() {
+            if (!currentUser || !staffId) return;
+            
+            try {
+                // Load projects where this staff member is assigned
+                const projectsQuery = await db.collection('users').doc(currentUser.uid)
+                    .collection('jobs')
+                    .where('assignedStaff', 'array-contains', staffId)
+                    .orderBy('updatedAt', 'desc')
+                    .limit(10)
+                    .get();
+                
+                staffProjects = [];
+                projectsQuery.forEach(doc => {
+                    staffProjects.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+                
+                renderStaffProjects();
+                
+            } catch (error) {
+                console.error('Error loading staff projects:', error);
+                // If the query fails due to missing index, show empty state
+                renderStaffProjects();
+            }
+        }
+        
+        // Render Staff Projects
+        function renderStaffProjects() {
+            const container = document.getElementById('projectsList');
+            const countElement = document.getElementById('projectsCount');
+            
+            countElement.textContent = staffProjects.length;
+            
+            if (staffProjects.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-hammer"></i>
+                        </div>
+                        <div class="empty-title">No Projects Found</div>
+                        <div class="empty-description">This staff member hasn't been assigned to any projects yet</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = staffProjects.map(project => `
+                <div class="project-item" onclick="openProjectDetails('${project.id}')">
+                    <div class="project-header">
+                        <div>
+                            <div class="project-title">${project.projectTitle || project.jobTitle || 'Untitled Project'}</div>
+                            <div class="project-date">${project.createdAt ? new Date(project.createdAt.toDate()).toLocaleDateString() : 'No date'}</div>
+                            <div class="project-role">Role: ${currentStaff.role || 'Team Member'}</div>
+                        </div>
+                        <div class="project-status status-${project.status || 'active'}">${(project.status || 'active').toUpperCase()}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Action Functions
+        window.openProjectDetails = function(projectId) {
+            localStorage.setItem('selectedProjectId', projectId);
+            window.location.href = `/account/project-details.html?id=${projectId}`;
+        };
+        
+        // Contact Actions
+        window.sendEmail = function() {
+            if (currentStaff && currentStaff.email) {
+                const subject = encodeURIComponent(`Building Group - Message for ${currentStaff.fullName || currentStaff.firstName}`);
+                const body = encodeURIComponent(`Dear ${currentStaff.firstName || 'Team Member'},\n\n\n\nBest regards,\nBuilding Group Management`);
+                window.open(`mailto:${currentStaff.email}?subject=${subject}&body=${body}`);
+            } else {
+                showAlert('warning', 'No email address available for this staff member');
+            }
+        };
+        
+        window.callStaff = function() {
+            if (currentStaff && currentStaff.phone) {
+                window.open(`tel:${currentStaff.phone}`);
+            } else {
+                showAlert('warning', 'No phone number available for this staff member');
+            }
+        };
+        
+        window.openDirections = function() {
+            if (currentStaff && currentStaff.address) {
+                const encodedAddress = encodeURIComponent(currentStaff.address);
+                window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank');
+            } else {
+                showAlert('warning', 'No address available for this staff member');
+            }
+        };
+        
+        window.callEmergencyContact = function() {
+            if (currentStaff && currentStaff.emergencyContact && currentStaff.emergencyContact.phone) {
+                const confirmCall = confirm(`Call emergency contact: ${currentStaff.emergencyContact.name} (${currentStaff.emergencyContact.relationship})?`);
+                if (confirmCall) {
+                    window.open(`tel:${currentStaff.emergencyContact.phone}`);
+                }
+            } else {
+                showAlert('warning', 'No emergency contact available for this staff member');
+            }
+        };
+        
+        // Staff Action Handlers
+        document.getElementById('scheduleStaffBtn').addEventListener('click', function() {
+            showAlert('info', 'Staff scheduling system will be implemented to manage work schedules and availability');
+            // TODO: Navigate to staff scheduling page
+        });
+        
+        document.getElementById('assignProjectBtn').addEventListener('click', function() {
+            showAlert('info', 'Project assignment tool will help assign this staff member to active projects');
+            // TODO: Open project assignment modal or navigate to assignment page
+        });
+        
+        document.getElementById('messageStaffBtn').addEventListener('click', function() {
+            if (currentStaff && currentStaff.email) {
+                sendEmail();
+            } else {
+                showAlert('warning', 'No email address available to send message');
+            }
+        });
+        
+        // Status Management
+        function openStatusModal() {
+            document.getElementById('statusModal').style.display = 'flex';
+            document.getElementById('newStatus').value = currentStaff.status || 'available';
+        }
+        
+        window.closeStatusModal = function() {
+            document.getElementById('statusModal').style.display = 'none';
+        };
+        
+        window.updateStaffStatus = async function() {
+            const newStatus = document.getElementById('newStatus').value;
+            
+            if (!currentUser || !staffId) {
+                showAlert('error', 'Unable to update status');
+                return;
+            }
+            
+            try {
+                await db.collection('users').doc(currentUser.uid)
+                    .collection('staff').doc(staffId).update({
+                        status: newStatus,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                
+                // Update local data
+                currentStaff.status = newStatus;
+                populateStaffDetails();
+                
+                closeStatusModal();
+                showAlert('success', `Staff status updated to ${newStatus}`);
+                
+            } catch (error) {
+                console.error('Error updating staff status:', error);
+                showAlert('error', 'Failed to update staff status');
+            }
+        };
+        
+        // Add click handler to status indicator
+        document.getElementById('staffStatusIndicator').addEventListener('click', openStatusModal);
+        document.getElementById('staffStatusIndicator').style.cursor = 'pointer';
+        document.getElementById('staffStatusIndicator').title = 'Click to change status';
+        
+        // Performance Analytics
+        function calculatePerformanceMetrics() {
+            if (!currentStaff) return;
+            
+            const metrics = {
+                overallRating: (currentStaff.rating || 0) * 20,
+                projectsCompleted: currentStaff.completedProjects || 0,
+                onTimeRate: currentStaff.onTimeCompletion || 100,
+                safetyRecord: currentStaff.safetyRecord || 98,
+                experienceLevel: getExperienceLevel(currentStaff.experienceYears || 0),
+                skillsCount: (currentStaff.skills || []).length,
+                qualificationsCount: (currentStaff.qualifications || []).length
+            };
+            
+            return metrics;
+        }
+        
+        function getExperienceLevel(years) {
+            if (years < 2) return 'Junior';
+            if (years < 5) return 'Intermediate';
+            if (years < 10) return 'Senior';
+            return 'Expert';
+        }
+        
+        // Export Staff Information
+        function exportStaffInfo() {
+            if (!currentStaff) return;
+            
+            const staffInfo = {
+                personalInfo: {
+                    name: currentStaff.fullName || `${currentStaff.firstName} ${currentStaff.lastName}`,
+                    email: currentStaff.email,
+                    phone: currentStaff.phone,
+                    address: currentStaff.address
+                },
+                employment: {
+                    employeeNumber: currentStaff.employeeNumber,
+                    role: currentStaff.role,
+                    department: currentStaff.department,
+                    startDate: currentStaff.startDate,
+                    employmentType: currentStaff.employmentType,
+                    hourlyRate: currentStaff.hourlyRate,
+                    experienceYears: currentStaff.experienceYears
+                },
+                performance: {
+                    rating: currentStaff.rating,
+                    completedProjects: currentStaff.completedProjects,
+                    onTimeCompletion: currentStaff.onTimeCompletion,
+                    status: currentStaff.status
+                },
+                skills: currentStaff.skills || [],
+                qualifications: currentStaff.qualifications || [],
+                emergencyContact: currentStaff.emergencyContact || {}
+            };
+            
+            // Create and download JSON file
+            const dataStr = JSON.stringify(staffInfo, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = `staff_${currentStaff.fullName?.replace(/\s+/g, '_') || 'member'}_${new Date().toISOString().split('T')[0]}.json`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            
+            showAlert('success', 'Staff information exported successfully');
+        }
+        
+        // Real-time Updates
+        function setupRealtimeUpdates() {
+            if (!currentUser || !staffId) return;
+            
+            const staffRef = db.collection('users').doc(currentUser.uid).collection('staff').doc(staffId);
+            
+            // Listen for real-time updates
+            const unsubscribe = staffRef.onSnapshot(
+                (doc) => {
+                    if (doc.exists) {
+                        const updatedData = doc.data();
+                        const hasChanges = JSON.stringify(currentStaff) !== JSON.stringify(updatedData);
+                        
+                        if (hasChanges) {
+                            currentStaff = { id: doc.id, ...updatedData };
+                            populateStaffDetails();
+                            console.log('Staff data updated in real-time');
+                        }
+                    }
+                },
+                (error) => {
+                    console.error('Error listening to staff updates:', error);
+                }
+            );
+            
+            // Store unsubscribe function for cleanup
+            window.staffUnsubscribe = unsubscribe;
+        }
+        
+        // Staff Notes Management
+        async function addStaffNote() {
+            const noteContent = prompt('Add a note about this staff member:');
+            
+            if (!noteContent || !noteContent.trim()) return;
+            
+            if (!currentUser || !staffId) {
+                showAlert('error', 'Unable to add note - user or staff not found');
+                return;
+            }
+            
+            try {
+                const noteData = {
+                    content: noteContent.trim(),
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    createdBy: currentUser.uid,
+                    staffName: currentStaff.fullName || `${currentStaff.firstName} ${currentStaff.lastName}`,
+                    type: 'general'
+                };
+                
+                await db.collection('users').doc(currentUser.uid)
+                    .collection('staff').doc(staffId)
+                    .collection('notes').add(noteData);
+                
+                showAlert('success', 'Staff note added successfully');
+                
+            } catch (error) {
+                console.error('Error adding staff note:', error);
+                showAlert('error', 'Failed to add note');
+            }
+        }
+        
+        // Quick Actions Menu
+        function createQuickActionsMenu() {
+            const actionsMenu = `
+                <div style="position: absolute; top: 100%; right: 0; background: var(--card-background); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: var(--shadow-lg); z-index: 1000; min-width: 200px; display: none;" id="quickActionsMenu">
+                    <div style="padding: 0.5rem;">
+                        <button onclick="addStaffNote()" style="width: 100%; text-align: left; padding: 0.75rem; border: none; background: transparent; color: var(--text-color); cursor: pointer; border-radius: 4px; margin-bottom: 0.25rem;" onmouseover="this.style.background='var(--background-secondary)'" onmouseout="this.style.background='transparent'">
+                            <i class="fas fa-sticky-note" style="margin-right: 0.5rem;"></i>Add Note
+                        </button>
+                        <button onclick="exportStaffInfo()" style="width: 100%; text-align: left; padding: 0.75rem; border: none; background: transparent; color: var(--text-color); cursor: pointer; border-radius: 4px; margin-bottom: 0.25rem;" onmouseover="this.style.background='var(--background-secondary)'" onmouseout="this.style.background='transparent'">
+                            <i class="fas fa-download" style="margin-right: 0.5rem;"></i>Export Info
+                        </button>
+                        <button onclick="openStatusModal()" style="width: 100%; text-align: left; padding: 0.75rem; border: none; background: transparent; color: var(--text-color); cursor: pointer; border-radius: 4px;" onmouseover="this.style.background='var(--background-secondary)'" onmouseout="this.style.background='transparent'">
+                            <i class="fas fa-user-clock" style="margin-right: 0.5rem;"></i>Change Status
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Add to profile actions section
+            const profileHeader = document.querySelector('.staff-profile-header');
+            profileHeader.style.position = 'relative';
+            profileHeader.insertAdjacentHTML('beforeend', actionsMenu);
+            
+            // Add trigger button
+            const quickActionsBtn = document.createElement('button');
+            quickActionsBtn.className = 'action-btn btn-secondary';
+            quickActionsBtn.innerHTML = '<i class="fas fa-ellipsis-v"></i>';
+            quickActionsBtn.style.position = 'absolute';
+            quickActionsBtn.style.top = '1.5rem';
+            quickActionsBtn.style.right = '1.5rem';
+            quickActionsBtn.onclick = toggleQuickActionsMenu;
+            
+            profileHeader.appendChild(quickActionsBtn);
+        }
+        
+        function toggleQuickActionsMenu() {
+            const menu = document.getElementById('quickActionsMenu');
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('quickActionsMenu');
+            const trigger = e.target.closest('button');
+            
+            if (menu && menu.style.display === 'block' && (!trigger || !trigger.onclick || trigger.onclick.toString().indexOf('toggleQuickActionsMenu') === -1)) {
+                menu.style.display = 'none';
+            }
+        });
+        
+        // Staff Performance Dashboard
+        function createPerformanceDashboard() {
+            const metrics = calculatePerformanceMetrics();
+            console.log('Staff Performance Metrics:', {
+                name: currentStaff.fullName,
+                metrics: metrics,
+                projects: staffProjects.length,
+                lastUpdated: new Date().toISOString()
+            });
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+E to edit staff
+            if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
+                e.preventDefault();
+                document.getElementById('editStaffBtn').click();
+            }
+            
+            // Ctrl+M to send message
+            if ((e.ctrlKey || e.metaKey) && e.key === 'm') {
+                e.preventDefault();
+                if (currentStaff && currentStaff.email) {
+                    sendEmail();
+                }
+            }
+            
+            // Ctrl+S to update status
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                openStatusModal();
+            }
+        });
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('Staff Details Page Loaded - 2025-07-19T15:22:24Z');
+            console.log('Current User: Dad-Link');
+            
+            // Get staff ID from URL or storage
+            staffId = getStaffIdFromURL();
+            
+            if (!staffId) {
+                showAlert('error', 'No staff member selected');
+                setTimeout(() => {
+                    window.location.href = '/account/staff.html';
+                }, 2000);
+                return;
+            }
+            
+            // Check authentication
+            const isAuthenticated = await checkAuthState();
+            if (!isAuthenticated) return;
+            
+            // Load staff details
+            await loadStaffDetails();
+            
+            // Setup real-time updates
+            setupRealtimeUpdates();
+            
+            // Create additional features
+            createQuickActionsMenu();
+            createPerformanceDashboard();
+            
+            // Clear selected staff ID from storage
+            localStorage.removeItem('selectedStaffId');
+            
+            console.log('🚀 Staff Details System Ready!');
+            console.log('✓ Firebase Integration ✓ Real-time Updates ✓ Performance Tracking');
+            console.log('✓ Contact Management ✓ Status Updates ✓ Project History');
+            console.log('✓ Skills & Qualifications ✓ Timeline ✓ Quick Actions');
+        });
+        
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            if (window.staffUnsubscribe) {
+                window.staffUnsubscribe();
+            }
+        });
+        
+        // Page visibility change handler
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden && currentUser && staffId) {
+                // Refresh data when page becomes visible again
+                loadStaffDetails();
+            }
+        });
+        
+        // Enhanced staff management functions
+        async function updateStaffPerformance(rating, notes = null) {
+            if (!currentUser || !staffId) return;
+            
+            try {
+                const updateData = {
+                    rating: parseFloat(rating),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                if (notes) {
+                    updateData.performanceNotes = notes;
+                }
+                
+                await db.collection('users').doc(currentUser.uid)
+                    .collection('staff').doc(staffId).update(updateData);
+                
+                showAlert('success', 'Staff performance updated');
+                
+            } catch (error) {
+                console.error('Error updating performance:', error);
+                showAlert('error', 'Failed to update performance');
+            }
+        }
+        
+        // Staff availability tracking
+        function trackStaffActivity() {
+            const lastActive = new Date().toISOString();
+            localStorage.setItem(`staff_${staffId}_last_viewed`, lastActive);
+            
+            // Track view count
+            const viewCount = parseInt(localStorage.getItem(`staff_${staffId}_views`) || '0') + 1;
+            localStorage.setItem(`staff_${staffId}_views`, viewCount.toString());
+        }
+        
+        // Initialize activity tracking
+        trackStaffActivity();
+        
+        // Expose functions globally for testing and external use
+        window.addStaffNote = addStaffNote;
+        window.exportStaffInfo = exportStaffInfo;
+        window.updateStaffPerformance = updateStaffPerformance;
+        window.toggleQuickActionsMenu = toggleQuickActionsMenu;
+        
+        console.log('👤 Building Group Staff Details System Initialized!');
+        console.log('📊 Features: Complete Profile, Performance Metrics, Contact Management');
+        console.log('🔄 Real-time Updates: Active | 📱 Responsive: Yes');
+        console.log('⚡ Quick Actions: Status, Notes, Export, Communications');
+        console.log('📈 Analytics: Performance tracking, project history, timeline');
+        console.log('🔗 Integration: Project assignments, skill tracking, qualifications');
+        console.log('🔥 Firebase Integration: Active | 👤 User: Dad-Link');
+        console.log(`👷 Staff Member: ${currentStaff ? currentStaff.fullName : 'Loading...'}`);
+        console.log('⏰ Current Time: 2025-07-19 15:22:24 UTC');
+    </script>
+</body>
+</html>

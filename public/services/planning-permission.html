@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planning Permission Services Manchester, Liverpool, Leeds & Cheshire | Building Group</title>
+    <meta name="description" content="Expert planning permission services across Manchester, Liverpool, Leeds & Cheshire. Planning applications, permitted development, planning consultancy, architectural drawings. Full planning support for extensions, conversions, new builds.">
+    <meta name="keywords" content="planning permission, planning applications, permitted development, planning consultancy, architectural drawings, planning approval, extension planning, conversion planning, manchester planning permission">
+    <meta name="author" content="Building Group">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.building-group.co.uk/services/planning-permission">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Professional Planning Permission Services | Building Group">
+    <meta property="og:description" content="Expert planning permission and consultancy services across North West England. Professional planning applications and architectural drawings.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.building-group.co.uk/services/planning-permission">
+    <meta property="og:image" content="https://www.building-group.co.uk/images/planning-permission-hero.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Last Updated -->
+    <meta name="last-modified" content="2025-07-19T00:07:03Z">
+    
+    <!-- Schema Markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Planning Permission Services",
+        "description": "Professional planning permission consultancy and application services for construction projects",
+        "provider": {
+            "@type": "Organization",
+            "name": "Building Group",
+            "url": "https://www.building-group.co.uk/",
+            "telephone": "+44 7446 695 686",
+            "email": "info@buildinggroup.co.uk"
+        },
+        "areaServed": [
+            {
+                "@type": "City",
+                "name": "Manchester"
+            },
+            {
+                "@type": "City",
+                "name": "Liverpool"
+            },
+            {
+                "@type": "City",
+                "name": "Leeds"
+            },
+            {
+                "@type": "State",
+                "name": "Cheshire"
+            }
+        ],
+        "offers": {
+            "@type": "Offer",
+            "availability": "https://schema.org/InStock",
+            "priceCurrency": "GBP",
+            "description": "Free planning consultation and application assessment"
+        }
+    }
+    </script>
+    
+    <style>
+        :root {
+            --primary-color: #e74c3c;
+            --primary-dark: #c0392b;
+            --secondary-color: #3498db;
+            --accent-color: #f39c12;
+            --dark-color: #2c3e50;
+            --darker-color: #1a252f;
+            --light-gray: #f8f9fa;
+            --medium-gray: #6c757d;
+            --border-color: #dee2e6;
+            --white: #ffffff;
+            --success-color: #27ae60;
+            --info-color: #17a2b8;
+            --planning-blue: #2c3e50;
+            --planning-green: #27ae60;
+            --shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            color: var(--dark-color);
+            overflow-x: hidden;
+            font-size: 16px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header & Navigation */
+        .header {
+            background: var(--white);
+            box-shadow: var(--shadow-md);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        .logo i {
+            margin-right: 0.5rem;
+            font-size: 2rem;
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Burger Menu */
+        .burger {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            z-index: 1001;
+        }
+        
+        .burger span {
+            width: 28px;
+            height: 3px;
+            background: var(--dark-color);
+            margin: 4px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+        
+        .burger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-6px, 7px);
+            background: var(--white);
+        }
+        
+        .burger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .burger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-6px, -7px);
+            background: var(--white);
+        }
+
+        /* Navigation Overlay */
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            overflow-y: auto;
+        }
+
+        .nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .nav-content {
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: block;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background: var(--light-gray);
+            padding: 1rem 0;
+            margin-top: 80px;
+        }
+
+        .breadcrumb-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--medium-gray);
+        }
+
+        .breadcrumb-nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .breadcrumb-nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.9), rgba(44, 62, 80, 0.9)),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23f8f9fa" width="1200" height="600"/><polygon fill="%23e74c3c" points="0,600 400,200 800,400 1200,100 1200,600"/><polygon fill="%232c3e50" opacity="0.7" points="200,600 600,150 1000,350 1200,50 1200,600"/></svg>');
+            padding: 8rem 0 6rem;
+            color: var(--white);
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 1.25rem 2.5rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(231, 76, 60, 0.5);
+        }
+
+        /* Content Sections */
+        .content-section {
+            padding: 5rem 0;
+        }
+
+        .content-section:nth-child(even) {
+            background: var(--light-gray);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            color: var(--dark-color);
+            text-align: center;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--medium-gray);
+            text-align: center;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .content-text h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .content-text p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            color: var(--medium-gray);
+        }
+
+        .content-text ul {
+            margin: 2rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .content-text li {
+            margin-bottom: 0.75rem;
+            color: var(--medium-gray);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h4 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        .feature-card p {
+            color: var(--medium-gray);
+            line-height: 1.6;
+        }
+
+        /* Application Types Grid */
+        .application-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin: 4rem 0;
+        }
+
+        .application-type {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+        }
+
+        .application-type:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.2);
+        }
+
+        .application-image {
+            height: 200px;
+            background: linear-gradient(135deg, var(--planning-blue), var(--primary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 3.5rem;
+        }
+
+        .application-content {
+            padding: 2rem;
+        }
+
+        .application-content h4 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        .application-content p {
+            color: var(--medium-gray);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .application-features {
+            list-style: none;
+            padding: 0;
+        }
+
+        .application-features li {
+            padding: 0.4rem 0;
+            color: var(--medium-gray);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .application-features i {
+            color: var(--success-color);
+            width: 16px;
+            font-size: 0.9rem;
+        }
+
+        /* Process Timeline */
+        .process-timeline {
+            background: var(--planning-blue);
+            color: var(--white);
+            padding: 4rem 0;
+            margin: 4rem 0;
+            border-radius: 15px;
+        }
+
+        .timeline-content {
+            text-align: center;
+        }
+
+        .timeline-content h3 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .timeline-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .timeline-step {
+            text-align: center;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .timeline-step::after {
+            content: '';
+            position: absolute;
+            right: -1rem;
+            top: 50%;
+            width: 2rem;
+            height: 2px;
+            background: var(--accent-color);
+            transform: translateY(-50%);
+        }
+
+        .timeline-step:last-child::after {
+            display: none;
+        }
+
+        .step-icon {
+            background: var(--accent-color);
+            color: var(--white);
+            width: 4rem;
+            height: 4rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 1rem;
+        }
+
+        .timeline-step h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-step p {
+            line-height: 1.6;
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        /* Permitted Development Section */
+        .pd-section {
+            background: linear-gradient(135deg, var(--planning-green), #229954);
+            color: var(--white);
+            padding: 3rem 0;
+            margin: 3rem 0;
+            border-radius: 15px;
+        }
+
+        .pd-content {
+            text-align: center;
+        }
+
+        .pd-content h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .pd-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Local Authorities */
+        .authorities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .authority-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--info-color);
+        }
+
+        .authority-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .authority-card h4 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        .authority-card p {
+            color: var(--medium-gray);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+            color: var(--white);
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--darker-color);
+            color: var(--white);
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: #bdc3c7;
+            text-decoration: none;
+            line-height: 1.8;
+            margin-bottom: 0.5rem;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #34495e;
+            color: #7f8c8d;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .two-column {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .application-types {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-step::after {
+                display: none;
+            }
+
+            .authorities-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <a href="/" class="logo">
+                <i class="fas fa-hammer"></i>
+                Building Group
+            </a>
+            <button class="burger" id="burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Navigation Overlay -->
+    <div class="nav-overlay" id="navOverlay">
+        <div class="nav-content">
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About Us</a></li>
+                <li><a href="/services">Our Services</a></li>
+                <li><a href="/manchester">Manchester</a></li>
+                <li><a href="/liverpool">Liverpool</a></li>
+                <li><a href="/leeds">Leeds</a></li>
+                <li><a href="/cheshire">Cheshire</a></li>
+                <li><a href="/projects">Our Projects</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+                <li><a href="/quote">Get Free Quote</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <section class="breadcrumb">
+        <div class="container">
+            <nav class="breadcrumb-nav">
+                <a href="/"><i class="fas fa-home"></i> Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="/services">Services</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Planning Permission</span>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Planning Permission Services</h1>
+                <p>Expert planning permission consultancy across Manchester, Liverpool, Leeds & Cheshire. Planning applications, permitted development advice, architectural drawings. Navigate planning regulations with our professional planning consultants.</p>
+                <a href="/quote" class="cta-button">Get Planning Consultation</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Permitted Development Section -->
+    <section class="content-section">
+        <div class="container">
+            <div class="pd-section">
+                <div class="pd-content">
+                    <h3><i class="fas fa-check-circle"></i> Permitted Development Rights</h3>
+                    <p>Many home improvements fall under Permitted Development Rights and don't require planning permission. Our experts assess your project to determine if you need planning permission or if your work qualifies for permitted development. We save you time and money by identifying the correct approval route for your project.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section class="content-section">
+        <div class="container">
+            <div class="two-column">
+                <div class="content-text">
+                    <h3>Expert Planning Permission Consultancy</h3>
+                    <p>Navigating the planning system can be complex and time-consuming. Our experienced planning consultants provide comprehensive support for all types of planning applications across Manchester, Liverpool, Leeds, and Cheshire.</p>
+                    <p>Whether you're planning a house extension, loft conversion, change of use, or new development, we handle the entire planning process from initial assessment through to approval. Our local knowledge and established relationships with planning departments ensure the best chance of success.</p>
+                    <ul>
+                        <li>Planning application preparation and submission</li>
+                        <li>Permitted development assessments</li>
+                        <li>Architectural drawings and plans</li>
+                        <li>Planning statements and reports</li>
+                        <li>Appeals and resubmissions</li>
+                        <li>Pre-application advice service</li>
+                    </ul>
+                </div>
+                <div class="content-image">
+                    <div style="background: linear-gradient(135deg, var(--planning-blue), var(--primary-color)); height: 400px; border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; text-align: center;">
+                        <div>
+                            <i class="fas fa-file-alt" style="font-size: 4rem; margin-bottom: 1rem; opacity: 0.8;"></i>
+                            <h4>Professional Planning Services</h4>
+                            <p>Expert Consultancy • Local Knowledge • High Success Rate</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Application Types Section -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">Planning Application Types</h2>
+            <p class="section-subtitle">We handle all types of planning applications with expert knowledge and local experience</p>
+            
+            <div class="application-types">
+                <div class="application-type">
+                    <div class="application-image">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="application-content">
+                        <h4>Householder Applications</h4>
+                        <p>Planning applications for domestic properties including extensions, conversions, and alterations to existing homes.</p>
+                        <ul class="application-features">
+                            <li><i class="fas fa-check"></i> Single and double-storey extensions</li>
+                            <li><i class="fas fa-check"></i> Loft conversions with dormers</li>
+                            <li><i class="fas fa-check"></i> Garage conversions</li>
+                            <li><i class="fas fa-check"></i> Outbuildings and annexes</li>
+                            <li><i class="fas fa-check"></i> Boundary walls and fences</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="application-type">
+                    <div class="application-image">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="application-content">
+                        <h4>Full Planning Applications</h4>
+                        <p>Comprehensive planning applications for new buildings, major developments, and significant alterations.</p>
+                        <ul class="application-features">
+                            <li><i class="fas fa-check"></i> New residential developments</li>
+                            <li><i class="fas fa-check"></i> Commercial buildings</li>
+                            <li><i class="fas fa-check"></i> Change of use applications</li>
+                            <li><i class="fas fa-check"></i> Major extensions</li>
+                            <li><i class="fas fa-check"></i> Mixed-use developments</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="application-type">
+                    <div class="application-image">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <div class="application-content">
+                        <h4>Prior Approval Applications</h4>
+                        <p>Specialized applications for permitted development projects requiring prior approval from local authorities.</p>
+                        <ul class="application-features">
+                            <li><i class="fas fa-check"></i> Larger home extensions</li>
+                            <li><i class="fas fa-check"></i> Agricultural buildings</li>
+                            <li><i class="fas fa-check"></i> Telecommunications equipment</li>
+                            <li><i class="fas fa-check"></i> Office to residential conversions</li>
+                            <li><i class="fas fa-check"></i> Solar panel installations</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="application-type">
+                    <div class="application-image">
+                        <i class="fas fa-tree"></i>
+                    </div>
+                    <div class="application-content">
+                        <h4>Listed Building & Conservation</h4>
+                        <p>Specialist applications for listed buildings and properties within conservation areas requiring sensitive approach.</p>
+                        <ul class="application-features">
+                            <li><i class="fas fa-check"></i> Listed building consent</li>
+                            <li><i class="fas fa-check"></i> Conservation area applications</li>
+                            <li><i class="fas fa-check"></i> Heritage impact assessments</li>
+                            <li><i class="fas fa-check"></i> Traditional materials and methods</li>
+                            <li><i class="fas fa-check"></i> Historic building alterations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Timeline */
+    <section class="content-section">
+        <div class="container">
+            <div class="process-timeline">
+                <div class="timeline-content">
+                    <h3><i class="fas fa-clock"></i> Planning Application Process</h3>
+                    <p style="margin-bottom: 2rem; font-size: 1.1rem;">Typical planning application timeline from initial consultation to decision</p>
+                    
+                    <div class="timeline-steps">
+                        <div class="timeline-step">
+                            <div class="step-icon"><i class="fas fa-search"></i></div>
+                            <h4>Initial Assessment</h4>
+                            <p>Site analysis and planning feasibility study</p>
+                        </div>
+                        <div class="timeline-step">
+                            <div class="step-icon"><i class="fas fa-drafting-compass"></i></div>
+                            <h4>Design & Drawings</h4>
+                            <p>Architectural plans and supporting documents</p>
+                        </div>
+                        <div class="timeline-step">
+                            <div class="step-icon"><i class="fas fa-file-upload"></i></div>
+                            <h4>Application Submission</h4>
+                            <p>Complete application submitted to council</p>
+                        </div>
+                        <div class="timeline-step">
+                            <div class="step-icon"><i class="fas fa-users"></i></div>
+                            <h4>Consultation Period</h4>
+                            <p>21-day public consultation and review</p>
+                        </div>
+                        <div class="timeline-step">
+                            <div class="step-icon"><i class="fas fa-gavel"></i></div>
+                            <h4>Planning Decision</h4>
+                            <p>Council decision within 8 weeks</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Services -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">Comprehensive Planning Services</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h4>Planning Feasibility Studies</h4>
+                    <p>Initial assessment of your project's planning prospects including site constraints analysis and development potential evaluation.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-drafting-compass"></i>
+                    </div>
+                    <h4>Architectural Drawings</h4>
+                    <p>Professional architectural plans, elevations, and technical drawings prepared to planning application standards by qualified architects.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h4>Planning Statements</h4>
+                    <p>Comprehensive planning statements supporting your application with policy analysis, design justification, and impact assessments.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h4>Pre-Application Advice</h4>
+                    <p>Formal pre-application discussions with planning officers to identify issues early and improve chances of approval.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h4>Public Consultation</h4>
+                    <p>Management of neighbor consultation process and community engagement to address concerns and build support for your project.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <h4>Appeals & Resubmissions</h4>
+                    <p>Planning appeal services and application resubmissions with revised proposals addressing reasons for refusal.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Local Planning Authorities -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">Local Planning Authorities We Work With</h2>
+            <p class="section-subtitle">Extensive experience across North West England planning departments</p>
+            
+            <div class="authorities-grid">
+                <div class="authority-card">
+                    <h4>Manchester & Greater Manchester</h4>
+                    <p>Manchester City Council, Trafford Council, Stockport Council, Oldham Council, Bolton Council, Salford Council, Rochdale Council, Bury Council, Wigan Council, Tameside Council</p>
+                </div>
+
+                <div class="authority-card">
+                    <h4>Liverpool & Merseyside</h4>
+                    <p>Liverpool City Council, Wirral Council, Sefton Council, Knowsley Council, St Helens Council, Halton Council planning departments</p>
+                </div>
+
+                <div class="authority-card">
+                    <h4>Leeds & West Yorkshire</h4>
+                    <p>Leeds City Council, Bradford Council, Kirklees Council, Calderdale Council, Wakefield Council planning services</p>
+                </div>
+
+                <div class="authority-card">
+                    <h4>Cheshire Councils</h4>
+                    <p>Cheshire East Council, Cheshire West and Chester Council, Warrington Council, Halton Council planning departments</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Documentation Required -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">What We Provide</h2>
+            <div class="two-column">
+                <div class="content-text">
+                    <h3>Complete Application Package</h3>
+                    <p>We prepare and submit complete planning applications with all required documentation to ensure your application is validated quickly and processed efficiently.</p>
+                    
+                    <h4 style="color: var(--primary-color); margin-top: 2rem;">Standard Documents:</h4>
+                    <ul>
+                        <li>Application forms and certificates</li>
+                        <li>Site location and block plans</li>
+                        <li>Existing and proposed floor plans</li>
+                        <li>Elevation drawings and sections</li>
+                        <li>Design and access statements</li>
+                        <li>Planning statements</li>
+                    </ul>
+                    
+                    <h4 style="color: var(--primary-color); margin-top: 2rem;">Specialist Reports (if required):</h4>
+                    <ul>
+                        <li>Heritage impact assessments</li>
+                        <li>Tree surveys and arboricultural reports</li>
+                        <li>Ecological surveys and assessments</li>
+                        <li>Transport assessments</li>
+                        <li>Flood risk assessments</li>
+                        <li>Noise impact assessments</li>
+                    </ul>
+                </div>
+                <div class="content-image">
+                    <div style="background: var(--light-gray); height: 500px; border-radius: 15px; padding: 2rem; display: flex; flex-direction: column; justify-content: space-around;">
+                        <div style="background: white; padding: 1.5rem; border-radius: 10px; text-align: center; border-left: 4px solid var(--planning-blue);">
+                            <i class="fas fa-file-alt" style="color: var(--planning-blue); font-size: 2rem; margin-bottom: 1rem;"></i>
+                            <h4>Planning Applications</h4>
+                            <p>Complete documentation packages</p>
+                        </div>
+                        <div style="background: white; padding: 1.5rem; border-radius: 10px; text-align: center; border-left: 4px solid var(--planning-blue);">
+                            <i class="fas fa-drafting-compass" style="color: var(--planning-blue); font-size: 2rem; margin-bottom: 1rem;"></i>
+                            <h4>Architectural Drawings</h4>
+                            <p>Professional plans and elevations</p>
+                        </div>
+                        <div style="background: white; padding: 1.5rem; border-radius: 10px; text-align: center; border-left: 4px solid var(--planning-blue);">
+                            <i class="fas fa-check-circle" style="color: var(--planning-blue); font-size: 2rem; margin-bottom: 1rem;"></i>
+                            <h4>Expert Support</h4>
+                            <p>Guidance through entire process</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Need Planning Permission Help?</h2>
+            <p>Get expert planning advice and professional application services from our qualified consultants</p>
+            <a href="/quote" class="cta-button" style="background: white; color: var(--primary-color);">Book Planning Consultation</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Building Group</h3>
+                    <p>Expert planning permission consultancy across Manchester, Liverpool, Leeds & Cheshire. Professional planning services with local knowledge and high success rates since 2008.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Our Services</h3>
+                    <a href="/services/house-building">New House Building</a>
+                    <a href="/services/house-renovations">House Renovations</a>
+                    <a href="/services/house-extensions">House Extensions</a>
+                    <a href="/services/planning-permission">Planning Permission</a>
+                    <a href="/services/loft-conversions">Loft Conversions</a>
+                    <a href="/services/building-regulations">Building Regulations</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Planning Services</h3>
+                    <p><i class="fas fa-phone"></i> +44 7446 695 686</p>
+                    <p><i class="fas fa-envelope"></i> info@building-group.co.uk</p>
+                    <p><i class="fas fa-file-alt"></i> Professional Planning Consultants</p>
+                    <a href="/contact">Book Planning Consultation</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Building Group. All rights reserved. | Planning Permission Services Manchester, Liverpool, Leeds & Cheshire</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const burger = document.getElementById('burger');
+        const navOverlay = document.getElementById('navOverlay');
+        
+        burger.addEventListener('click', function() {
+            burger.classList.toggle('active');
+            navOverlay.classList.toggle('active');
+            document.body.style.overflow = navOverlay.classList.contains('active') ? 'hidden' : 'auto';
+        });
+
+        // Close menu when clicking on overlay
+        navOverlay.addEventListener('click', function(e) {
+            if (e.target === navOverlay || e.target.tagName === 'A') {
+                burger.classList.remove('active');
+                navOverlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && navOverlay.classList.contains('active')) {
+                burger.classList.remove('active');
+                navOverlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Add hover effects to application type cards
+        document.querySelectorAll('.application-type').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        console.log('Planning Permission Page Loaded - Dad-Link - 2025-07-19T00:07:03Z');
+    </script>
+</body>
+</html>

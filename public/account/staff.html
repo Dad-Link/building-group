@@ -1,0 +1,2193 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Management | Building Group | Team Management Hub</title>
+    <meta name="description" content="Manage your construction team with Building Group staff management system. Track employees, schedules, performance, and team assignments across Manchester, Liverpool, Leeds & Cheshire.">
+    <meta name="keywords" content="staff management, team management, employee tracking, construction team, workforce management">
+    <meta name="author" content="Building Group">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- FIREBASE-COMPATIBLE CSP -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self'; 
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' 
+            https://www.gstatic.com 
+            https://www.googleapis.com 
+            https://apis.google.com;
+        connect-src 'self' 
+            https://identitytoolkit.googleapis.com 
+            https://www.googleapis.com 
+            https://securetoken.googleapis.com 
+            https://buildinggroup-4f8b9-default-rtdb.firebaseio.com 
+            https://firestore.googleapis.com 
+            https://buildinggroup-4f8b9.firebasestorage.app
+            wss://s-usc1c-nss-2077.firebaseio.com;
+        img-src 'self' data: 
+            https://www.gstatic.com 
+            https://fonts.gstatic.com;
+        style-src 'self' 'unsafe-inline' 
+            https://fonts.googleapis.com 
+            https://cdnjs.cloudflare.com;
+        font-src 'self' 
+            https://fonts.gstatic.com 
+            https://cdnjs.cloudflare.com;
+        frame-src 'self' 
+            https://buildinggroup-4f8b9.firebaseapp.com;
+    ">
+    
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <!-- Last Updated -->
+    <meta name="last-modified" content="2025-07-19T14:18:24Z">
+    
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Enhanced Theme System */
+        :root {
+            --primary-color: #e74c3c;
+            --primary-dark: #c0392b;
+            --primary-light: #ec7063;
+            --secondary-color: #3498db;
+            --accent-color: #f39c12;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #17a2b8;
+            --text-color: #2c3e50;
+            --text-secondary: #6c757d;
+            --text-light: #95a5a6;
+            --background-color: #f8fafc;
+            --background-secondary: #ecf0f1;
+            --card-background: #ffffff;
+            --input-background: #ffffff;
+            --border-color: #dee2e6;
+            --border-light: #f1f3f4;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.15);
+            --shadow-xl: 0 16px 64px rgba(0,0,0,0.2);
+            --gradient-primary: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            --gradient-secondary: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            --gradient-success: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            --gradient-staff: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
+            --gradient-team: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+        }
+        
+        /* Dark Theme Variables */
+        [data-theme="dark"] {
+            --text-color: #ffffff;
+            --text-secondary: #bdc3c7;
+            --text-light: #95a5a6;
+            --background-color: #0f0f0f;
+            --background-secondary: #1a1a1a;
+            --card-background: #1e1e1e;
+            --input-background: #2a2a2a;
+            --border-color: #333333;
+            --border-light: #2a2a2a;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
+            --shadow-xl: 0 16px 64px rgba(0,0,0,0.6);
+        }
+        
+        /* Auto Theme Detection */
+        @media (prefers-color-scheme: dark) {
+            :root[data-theme="auto"] {
+                --text-color: #ffffff;
+                --text-secondary: #bdc3c7;
+                --text-light: #95a5a6;
+                --background-color: #0f0f0f;
+                --background-secondary: #1a1a1a;
+                --card-background: #1e1e1e;
+                --input-background: #2a2a2a;
+                --border-color: #333333;
+                --border-light: #2a2a2a;
+                --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
+                --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+                --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
+                --shadow-xl: 0 16px 64px rgba(0,0,0,0.6);
+            }
+        }
+        
+        /* Base Elements */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: var(--background-color);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--card-background);
+            box-shadow: var(--shadow-md);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .back-btn {
+            background: var(--background-secondary);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+        }
+        
+        .header-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .add-staff-btn {
+            background: var(--gradient-staff);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .add-staff-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .theme-toggle {
+            background: var(--background-secondary);
+            color: var(--text-color);
+            border: 2px solid var(--border-color);
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .theme-toggle:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: scale(1.1);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+        
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 2rem 0;
+        }
+        
+        /* Page Header */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .page-title-section h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        /* Team Statistics */
+        .team-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: var(--card-background);
+            padding: 2rem 1.5rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+        }
+        
+        .stat-card.total::before {
+            background: var(--gradient-staff);
+        }
+        
+        .stat-card.active::before {
+            background: var(--gradient-success);
+        }
+        
+        .stat-card.onsite::before {
+            background: var(--gradient-secondary);
+        }
+        
+        .stat-card.performance::before {
+            background: var(--gradient-team);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .stat-title {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .stat-icon.total {
+            background: var(--gradient-staff);
+        }
+        
+        .stat-icon.active {
+            background: var(--gradient-success);
+        }
+        
+        .stat-icon.onsite {
+            background: var(--gradient-secondary);
+        }
+        
+        .stat-icon.performance {
+            background: var(--gradient-team);
+        }
+        
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+        
+        .stat-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-change {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .stat-change.positive {
+            color: var(--success-color);
+        }
+        
+        .stat-change.negative {
+            color: var(--danger-color);
+        }
+        
+        .stat-change.neutral {
+            color: var(--text-secondary);
+        }
+        
+        /* Filter and Search */
+        .filter-search-bar {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: var(--card-background);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .search-input {
+            flex: 1;
+            max-width: 400px;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--input-background);
+            color: var(--text-color);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .search-container {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 1rem;
+            z-index: 2;
+        }
+        
+        .search-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .filter-btn {
+            padding: 0.75rem 1.25rem;
+            border: 2px solid var(--border-color);
+            background: var(--card-background);
+            color: var(--text-color);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .filter-btn:hover {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        /* Staff Grid */
+        .staff-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .staff-card {
+            background: var(--card-background);
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .staff-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .staff-header {
+            padding: 2rem 1.5rem 1rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .staff-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--gradient-staff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 800;
+            color: white;
+            margin: 0 auto 1rem;
+            box-shadow: var(--shadow-md);
+            position: relative;
+        }
+        
+        .staff-status {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 3px solid var(--card-background);
+        }
+        
+        .staff-status.available {
+            background: var(--success-color);
+        }
+        
+        .staff-status.busy {
+            background: var(--warning-color);
+        }
+        
+        .staff-status.unavailable {
+            background: var(--danger-color);
+        }
+        
+        .staff-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 0.25rem;
+        }
+        
+        .staff-role {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .staff-details {
+            padding: 0 1.5rem 1.5rem;
+        }
+        
+        .staff-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .staff-info-item {
+            text-align: center;
+            padding: 0.75rem;
+            background: var(--background-secondary);
+            border-radius: 8px;
+        }
+        
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.25rem;
+        }
+        
+        .info-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .staff-skills {
+            margin-bottom: 1rem;
+        }
+        
+        .skills-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .skill-tag {
+            background: var(--gradient-secondary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .staff-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .staff-action-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .staff-action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .btn-view {
+            background: var(--secondary-color);
+            color: white;
+        }
+        
+        .btn-schedule {
+            background: var(--warning-color);
+            color: white;
+        }
+        
+        .btn-assign {
+            background: var(--success-color);
+            color: white;
+        }
+        
+        /* Quick Actions Panel */
+        .quick-actions {
+            background: var(--card-background);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+        
+        .actions-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .action-card {
+            padding: 1.5rem;
+            background: var(--background-secondary);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .action-card:hover {
+            background: var(--card-background);
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .action-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-staff);
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 1rem;
+        }
+        
+        .action-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .action-description {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .empty-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+        
+        .empty-description {
+            font-size: 1rem;
+            max-width: 500px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+        
+        .empty-action {
+            background: var(--gradient-staff);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        
+        .empty-action:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* Loading States */
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border-color);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Alert Messages */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: none;
+            animation: slideInDown 0.3s ease;
+        }
+        
+        .alert.show {
+            display: block;
+        }
+        
+        .alert-success {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success-color);
+            border: 1px solid rgba(39, 174, 96, 0.2);
+        }
+        
+        .alert-error {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--danger-color);
+            border: 1px solid rgba(231, 76, 60, 0.2);
+        }
+        
+        .alert-warning {
+            background: rgba(243, 156, 18, 0.1);
+            color: var(--warning-color);
+            border: 1px solid rgba(243, 156, 18, 0.2);
+        }
+        
+        .alert-info {
+            background: rgba(23, 162, 184, 0.1);
+            color: var(--info-color);
+            border: 1px solid rgba(23, 162, 184, 0.2);
+        }
+        
+        /* Animations */
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+        
+        /* Enhanced Responsive Design */
+        @media (max-width: 1200px) {
+            .team-stats {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+            
+            .staff-grid {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .header-left, .header-right {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            .filter-search-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-container {
+                max-width: none;
+            }
+            
+            .filter-buttons {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .team-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .staff-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .actions-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 0.5rem;
+            }
+            
+            .main-content {
+                padding: 1rem 0;
+            }
+            
+            .team-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .staff-info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-buttons {
+                flex-direction: column;
+            }
+        }
+        
+        /* High Contrast Mode Support */
+        @media (prefers-contrast: high) {
+            :root {
+                --border-color: #000000;
+                --shadow-md: 0 4px 12px rgba(0,0,0,0.5);
+            }
+            
+            [data-theme="dark"] {
+                --border-color: #ffffff;
+                --shadow-md: 0 4px 12px rgba(255,255,255,0.3);
+            }
+        }
+        
+        /* Reduced Motion Support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* Focus Styles for Accessibility */
+        *:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-left">
+                    <a href="/account/my-dash.html" class="back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Dashboard
+                    </a>
+                    <h1 class="header-title">Staff Management</h1>
+                </div>
+                
+                <div class="header-right">
+                    <a href="/account/add-staff.html" class="add-staff-btn">
+                        <i class="fas fa-user-plus"></i>
+                        Add Staff Member
+                    </a>
+                    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <div class="user-info">
+                        <div class="user-avatar" id="userAvatar">DL</div>
+                        <span id="userName">Dad-Link</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Alert Messages -->
+            <div class="alert alert-error" id="errorAlert" role="alert"></div>
+            <div class="alert alert-success" id="successAlert" role="alert"></div>
+            <div class="alert alert-warning" id="warningAlert" role="alert"></div>
+            <div class="alert alert-info" id="infoAlert" role="alert"></div>
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-title-section">
+                    <h1>Team Management Hub</h1>
+                    <p class="page-subtitle">
+                        Manage your construction team, track performance, and coordinate projects across Manchester, Liverpool, Leeds & Cheshire
+                    </p>
+                </div>
+            </div>
+
+            <!-- Team Statistics -->
+            <div class="team-stats">
+                <div class="stat-card total">
+                    <div class="stat-header">
+                        <div class="stat-title">Total Staff</div>
+                        <div class="stat-icon total">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" id="totalStaffCount">0</div>
+                    <div class="stat-subtitle">Team Members</div>
+                    <div class="stat-change neutral" id="totalStaffChange">
+                        <i class="fas fa-equals"></i>
+                        <span>All employees</span>
+                    </div>
+                </div>
+
+                <div class="stat-card active">
+                    <div class="stat-header">
+                        <div class="stat-title">Available Today</div>
+                        <div class="stat-icon active">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" id="availableStaffCount">0</div>
+                    <div class="stat-subtitle">Ready to work</div>
+                    <div class="stat-change positive" id="availableStaffChange">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>5% from yesterday</span>
+                    </div>
+                </div>
+
+                <div class="stat-card onsite">
+                    <div class="stat-header">
+                        <div class="stat-title">On-Site Now</div>
+                        <div class="stat-icon onsite">
+                            <i class="fas fa-hard-hat"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" id="onsiteStaffCount">0</div>
+                    <div class="stat-subtitle">Currently working</div>
+                    <div class="stat-change positive" id="onsiteStaffChange">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>12% from last week</span>
+                    </div>
+                </div>
+
+                <div class="stat-card performance">
+                    <div class="stat-header">
+                        <div class="stat-title">Team Performance</div>
+                        <div class="stat-icon performance">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" id="teamPerformanceScore">95%</div>
+                    <div class="stat-subtitle">Average rating</div>
+                    <div class="stat-change positive" id="performanceChange">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>3% this month</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter and Search Bar -->
+            <div class="filter-search-bar">
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input
+                        type="text"
+                        id="staffSearch"
+                        class="search-input"
+                        placeholder="Search staff by name, role, or skills..."
+                    >
+                </div>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">
+                        <i class="fas fa-users"></i>
+                        All Staff
+                    </button>
+                    <button class="filter-btn" data-filter="available">
+                        <i class="fas fa-user-check"></i>
+                        Available
+                    </button>
+                    <button class="filter-btn" data-filter="onsite">
+                        <i class="fas fa-hard-hat"></i>
+                        On-Site
+                    </button>
+                    <button class="filter-btn" data-filter="supervisors">
+                        <i class="fas fa-user-tie"></i>
+                        Supervisors
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h3 class="actions-title">
+                    <i class="fas fa-bolt" style="color: var(--warning-color);"></i>
+                    Quick Actions
+                </h3>
+                <div class="actions-grid">
+                    <div class="action-card" onclick="openScheduleManager()">
+                        <div class="action-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="action-title">Schedule Manager</div>
+                        <div class="action-description">View and manage staff schedules</div>
+                    </div>
+                    <div class="action-card" onclick="assignStaffToProject()">
+                        <div class="action-icon">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+                        <div class="action-title">Project Assignment</div>
+                        <div class="action-description">Assign team members to projects</div>
+                    </div>
+                    <div class="action-card" onclick="viewTeamReports()">
+                        <div class="action-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="action-title">Team Reports</div>
+                        <div class="action-description">View performance and analytics</div>
+                    </div>
+                    <div class="action-card" onclick="manageTimeTracking()">
+                        <div class="action-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="action-title">Time Tracking</div>
+                        <div class="action-description">Track work hours and attendance</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Staff Grid -->
+            <div id="staffContainer">
+                <div class="loading-spinner" id="loadingSpinner">
+                    <div class="spinner"></div>
+                </div>
+                
+                <div class="staff-grid" id="staffGrid" style="display: none;">
+                    <!-- Staff cards will be populated here -->
+                </div>
+
+                <div class="empty-state" id="emptyState" style="display: none;">
+                    <div class="empty-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="empty-title">No Team Members Yet</div>
+                    <div class="empty-description">
+                        Start building your construction team by adding your first staff member.
+                        You can track their skills, schedule, and performance from here.
+                    </div>
+                    <a href="/account/add-staff.html" class="empty-action">
+                        <i class="fas fa-user-plus"></i>
+                        Add First Team Member
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBI1M38HZH8-xY3nfoKmqoitmggq3C8zKE",
+            authDomain: "buildinggroup-4f8b9.firebaseapp.com",
+            projectId: "buildinggroup-4f8b9",
+            storageBucket: "buildinggroup-4f8b9.firebasestorage.app",
+            messagingSenderId: "353000992011",
+            appId: "1:353000992011:web:c834310d7d79dd1bf0c60e",
+            measurementId: "G-DF11Q5PZRT"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        
+        // Global variables
+        let currentUser = null;
+        let allStaffMembers = [];
+        let filteredStaffMembers = [];
+        let currentFilter = 'all';
+        
+        // Theme Management
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        let currentTheme = localStorage.getItem('theme') || 'auto';
+        html.setAttribute('data-theme', currentTheme);
+        updateThemeIcon();
+        
+        themeToggle.addEventListener('click', () => {
+            switch(currentTheme) {
+                case 'auto':
+                    currentTheme = 'light';
+                    break;
+                case 'light':
+                    currentTheme = 'dark';
+                    break;
+                case 'dark':
+                    currentTheme = 'auto';
+                    break;
+            }
+            
+            html.setAttribute('data-theme', currentTheme);
+            localStorage.setItem('theme', currentTheme);
+            updateThemeIcon();
+        });
+        
+        function updateThemeIcon() {
+            const icon = themeToggle.querySelector('i');
+            switch(currentTheme) {
+                case 'light':
+                    icon.className = 'fas fa-sun';
+                    break;
+                case 'dark':
+                    icon.className = 'fas fa-moon';
+                    break;
+                case 'auto':
+                    icon.className = 'fas fa-adjust';
+                    break;
+            }
+        }
+        
+        // Alert Functions
+        function showAlert(type, message) {
+            hideAllAlerts();
+            const alert = document.getElementById(`${type}Alert`);
+            alert.textContent = message;
+            alert.classList.add('show');
+            
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 5000);
+        }
+        
+        function hideAllAlerts() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => alert.classList.remove('show'));
+        }
+        
+        // User Authentication Check
+        function checkAuthState() {
+            return new Promise((resolve) => {
+                const unsubscribe = auth.onAuthStateChanged((user) => {
+                    unsubscribe();
+                    if (user && user.emailVerified) {
+                        currentUser = user;
+                        loadUserData();
+                        resolve(true);
+                    } else {
+                        showAlert('error', 'Please login to access staff management');
+                        setTimeout(() => {
+                            window.location.href = '/account/login.html';
+                        }, 2000);
+                        resolve(false);
+                    }
+                });
+            });
+        }
+        
+        async function loadUserData() {
+            try {
+                const userDoc = await db.collection('users').doc(currentUser.uid).get();
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    
+                    // Update UI
+                    document.getElementById('userName').textContent = userData.firstName || 'User';
+                    document.getElementById('userAvatar').textContent = (userData.firstName?.[0] || 'U') + (userData.lastName?.[0] || '');
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+        
+        // Demo Staff Creation
+        async function createDemoStaff() {
+            if (!currentUser) return;
+            
+            const demoStaffMembers = [
+                {
+                    staffId: generateStaffId(),
+                    employeeNumber: 'EMP-001',
+                    firstName: 'Michael',
+                    lastName: 'Johnson',
+                    fullName: 'Michael Johnson',
+                    email: 'michael.johnson@buildinggroup.co.uk',
+                    phone: '07123 456789',
+                    address: '42 Construction Avenue, Manchester M1 2AB',
+                    
+                    // Employment details
+                    role: 'Site Supervisor',
+                    department: 'Construction',
+                    startDate: '2023-03-15',
+                    employmentType: 'full-time',
+                    status: 'available',
+                    
+                    // Skills and qualifications
+                    skills: ['Project Management', 'Health & Safety', 'Team Leadership', 'Quality Control'],
+                    qualifications: ['CSCS Gold Card', 'SMSTS Certified', 'First Aid Trained'],
+                    experienceYears: 12,
+                    
+                    // Performance and ratings
+                    rating: 4.8,
+                    completedProjects: 45,
+                    onTimeCompletion: 94,
+                    
+                    // Work details
+                    currentProject: null,
+                    availability: 'available',
+                    hourlyRate: 28.50,
+                    
+                    // Contact and emergency
+                    emergencyContact: {
+                        name: 'Sarah Johnson',
+                        phone: '07987 654321',
+                        relationship: 'Spouse'
+                    },
+                    
+                    // Metadata
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    createdBy: currentUser.uid,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                },
+                {
+                    staffId: generateStaffId(),
+                    employeeNumber: 'EMP-002',
+                    firstName: 'Sarah',
+                    lastName: 'Williams',
+                    fullName: 'Sarah Williams',
+                    email: 'sarah.williams@buildinggroup.co.uk',
+                    phone: '07234 567890',
+                    address: '78 Builder Street, Liverpool L2 3CD',
+                    
+                    // Employment details
+                    role: 'Skilled Electrician',
+                    department: 'Electrical',
+                    startDate: '2023-06-01',
+                    employmentType: 'full-time',
+                    status: 'onsite',
+                    
+                    // Skills and qualifications
+                    skills: ['Electrical Installation', 'Fault Diagnosis', 'PAT Testing', 'LED Systems'],
+                    qualifications: ['City & Guilds Level 3', '18th Edition Certified', 'ECS Gold Card'],
+                    experienceYears: 8,
+                    
+                    // Performance and ratings
+                    rating: 4.9,
+                    completedProjects: 32,
+                    onTimeCompletion: 98,
+                    
+                    // Work details
+                    currentProject: 'Kitchen Extension - Smith Residence',
+                    availability: 'busy',
+                    hourlyRate: 32.00,
+                    
+                    // Contact and emergency
+                    emergencyContact: {
+                        name: 'David Williams',
+                        phone: '07876 543210',
+                        relationship: 'Partner'
+                    },
+                    
+                    // Metadata
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    createdBy: currentUser.uid,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                },
+                {
+                    staffId: generateStaffId(),
+                    employeeNumber: 'EMP-003',
+                    firstName: 'David',
+                    lastName: 'Brown',
+                    fullName: 'David Brown',
+                    email: 'david.brown@buildinggroup.co.uk',
+                    phone: '07345 678901',
+                    address: '156 Trades Road, Leeds LS1 4EF',
+                    
+                    // Employment details
+                    role: 'Plumber',
+                    department: 'Plumbing',
+                    startDate: '2024-01-08',
+                    employmentType: 'full-time',
+                    status: 'available',
+                    
+                    // Skills and qualifications
+                    skills: ['Pipe Installation', 'Boiler Servicing', 'Bathroom Fitting', 'Gas Work'],
+                    qualifications: ['Gas Safe Registered', 'City & Guilds Plumbing', 'Unvented Hot Water'],
+                    experienceYears: 6,
+                    
+                    // Performance and ratings
+                    rating: 4.6,
+                    completedProjects: 28,
+                    onTimeCompletion: 91,
+                    
+                    // Work details
+                    currentProject: null,
+                    availability: 'available',
+                    hourlyRate: 26.00,
+                    
+                    // Contact and emergency
+                    emergencyContact: {
+                        name: 'Emma Brown',
+                        phone: '07765 432109',
+                        relationship: 'Wife'
+                    },
+                    
+                    // Metadata
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    createdBy: currentUser.uid,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }
+            ];
+            
+            try {
+                for (const staffMember of demoStaffMembers) {
+                    await db.collection('users').doc(currentUser.uid)
+                        .collection('staff').add(staffMember);
+                }
+                
+                console.log('Demo staff members created');
+                return demoStaffMembers.length;
+            } catch (error) {
+                console.error('Error creating demo staff:', error);
+                throw error;
+            }
+        }
+        
+        function generateStaffId() {
+            return 'STAFF_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+        }
+        
+        // Load Staff Members from Firebase
+        async function loadStaffMembers() {
+            if (!currentUser) return;
+            
+            try {
+                // Show loading
+                document.getElementById('loadingSpinner').style.display = 'flex';
+                document.getElementById('staffGrid').style.display = 'none';
+                document.getElementById('emptyState').style.display = 'none';
+                
+                // Load staff from Firebase
+                const staffQuery = await db.collection('users').doc(currentUser.uid)
+                    .collection('staff')
+                    .orderBy('updatedAt', 'desc')
+                    .get();
+                
+                allStaffMembers = [];
+                
+                staffQuery.forEach(doc => {
+                    const staff = {
+                        id: doc.id,
+                        ...doc.data()
+                    };
+                    allStaffMembers.push(staff);
+                });
+                
+                // If no staff exist, create demo staff
+                if (allStaffMembers.length === 0) {
+                    showAlert('info', 'Creating demo team members for you...');
+                    await createDemoStaff();
+                    // Reload staff after creating demo
+                    await loadStaffMembers();
+                    return;
+                }
+                
+                // Update statistics
+                updateTeamStatistics();
+                
+                // Apply current filter
+                applyFilter(currentFilter);
+                
+                // Hide loading and show content
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('staffGrid').style.display = 'grid';
+                
+                console.log('Staff members loaded:', {
+                    total: allStaffMembers.length,
+                    available: allStaffMembers.filter(s => s.status === 'available').length,
+                    onsite: allStaffMembers.filter(s => s.status === 'onsite').length
+                });
+                
+            } catch (error) {
+                console.error('Error loading staff members:', error);
+                showAlert('error', 'Failed to load staff members. Please try again.');
+                
+                // Hide loading and show empty state
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('emptyState').style.display = 'block';
+            }
+        }
+        
+        // Update Team Statistics
+        function updateTeamStatistics() {
+            const totalStaff = allStaffMembers.length;
+            const availableStaff = allStaffMembers.filter(s => s.status === 'available').length;
+            const onsiteStaff = allStaffMembers.filter(s => s.status === 'onsite' || s.status === 'busy').length;
+            
+            // Calculate average performance
+            const avgRating = allStaffMembers.length > 0
+                ? (allStaffMembers.reduce((sum, s) => sum + (s.rating || 0), 0) / allStaffMembers.length)
+                : 0;
+            
+            // Update stat cards
+            document.getElementById('totalStaffCount').textContent = totalStaff;
+            document.getElementById('availableStaffCount').textContent = availableStaff;
+            document.getElementById('onsiteStaffCount').textContent = onsiteStaff;
+            document.getElementById('teamPerformanceScore').textContent = `${Math.round(avgRating * 20)}%`;
+            
+            // Update change indicators (placeholder - you'd calculate actual changes)
+            const availablePercentage = totalStaff > 0 ? Math.round((availableStaff / totalStaff) * 100) : 0;
+            const onsitePercentage = totalStaff > 0 ? Math.round((onsiteStaff / totalStaff) * 100) : 0;
+            
+            document.getElementById('availableStaffChange').innerHTML = `
+                <i class="fas fa-arrow-up"></i>
+                <span>${availablePercentage}% of team</span>
+            `;
+            
+            document.getElementById('onsiteStaffChange').innerHTML = `
+                <i class="fas fa-arrow-up"></i>
+                <span>${onsitePercentage}% working</span>
+            `;
+        }
+        
+        // Filter Staff Members
+        function applyFilter(filter) {
+            currentFilter = filter;
+            
+            // Update active filter button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
+            
+            // Filter staff
+            switch(filter) {
+                case 'all':
+                    filteredStaffMembers = allStaffMembers;
+                    break;
+                case 'available':
+                    filteredStaffMembers = allStaffMembers.filter(staff => staff.status === 'available');
+                    break;
+                case 'onsite':
+                    filteredStaffMembers = allStaffMembers.filter(staff =>
+                        staff.status === 'onsite' || staff.status === 'busy');
+                    break;
+                case 'supervisors':
+                    filteredStaffMembers = allStaffMembers.filter(staff =>
+                        staff.role && staff.role.toLowerCase().includes('supervisor'));
+                    break;
+                default:
+                    filteredStaffMembers = allStaffMembers;
+            }
+            
+            // Apply search if there's a search term
+            const searchTerm = document.getElementById('staffSearch').value.toLowerCase().trim();
+            if (searchTerm) {
+                applySearch(searchTerm);
+            } else {
+                renderStaffGrid();
+            }
+        }
+        
+        // Search Staff Members
+        function applySearch(searchTerm) {
+            if (!searchTerm) {
+                filteredStaffMembers = allStaffMembers;
+                renderStaffGrid();
+                return;
+            }
+            
+            filteredStaffMembers = allStaffMembers.filter(staff => {
+                const fullName = (staff.fullName || '').toLowerCase();
+                const firstName = (staff.firstName || '').toLowerCase();
+                const lastName = (staff.lastName || '').toLowerCase();
+                const role = (staff.role || '').toLowerCase();
+                const skills = (staff.skills || []).join(' ').toLowerCase();
+                const department = (staff.department || '').toLowerCase();
+                
+                return fullName.includes(searchTerm) ||
+                       firstName.includes(searchTerm) ||
+                       lastName.includes(searchTerm) ||
+                       role.includes(searchTerm) ||
+                       skills.includes(searchTerm) ||
+                       department.includes(searchTerm);
+            });
+            
+            renderStaffGrid();
+        }
+        
+        // Render Staff Grid
+        function renderStaffGrid() {
+            const container = document.getElementById('staffGrid');
+            
+            if (filteredStaffMembers.length === 0) {
+                container.style.display = 'none';
+                document.getElementById('emptyState').style.display = 'block';
+                return;
+            }
+            
+            document.getElementById('emptyState').style.display = 'none';
+            container.style.display = 'grid';
+            
+            container.innerHTML = filteredStaffMembers.map(staff => createStaffCard(staff)).join('');
+        }
+        
+        // Create Staff Card HTML
+        function createStaffCard(staff) {
+            const initials = (staff.firstName?.[0] || '') + (staff.lastName?.[0] || '');
+            const rating = staff.rating || 0;
+            const ratingPercentage = Math.round(rating * 20);
+            const completedProjects = staff.completedProjects || 0;
+            const onTimeCompletion = staff.onTimeCompletion || 0;
+            const hourlyRate = staff.hourlyRate || 0;
+            const skills = staff.skills || [];
+            
+            // Determine status color and text
+            let statusClass = 'available';
+            let statusText = 'Available';
+            
+            switch(staff.status) {
+                case 'available':
+                    statusClass = 'available';
+                    statusText = 'Available';
+                    break;
+                case 'onsite':
+                case 'busy':
+                    statusClass = 'busy';
+                    statusText = 'On-Site';
+                    break;
+                case 'unavailable':
+                    statusClass = 'unavailable';
+                    statusText = 'Unavailable';
+                    break;
+            }
+            
+            return `
+                <div class="staff-card fade-in" onclick="openStaffDetails('${staff.id}')">
+                    <div class="staff-header">
+                        <div class="staff-avatar">
+                            ${initials}
+                            <div class="staff-status ${statusClass}" title="${statusText}"></div>
+                        </div>
+                        <h3 class="staff-name">${staff.fullName || staff.firstName + ' ' + staff.lastName}</h3>
+                        <p class="staff-role">${staff.role || 'Team Member'}</p>
+                    </div>
+                    
+                    <div class="staff-details">
+                        <div class="staff-info-grid">
+                            <div class="staff-info-item">
+                                <div class="info-value">${ratingPercentage}%</div>
+                                <div class="info-label">Rating</div>
+                            </div>
+                            <div class="staff-info-item">
+                                <div class="info-value">${completedProjects}</div>
+                                <div class="info-label">Projects</div>
+                            </div>
+                            <div class="staff-info-item">
+                                <div class="info-value">${onTimeCompletion}%</div>
+                                <div class="info-label">On Time</div>
+                            </div>
+                            <div class="staff-info-item">
+                                <div class="info-value">£${hourlyRate.toFixed(0)}</div>
+                                <div class="info-label">Per Hour</div>
+                            </div>
+                        </div>
+                        
+                        ${skills.length > 0 ? `
+                        <div class="staff-skills">
+                            <div class="skills-label">Key Skills</div>
+                            <div class="skills-list">
+                                ${skills.slice(0, 3).map(skill => `
+                                    <span class="skill-tag">${skill}</span>
+                                `).join('')}
+                                ${skills.length > 3 ? `<span class="skill-tag">+${skills.length - 3} more</span>` : ''}
+                            </div>
+                        </div>` : ''}
+                        
+                        <div class="staff-actions">
+                            <button class="staff-action-btn btn-view" onclick="event.stopPropagation(); openStaffDetails('${staff.id}')">
+                                <i class="fas fa-eye"></i>
+                                View
+                            </button>
+                            <button class="staff-action-btn btn-schedule" onclick="event.stopPropagation(); openStaffSchedule('${staff.id}')">
+                                <i class="fas fa-calendar"></i>
+                                Schedule
+                            </button>
+                            <button class="staff-action-btn btn-assign" onclick="event.stopPropagation(); assignToProject('${staff.id}')">
+                                <i class="fas fa-tasks"></i>
+                                Assign
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Staff Action Functions
+        window.openStaffDetails = function(staffId) {
+            localStorage.setItem('selectedStaffId', staffId);
+            window.location.href = `/account/staff-details.html?id=${staffId}`;
+        };
+        
+        window.openStaffSchedule = function(staffId) {
+            localStorage.setItem('selectedStaffId', staffId);
+            window.location.href = `/account/staff-schedule.html?id=${staffId}`;
+        };
+        
+        window.assignToProject = function(staffId) {
+            const staff = allStaffMembers.find(s => s.id === staffId);
+            if (!staff) return;
+            
+            showAlert('info', `Project assignment for ${staff.fullName || staff.firstName + ' ' + staff.lastName} will be implemented soon`);
+            
+            // TODO: Implement project assignment functionality
+            // This would open a modal or navigate to project assignment page
+        };
+        
+        // Quick Action Functions
+        window.openScheduleManager = function() {
+            showAlert('info', 'Schedule Manager will be implemented to show team calendar and schedules');
+            // TODO: Navigate to schedule management page
+        };
+        
+        window.assignStaffToProject = function() {
+            showAlert('info', 'Project Assignment tool will help you assign team members to specific projects');
+            // TODO: Navigate to project assignment page
+        };
+        
+        window.viewTeamReports = function() {
+            showAlert('info', 'Team Reports will show performance analytics, productivity, and insights');
+            // TODO: Navigate to team reports page
+        };
+        
+        window.manageTimeTracking = function() {
+            showAlert('info', 'Time Tracking system will monitor work hours, breaks, and attendance');
+            // TODO: Navigate to time tracking page
+        };
+        
+        // Filter Event Listeners
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const filter = btn.getAttribute('data-filter');
+                applyFilter(filter);
+            });
+        });
+        
+        // Search Event Listener
+        document.getElementById('staffSearch').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase().trim();
+            
+            if (searchTerm.length >= 2 || searchTerm.length === 0) {
+                applySearch(searchTerm);
+            }
+        });
+        
+        // Advanced Staff Management Functions
+        
+        // Update Staff Status
+        async function updateStaffStatus(staffId, newStatus) {
+            if (!currentUser) return;
+            
+            try {
+                await db.collection('users').doc(currentUser.uid)
+                    .collection('staff').doc(staffId).update({
+                        status: newStatus,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                
+                showAlert('success', 'Staff status updated successfully');
+                
+                // Update local data
+                const staffIndex = allStaffMembers.findIndex(s => s.id === staffId);
+                if (staffIndex !== -1) {
+                    allStaffMembers[staffIndex].status = newStatus;
+                    updateTeamStatistics();
+                    renderStaffGrid();
+                }
+                
+            } catch (error) {
+                console.error('Error updating staff status:', error);
+                showAlert('error', 'Failed to update staff status');
+            }
+        }
+        
+        // Bulk Operations
+        function selectAllStaff() {
+            const checkboxes = document.querySelectorAll('.staff-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+            updateBulkActions();
+        }
+        
+        function deselectAllStaff() {
+            const checkboxes = document.querySelectorAll('.staff-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            updateBulkActions();
+        }
+        
+        function updateBulkActions() {
+            const selectedStaff = document.querySelectorAll('.staff-checkbox:checked');
+            const bulkActionsBar = document.getElementById('bulkActionsBar');
+            
+            if (selectedStaff.length > 0) {
+                bulkActionsBar.style.display = 'flex';
+                bulkActionsBar.querySelector('.selected-count').textContent = `${selectedStaff.length} staff selected`;
+            } else {
+                bulkActionsBar.style.display = 'none';
+            }
+        }
+        
+        // Staff Performance Analytics
+        function calculateTeamPerformance() {
+            if (allStaffMembers.length === 0) return { avgRating: 0, totalProjects: 0, avgCompletion: 0 };
+            
+            const totalRating = allStaffMembers.reduce((sum, staff) => sum + (staff.rating || 0), 0);
+            const totalProjects = allStaffMembers.reduce((sum, staff) => sum + (staff.completedProjects || 0), 0);
+            const avgCompletion = allStaffMembers.reduce((sum, staff) => sum + (staff.onTimeCompletion || 0), 0) / allStaffMembers.length;
+            
+            return {
+                avgRating: totalRating / allStaffMembers.length,
+                totalProjects: totalProjects,
+                avgCompletion: Math.round(avgCompletion)
+            };
+        }
+        
+        // Export Staff Data
+        function exportStaffData(format = 'csv') {
+            const headers = ['Name', 'Role', 'Department', 'Status', 'Rating', 'Projects', 'On-Time %', 'Hourly Rate', 'Start Date'];
+            
+            let content = '';
+            
+            if (format === 'csv') {
+                content = headers.join(',') + '\n';
+                
+                allStaffMembers.forEach(staff => {
+                    const row = [
+                        `"${staff.fullName || staff.firstName + ' ' + staff.lastName}"`,
+                        `"${staff.role || ''}"`,
+                        `"${staff.department || ''}"`,
+                        `"${staff.status || ''}"`,
+                        staff.rating || 0,
+                        staff.completedProjects || 0,
+                        staff.onTimeCompletion || 0,
+                        staff.hourlyRate || 0,
+                        `"${staff.startDate || ''}"`
+                    ];
+                    content += row.join(',') + '\n';
+                });
+                
+                // Download CSV file
+                const blob = new Blob([content], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `staff_report_${new Date().toISOString().split('T')[0]}.csv`;
+                a.click();
+                window.URL.revokeObjectURL(url);
+                
+                showAlert('success', 'Staff data exported successfully');
+            }
+        }
+        
+        // Real-time Staff Updates
+        function setupRealtimeUpdates() {
+            if (!currentUser) return;
+            
+            const staffRef = db.collection('users').doc(currentUser.uid).collection('staff');
+            
+            // Listen for real-time updates
+            const unsubscribe = staffRef.onSnapshot(
+                (snapshot) => {
+                    let hasChanges = false;
+                    
+                    snapshot.docChanges().forEach((change) => {
+                        if (change.type === 'added' || change.type === 'modified' || change.type === 'removed') {
+                            hasChanges = true;
+                        }
+                    });
+                    
+                    if (hasChanges) {
+                        console.log('Staff data updated in real-time');
+                        loadStaffMembers();
+                    }
+                },
+                (error) => {
+                    console.error('Error listening to staff updates:', error);
+                }
+            );
+            
+            // Store unsubscribe function for cleanup
+            window.staffUnsubscribe = unsubscribe;
+        }
+        
+        // Staff Availability Management
+        async function updateStaffAvailability(staffId, availability) {
+            if (!currentUser) return;
+            
+            try {
+                const updateData = {
+                    availability: availability,
+                    status: availability === 'available' ? 'available' : 'unavailable',
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                await db.collection('users').doc(currentUser.uid)
+                    .collection('staff').doc(staffId).update(updateData);
+                
+                showAlert('success', 'Staff availability updated');
+                
+            } catch (error) {
+                console.error('Error updating availability:', error);
+                showAlert('error', 'Failed to update availability');
+            }
+        }
+        
+        // Enhanced Search with Filters
+        function performAdvancedSearch() {
+            const searchFilters = {
+                name: document.getElementById('staffSearch').value.toLowerCase(),
+                role: document.getElementById('roleFilter')?.value || '',
+                department: document.getElementById('departmentFilter')?.value || '',
+                status: currentFilter,
+                minRating: parseFloat(document.getElementById('minRating')?.value || 0),
+                minExperience: parseInt(document.getElementById('minExperience')?.value || 0)
+            };
+            
+            filteredStaffMembers = allStaffMembers.filter(staff => {
+                // Name filter
+                if (searchFilters.name) {
+                    const fullName = (staff.fullName || staff.firstName + ' ' + staff.lastName).toLowerCase();
+                    if (!fullName.includes(searchFilters.name)) return false;
+                }
+                
+                // Role filter
+                if (searchFilters.role && staff.role !== searchFilters.role) return false;
+                
+                // Department filter
+                if (searchFilters.department && staff.department !== searchFilters.department) return false;
+                
+                // Status filter
+                if (searchFilters.status !== 'all' && staff.status !== searchFilters.status) return false;
+                
+                // Rating filter
+                if ((staff.rating || 0) < searchFilters.minRating) return false;
+                
+                // Experience filter
+                if ((staff.experienceYears || 0) < searchFilters.minExperience) return false;
+                
+                return true;
+            });
+            
+            renderStaffGrid();
+        }
+        
+        // Staff Skills Management
+        function getUniqueSkills() {
+            const allSkills = [];
+            allStaffMembers.forEach(staff => {
+                if (staff.skills && Array.isArray(staff.skills)) {
+                    allSkills.push(...staff.skills);
+                }
+            });
+            
+            return [...new Set(allSkills)].sort();
+        }
+        
+        function findStaffBySkill(skill) {
+            return allStaffMembers.filter(staff =>
+                staff.skills && staff.skills.includes(skill)
+            );
+        }
+        
+        // Team Workload Analysis
+        function analyzeTeamWorkload() {
+            const workloadAnalysis = {
+                available: allStaffMembers.filter(s => s.status === 'available').length,
+                busy: allStaffMembers.filter(s => s.status === 'onsite' || s.status === 'busy').length,
+                unavailable: allStaffMembers.filter(s => s.status === 'unavailable').length,
+                totalCapacity: allStaffMembers.length * 8, // 8 hours per day assumption
+                currentUtilization: 0
+            };
+            
+            // Calculate current utilization based on active projects
+            const activeStaff = allStaffMembers.filter(s => s.currentProject);
+            workloadAnalysis.currentUtilization = Math.round((activeStaff.length / allStaffMembers.length) * 100);
+            
+            return workloadAnalysis;
+        }
+        
+        // Performance Monitoring
+        function trackPerformanceMetrics() {
+            const metrics = {
+                teamProductivity: calculateTeamPerformance(),
+                skillsDistribution: getSkillsDistribution(),
+                departmentBreakdown: getDepartmentBreakdown(),
+                experienceLevels: getExperienceLevels()
+            };
+            
+            return metrics;
+        }
+        
+        function getSkillsDistribution() {
+            const skillsCount = {};
+            allStaffMembers.forEach(staff => {
+                if (staff.skills && Array.isArray(staff.skills)) {
+                    staff.skills.forEach(skill => {
+                        skillsCount[skill] = (skillsCount[skill] || 0) + 1;
+                    });
+                }
+            });
+            
+            return Object.entries(skillsCount)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10); // Top 10 skills
+        }
+        
+        function getDepartmentBreakdown() {
+            const departments = {};
+            allStaffMembers.forEach(staff => {
+                const dept = staff.department || 'Unassigned';
+                departments[dept] = (departments[dept] || 0) + 1;
+            });
+            
+            return departments;
+        }
+        
+        function getExperienceLevels() {
+            const levels = {
+                junior: allStaffMembers.filter(s => (s.experienceYears || 0) < 3).length,
+                intermediate: allStaffMembers.filter(s => (s.experienceYears || 0) >= 3 && (s.experienceYears || 0) < 8).length,
+                senior: allStaffMembers.filter(s => (s.experienceYears || 0) >= 8).length
+            };
+            
+            return levels;
+        }
+        
+        // Auto-refresh functionality
+        let autoRefreshInterval;
+        
+        function startAutoRefresh() {
+            autoRefreshInterval = setInterval(() => {
+                console.log('Auto-refreshing staff data...');
+                loadStaffMembers();
+            }, 300000); // Refresh every 5 minutes
+        }
+        
+        function stopAutoRefresh() {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = null;
+            }
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+F to focus search
+            if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                e.preventDefault();
+                document.getElementById('staffSearch').focus();
+            }
+            
+            // Ctrl+A to select all (when in staff management context)
+            if ((e.ctrlKey || e.metaKey) && e.key === 'a' && document.activeElement.closest('.staff-grid')) {
+                e.preventDefault();
+                selectAllStaff();
+            }
+            
+            // Escape to clear search
+            if (e.key === 'Escape') {
+                document.getElementById('staffSearch').value = '';
+                applySearch('');
+            }
+        });
+        
+        // Staff Quick Stats Update
+        function updateQuickStats() {
+            const stats = analyzeTeamWorkload();
+            const performance = calculateTeamPerformance();
+            
+            // Update additional stats that might be shown in tooltips or modals
+            console.log('Team Statistics:', {
+                workload: stats,
+                performance: performance,
+                skills: getSkillsDistribution(),
+                departments: getDepartmentBreakdown()
+            });
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('Staff Management Page Loaded - 2025-07-19T15:11:03Z');
+            console.log('Current User: Dad-Link');
+            
+            // Check authentication
+            const isAuthenticated = await checkAuthState();
+            if (!isAuthenticated) return;
+            
+            // Load staff members
+            await loadStaffMembers();
+            
+            // Setup real-time updates
+            setupRealtimeUpdates();
+            
+            // Start auto-refresh
+            startAutoRefresh();
+            
+            // Update quick stats
+            updateQuickStats();
+            
+            console.log('🚀 Staff Management System Ready!');
+            console.log('✓ Firebase Integration ✓ Real-time Updates ✓ Demo Data');
+            console.log('✓ Team Statistics ✓ Search & Filters ✓ Staff Cards');
+            console.log('✓ Performance Tracking ✓ Workload Analysis');
+        });
+        
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            if (window.staffUnsubscribe) {
+                window.staffUnsubscribe();
+            }
+            stopAutoRefresh();
+        });
+        
+        // Page visibility change handler
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                stopAutoRefresh();
+            } else {
+                startAutoRefresh();
+                // Refresh data when page becomes visible again
+                loadStaffMembers();
+            }
+        });
+        
+        // Expose functions globally for testing and external use
+        window.updateStaffStatus = updateStaffStatus;
+        window.updateStaffAvailability = updateStaffAvailability;
+        window.exportStaffData = exportStaffData;
+        window.analyzeTeamWorkload = analyzeTeamWorkload;
+        window.trackPerformanceMetrics = trackPerformanceMetrics;
+        
+        console.log('👷‍♂️ Building Group Staff Management System Initialized!');
+        console.log('📊 Features: Team Overview, Staff Cards, Performance Tracking');
+        console.log('🔄 Real-time Updates: Every 5 minutes | 📱 Responsive: Yes');
+        console.log('🔍 Search & Filter: Name, Role, Skills, Status');
+        console.log('📈 Analytics: Performance, Workload, Skills Distribution');
+        console.log('⚡ Quick Actions: Schedule, Assign, Reports, Time Tracking');
+        console.log('🔥 Firebase Integration: Active | 👤 User: Dad-Link');
+        console.log('⏰ Timestamp: 2025-07-19 15:11:03 UTC');
+    </script>
+</body>
+</html>

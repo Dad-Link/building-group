@@ -1,0 +1,2306 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Staff Member | Building Group | Employee Management</title>
+    <meta name="description" content="Add new team members to your construction business with Building Group staff management system. Complete employee onboarding with skills, qualifications, and performance tracking across Manchester, Liverpool, Leeds & Cheshire.">
+    <meta name="keywords" content="add staff, employee onboarding, team management, construction staff, hire employee">
+    <meta name="author" content="Building Group">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- FIREBASE-COMPATIBLE CSP -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self'; 
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' 
+            https://www.gstatic.com 
+            https://www.googleapis.com 
+            https://apis.google.com;
+        connect-src 'self' 
+            https://identitytoolkit.googleapis.com 
+            https://www.googleapis.com 
+            https://securetoken.googleapis.com 
+            https://buildinggroup-4f8b9-default-rtdb.firebaseio.com 
+            https://firestore.googleapis.com 
+            https://buildinggroup-4f8b9.firebasestorage.app
+            wss://s-usc1c-nss-2077.firebaseio.com;
+        img-src 'self' data: 
+            https://www.gstatic.com 
+            https://fonts.gstatic.com;
+        style-src 'self' 'unsafe-inline' 
+            https://fonts.googleapis.com 
+            https://cdnjs.cloudflare.com;
+        font-src 'self' 
+            https://fonts.gstatic.com 
+            https://cdnjs.cloudflare.com;
+        frame-src 'self' 
+            https://buildinggroup-4f8b9.firebaseapp.com;
+    ">
+    
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <!-- Last Updated -->
+    <meta name="last-modified" content="2025-07-19T15:13:52Z">
+    
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Enhanced Theme System */
+        :root {
+            --primary-color: #e74c3c;
+            --primary-dark: #c0392b;
+            --primary-light: #ec7063;
+            --secondary-color: #3498db;
+            --accent-color: #f39c12;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #17a2b8;
+            --text-color: #2c3e50;
+            --text-secondary: #6c757d;
+            --text-light: #95a5a6;
+            --background-color: #f8fafc;
+            --background-secondary: #ecf0f1;
+            --card-background: #ffffff;
+            --input-background: #ffffff;
+            --border-color: #dee2e6;
+            --border-light: #f1f3f4;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.15);
+            --shadow-xl: 0 16px 64px rgba(0,0,0,0.2);
+            --gradient-primary: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            --gradient-secondary: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            --gradient-success: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            --gradient-staff: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
+        }
+        
+        /* Dark Theme Variables */
+        [data-theme="dark"] {
+            --text-color: #ffffff;
+            --text-secondary: #bdc3c7;
+            --text-light: #95a5a6;
+            --background-color: #0f0f0f;
+            --background-secondary: #1a1a1a;
+            --card-background: #1e1e1e;
+            --input-background: #2a2a2a;
+            --border-color: #333333;
+            --border-light: #2a2a2a;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
+            --shadow-xl: 0 16px 64px rgba(0,0,0,0.6);
+        }
+        
+        /* Auto Theme Detection */
+        @media (prefers-color-scheme: dark) {
+            :root[data-theme="auto"] {
+                --text-color: #ffffff;
+                --text-secondary: #bdc3c7;
+                --text-light: #95a5a6;
+                --background-color: #0f0f0f;
+                --background-secondary: #1a1a1a;
+                --card-background: #1e1e1e;
+                --input-background: #2a2a2a;
+                --border-color: #333333;
+                --border-light: #2a2a2a;
+                --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
+                --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+                --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
+                --shadow-xl: 0 16px 64px rgba(0,0,0,0.6);
+            }
+        }
+        
+        /* Base Elements */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: var(--background-color);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--card-background);
+            box-shadow: var(--shadow-md);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .back-btn {
+            background: var(--background-secondary);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+        }
+        
+        .header-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .theme-toggle {
+            background: var(--background-secondary);
+            color: var(--text-color);
+            border: 2px solid var(--border-color);
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .theme-toggle:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: scale(1.1);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+        
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 2rem 0;
+        }
+        
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Staff Form Container */
+        .staff-form-container {
+            background: var(--card-background);
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+        
+        .form-header {
+            background: var(--gradient-staff);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .form-header h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-header p {
+            opacity: 0.9;
+        }
+        
+        /* Progress Indicator */
+        .progress-indicator {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+            padding: 0 2rem;
+        }
+        
+        .progress-steps {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .progress-step {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--background-secondary);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .progress-step.active {
+            background: var(--gradient-staff);
+            color: white;
+        }
+        
+        .progress-step.completed {
+            background: var(--success-color);
+            color: white;
+        }
+        
+        .progress-step-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+        
+        /* Staff Form */
+        .staff-form {
+            padding: 2rem;
+        }
+        
+        .form-section {
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--background-secondary);
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .section-icon {
+            width: 35px;
+            height: 35px;
+            background: var(--gradient-staff);
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .form-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 0.95rem;
+        }
+        
+        .form-label.required::after {
+            content: '*';
+            color: var(--danger-color);
+            margin-left: 3px;
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.875rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            background: var(--input-background);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .form-input:valid, .form-select:valid {
+            border-color: var(--success-color);
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .form-help {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+        
+        /* Skills Section */
+        .skills-input-container {
+            position: relative;
+        }
+        
+        .skills-input {
+            width: 100%;
+            padding: 0.875rem 0.875rem 0.875rem 3rem;
+        }
+        
+        .skills-input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+        
+        .skills-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .skill-suggestion {
+            background: var(--gradient-secondary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        .skill-suggestion:hover {
+            background: var(--gradient-staff);
+            transform: translateY(-1px);
+        }
+        
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .skill-tag {
+            background: var(--gradient-staff);
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .skill-remove {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Photo Upload Section */
+        .photo-upload {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            padding: 2rem;
+            background: var(--card-background);
+            border-radius: 12px;
+            border: 2px dashed var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .photo-upload:hover {
+            border-color: var(--primary-color);
+            background: var(--background-secondary);
+        }
+        
+        .photo-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--gradient-staff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            font-weight: 800;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        
+        .photo-upload-content {
+            flex: 1;
+        }
+        
+        .photo-upload-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .photo-upload-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .photo-upload-btn {
+            background: var(--gradient-secondary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .photo-upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        /* Qualifications List */
+        .qualifications-list {
+            margin-top: 1rem;
+        }
+        
+        .qualification-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .qualification-input {
+            flex: 1;
+            border: 1px solid var(--border-color);
+            padding: 0.5rem;
+            border-radius: 4px;
+            background: var(--input-background);
+            color: var(--text-color);
+        }
+        
+        .remove-qualification-btn {
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .add-qualification-btn {
+            background: var(--gradient-success);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .add-qualification-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        /* Emergency Contact */
+        .emergency-contact-info {
+            background: rgba(243, 156, 18, 0.1);
+            border-left: 4px solid var(--warning-color);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 1rem;
+        }
+        
+        .emergency-contact-title {
+            font-weight: 700;
+            color: var(--warning-color);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Alert Messages */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: none;
+            animation: slideInDown 0.3s ease;
+        }
+        
+        .alert.show {
+            display: block;
+        }
+        
+        .alert-success {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success-color);
+            border: 1px solid rgba(39, 174, 96, 0.2);
+        }
+        
+        .alert-error {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--danger-color);
+            border: 1px solid rgba(231, 76, 60, 0.2);
+        }
+        
+        .alert-warning {
+            background: rgba(243, 156, 18, 0.1);
+            color: var(--warning-color);
+            border: 1px solid rgba(243, 156, 18, 0.2);
+        }
+        
+        .alert-info {
+            background: rgba(23, 162, 184, 0.1);
+            color: var(--info-color);
+            border: 1px solid rgba(23, 162, 184, 0.2);
+        }
+        
+        /* Form Actions */
+        .form-actions {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--background-secondary);
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.875rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-align: center;
+            justify-content: center;
+            min-width: 140px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+        
+        .btn-staff {
+            background: var(--gradient-staff);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: var(--background-color);
+            color: var(--text-color);
+            border: 2px solid var(--border-color);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--background-secondary);
+            border-color: var(--primary-color);
+        }
+        
+        .btn:disabled {
+            background: var(--text-light) !important;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        
+        .btn-loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+        
+        .btn-loading .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Animations */
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+        
+        /* Enhanced Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .header-left, .header-right {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .form-row-2, .form-row-3 {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .photo-upload {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .progress-steps {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .staff-form {
+                padding: 1rem;
+            }
+            
+            .form-section {
+                padding: 1rem;
+            }
+            
+            .container {
+                padding: 0 0.5rem;
+            }
+            
+            .skills-suggestions {
+                justify-content: center;
+            }
+        }
+        
+        /* High Contrast Mode Support */
+        @media (prefers-contrast: high) {
+            :root {
+                --border-color: #000000;
+                --shadow-md: 0 4px 12px rgba(0,0,0,0.5);
+            }
+            
+            [data-theme="dark"] {
+                --border-color: #ffffff;
+                --shadow-md: 0 4px 12px rgba(255,255,255,0.3);
+            }
+        }
+        
+        /* Reduced Motion Support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* Focus Styles for Accessibility */
+        *:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-left">
+                    <a href="/account/staff.html" class="back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Staff
+                    </a>
+                    <h1 class="header-title">Add Staff Member</h1>
+                </div>
+                
+                <div class="header-right">
+                    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <div class="user-info">
+                        <div class="user-avatar" id="userAvatar">DL</div>
+                        <span id="userName">Dad-Link</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h2 class="page-title">Employee Onboarding</h2>
+                <p class="page-subtitle">
+                    Add a new team member to your construction business with complete profile, skills, and performance tracking.
+                </p>
+            </div>
+
+            <!-- Alert Messages -->
+            <div class="alert alert-error" id="errorAlert" role="alert"></div>
+            <div class="alert alert-success" id="successAlert" role="alert"></div>
+            <div class="alert alert-warning" id="warningAlert" role="alert"></div>
+            <div class="alert alert-info" id="infoAlert" role="alert"></div>
+
+            <!-- Staff Form Container -->
+            <div class="staff-form-container">
+                <div class="form-header">
+                    <h3>Staff Member Registration</h3>
+                    <p>Complete all sections to create a comprehensive employee profile</p>
+                </div>
+
+                <!-- Progress Indicator -->
+                <div class="progress-indicator">
+                    <div class="progress-steps">
+                        <div class="progress-step active" data-step="1">
+                            <div class="progress-step-icon">1</div>
+                            <span>Personal Info</span>
+                        </div>
+                        <div class="progress-step" data-step="2">
+                            <div class="progress-step-icon">2</div>
+                            <span>Employment</span>
+                        </div>
+                        <div class="progress-step" data-step="3">
+                            <div class="progress-step-icon">3</div>
+                            <span>Skills & Qualifications</span>
+                        </div>
+                        <div class="progress-step" data-step="4">
+                            <div class="progress-step-icon">4</div>
+                            <span>Emergency Contact</span>
+                        </div>
+                    </div>
+                </div>
+
+                <form class="staff-form" id="staffForm" novalidate>
+                    <!-- Personal Information -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <div class="section-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            Personal Information
+                        </div>
+
+                        <div class="form-row-2">
+                            <div class="form-group">
+                                <label for="firstName" class="form-label required">First Name</label>
+                                <input
+                                    type="text"
+                                    id="firstName"
+                                    name="firstName"
+                                    class="form-input"
+                                    placeholder="e.g. John"
+                                    required
+                                    maxlength="50"
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName" class="form-label required">Last Name</label>
+                                <input
+                                    type="text"
+                                    id="lastName"
+                                    name="lastName"
+                                    class="form-input"
+                                    placeholder="e.g. Smith"
+                                    required
+                                    maxlength="50"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="form-row-2">
+                            <div class="form-group">
+                                <label for="email" class="form-label required">Email Address</label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    class="form-input"
+                                    placeholder="john.smith@buildinggroup.co.uk"
+                                    required
+                                    maxlength="100"
+                                >
+                                <div class="form-help">Work email address for company communications</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone" class="form-label required">Phone Number</label>
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    name="phone"
+                                    class="form-input"
+                                    placeholder="07123 456789"
+                                    required
+                                    maxlength="15"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address" class="form-label">Home Address</label>
+                            <textarea
+                                id="address"
+                                name="address"
+                                class="form-textarea"
+                                placeholder="Full home address including postcode"
+                                rows="3"
+                                maxlength="300"
+                            ></textarea>
+                        </div>
+
+                        <!-- Photo Upload -->
+                        <div class="form-group">
+                            <label class="form-label">Profile Photo</label>
+                            <div class="photo-upload" id="photoUpload">
+                                <div class="photo-preview" id="photoPreview">
+                                    <span id="photoInitials">JS</span>
+                                </div>
+                                <div class="photo-upload-content">
+                                    <div class="photo-upload-title">Upload Profile Photo</div>
+                                    <div class="photo-upload-description">
+                                        Choose a professional photo for the employee profile. JPG, PNG up to 5MB.
+                                    </div>
+                                    <input type="file" id="photoInput" accept="image/jpeg,image/png" hidden>
+                                    <button type="button" class="photo-upload-btn" onclick="document.getElementById('photoInput').click()">
+                                        <i class="fas fa-camera"></i>
+                                        Choose Photo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Employment Details -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <div class="section-icon">
+                                <i class="fas fa-briefcase"></i>
+                            </div>
+                            Employment Details
+                        </div>
+
+                        <div class="form-row-3">
+                            <div class="form-group">
+                                <label for="employeeNumber" class="form-label">Employee Number</label>
+                                <input
+                                    type="text"
+                                    id="employeeNumber"
+                                    name="employeeNumber"
+                                    class="form-input"
+                                    placeholder="Auto-generated"
+                                    readonly
+                                    style="background: var(--background-secondary);"
+                                >
+                                <div class="form-help">Auto-generated upon creation</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="startDate" class="form-label required">Start Date</label>
+                                <input
+                                    type="date"
+                                    id="startDate"
+                                    name="startDate"
+                                    class="form-input"
+                                    required
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label for="employmentType" class="form-label required">Employment Type</label>
+                                <select
+                                    id="employmentType"
+                                    name="employmentType"
+                                    class="form-select"
+                                    required
+                                >
+                                    <option value="">Select type</option>
+                                    <option value="full-time">Full-time</option>
+                                    <option value="part-time">Part-time</option>
+                                    <option value="contract">Contract</option>
+                                    <option value="apprentice">Apprentice</option>
+                                    <option value="temporary">Temporary</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row-2">
+                            <div class="form-group">
+                                <label for="role" class="form-label required">Job Role/Title</label>
+                                <select
+                                    id="role"
+                                    name="role"
+                                    class="form-select"
+                                    required
+                                >
+                                    <option value="">Select role</option>
+                                    <option value="Site Manager">Site Manager</option>
+                                    <option value="Site Supervisor">Site Supervisor</option>
+                                    <option value="Project Manager">Project Manager</option>
+                                    <option value="Skilled Electrician">Skilled Electrician</option>
+                                    <option value="Plumber">Plumber</option>
+                                    <option value="Carpenter">Carpenter</option>
+                                    <option value="Bricklayer">Bricklayer</option>
+                                    <option value="Roofer">Roofer</option>
+                                    <option value="Plasterer">Plasterer</option>
+                                    <option value="Painter/Decorator">Painter/Decorator</option>
+                                    <option value="General Labourer">General Labourer</option>
+                                    <option value="Health & Safety Officer">Health & Safety Officer</option>
+                                    <option value="Quantity Surveyor">Quantity Surveyor</option>
+                                    <option value="Administrative Assistant">Administrative Assistant</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="department" class="form-label">Department</label>
+                                <select
+                                    id="department"
+                                    name="department"
+                                    class="form-select"
+                                >
+                                    <option value="">Select department</option>
+                                    <option value="Construction">Construction</option>
+                                    <option value="Electrical">Electrical</option>
+                                    <option value="Plumbing">Plumbing</option>
+                                    <option value="Carpentry">Carpentry</option>
+                                    <option value="Roofing">Roofing</option>
+                                    <option value="Management">Management</option>
+                                    <option value="Health & Safety">Health & Safety</option>
+                                    <option value="Administration">Administration</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row-3">
+                            <div class="form-group">
+                                <label for="hourlyRate" class="form-label">Hourly Rate (£)</label>
+                                <input
+                                    type="number"
+                                    id="hourlyRate"
+                                    name="hourlyRate"
+                                    class="form-input"
+                                    placeholder="25.00"
+                                    min="0"
+                                    step="0.01"
+                                    max="200"
+                                >
+                                <div class="form-help">Standard hourly rate for payroll</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="experienceYears" class="form-label">Years of Experience</label>
+                                <input
+                                    type="number"
+                                    id="experienceYears"
+                                    name="experienceYears"
+                                    class="form-input"
+                                    placeholder="5"
+                                    min="0"
+                                    max="50"
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label for="status" class="form-label">Initial Status</label>
+                                <select
+                                    id="status"
+                                    name="status"
+                                    class="form-select"
+                                >
+                                    <option value="available">Available</option>
+                                    <option value="unavailable">Unavailable</option>
+                                    <option value="training">In Training</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Skills & Qualifications -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <div class="section-icon">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                            Skills & Qualifications
+                        </div>
+
+                        <div class="form-group">
+                            <label for="skillsInput" class="form-label">Skills</label>
+                            <div class="skills-input-container">
+                                <i class="fas fa-plus skills-input-icon"></i>
+                                <input
+                                    type="text"
+                                    id="skillsInput"
+                                    name="skillsInput"
+                                    class="skills-input"
+                                    placeholder="Type skill and press Enter to add..."
+                                >
+                            </div>
+                            <div class="form-help">Add relevant skills for this employee</div>
+                            
+                            <!-- Skills Suggestions -->
+                            <div class="skills-suggestions">
+                                <button type="button" class="skill-suggestion" onclick="addSkillFromSuggestion('Project Management')">Project Management</button>
+                                <button type="button" class="skill-suggestion" onclick="addSkillFromSuggestion('Health & Safety')">Health & Safety</button>
+                                <button type="button" class="skill-suggestion" onclick="addSkillFromSuggestion('Team Leadership')">Team Leadership</button>
+                                <button type="button" class="skill-suggestion" onclick="addSkillFromSuggestion('Quality Control')">Quality Control</button>
+                                <button type="button" class="skill-suggestion" onclick="addSkillFromSuggestion('Electrical Installation')">Electrical Installation</button>
+                                <button type="button" class="skill-suggestion" onclick="addSkillFromSuggestion('Plumbing')">Plumbing</button>
+                                <button type="button" class="skill-suggestion" onclick="addSkillFromSuggestion('Carpentry')">Carpentry</button>
+                                <button type="button" class="skill-suggestion" onclick="addSkillFromSuggestion('Brickwork')">Brickwork</button>
+                            </div>
+                            
+                            <!-- Selected Skills -->
+                            <div class="skills-list" id="skillsList">
+                                <!-- Skills will be added here -->
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Qualifications & Certifications</label>
+                            <div class="qualifications-list" id="qualificationsList">
+                                <div class="qualification-item">
+                                    <input
+                                        type="text"
+                                        class="qualification-input"
+                                        placeholder="e.g. CSCS Gold Card"
+                                        name="qualifications[]"
+                                    >
+                                    <button type="button" class="remove-qualification-btn" onclick="removeQualification(this)">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="button" class="add-qualification-btn" onclick="addQualification()">
+                                <i class="fas fa-plus"></i>
+                                Add Qualification
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Emergency Contact -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <div class="section-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            Emergency Contact Information
+                        </div>
+
+                        <div class="emergency-contact-info">
+                            <div class="emergency-contact-title">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                Important: Emergency Contact Details
+                            </div>
+                            <p>This information will be used to contact someone in case of workplace emergencies or accidents.</p>
+                        </div>
+
+                        <div class="form-row-3">
+                            <div class="form-group">
+                                <label for="emergencyName" class="form-label required">Contact Name</label>
+                                <input
+                                    type="text"
+                                    id="emergencyName"
+                                    name="emergencyName"
+                                    class="form-input"
+                                    placeholder="Full name"
+                                    required
+                                    maxlength="100"
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label for="emergencyPhone" class="form-label required">Contact Phone</label>
+                                <input
+                                    type="tel"
+                                    id="emergencyPhone"
+                                    name="emergencyPhone"
+                                    class="form-input"
+                                    placeholder="07987 654321"
+                                    required
+                                    maxlength="15"
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label for="emergencyRelationship" class="form-label required">Relationship</label>
+                                <select
+                                    id="emergencyRelationship"
+                                    name="emergencyRelationship"
+                                    class="form-select"
+                                    required
+                                >
+                                    <option value="">Select relationship</option>
+                                    <option value="Spouse">Spouse</option>
+                                    <option value="Partner">Partner</option>
+                                    <option value="Parent">Parent</option>
+                                    <option value="Child">Child</option>
+                                    <option value="Sibling">Sibling</option>
+                                    <option value="Friend">Friend</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <div>
+                            <button type="button" class="btn btn-secondary" id="saveDraft">
+                                <i class="fas fa-save"></i>
+                                Save as Draft
+                            </button>
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <button type="button" class="btn btn-secondary" id="resetForm">
+                                <i class="fas fa-undo"></i>
+                                Reset Form
+                            </button>
+                            <button type="submit" class="btn btn-staff" id="addStaff">
+                                <i class="fas fa-user-plus"></i>
+                                Add Staff Member
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBI1M38HZH8-xY3nfoKmqoitmggq3C8zKE",
+            authDomain: "buildinggroup-4f8b9.firebaseapp.com",
+            projectId: "buildinggroup-4f8b9",
+            storageBucket: "buildinggroup-4f8b9.firebasestorage.app",
+            messagingSenderId: "353000992011",
+            appId: "1:353000992011:web:c834310d7d79dd1bf0c60e",
+            measurementId: "G-DF11Q5PZRT"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        
+        // Global variables
+        let currentUser = null;
+        let staffSkills = [];
+        let isEditMode = false;
+        let editStaffId = null;
+        
+        // Theme Management
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        let currentTheme = localStorage.getItem('theme') || 'auto';
+        html.setAttribute('data-theme', currentTheme);
+        updateThemeIcon();
+        
+        themeToggle.addEventListener('click', () => {
+            switch(currentTheme) {
+                case 'auto':
+                    currentTheme = 'light';
+                    break;
+                case 'light':
+                    currentTheme = 'dark';
+                    break;
+                case 'dark':
+                    currentTheme = 'auto';
+                    break;
+            }
+            
+            html.setAttribute('data-theme', currentTheme);
+            localStorage.setItem('theme', currentTheme);
+            updateThemeIcon();
+        });
+        
+        function updateThemeIcon() {
+            const icon = themeToggle.querySelector('i');
+            switch(currentTheme) {
+                case 'light':
+                    icon.className = 'fas fa-sun';
+                    break;
+                case 'dark':
+                    icon.className = 'fas fa-moon';
+                    break;
+                case 'auto':
+                    icon.className = 'fas fa-adjust';
+                    break;
+            }
+        }
+        
+        // Alert Functions
+        function showAlert(type, message) {
+            hideAllAlerts();
+            const alert = document.getElementById(`${type}Alert`);
+            alert.textContent = message;
+            alert.classList.add('show');
+            
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 8000);
+        }
+        
+        function hideAllAlerts() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => alert.classList.remove('show'));
+        }
+        
+        // User Authentication Check
+        function checkAuthState() {
+            return new Promise((resolve) => {
+                const unsubscribe = auth.onAuthStateChanged((user) => {
+                    unsubscribe();
+                    if (user && user.emailVerified) {
+                        currentUser = user;
+                        loadUserData();
+                        resolve(true);
+                    } else {
+                        showAlert('error', 'Please login to add staff members');
+                        setTimeout(() => {
+                            window.location.href = '/account/login.html';
+                        }, 2000);
+                        resolve(false);
+                    }
+                });
+            });
+        }
+        
+        async function loadUserData() {
+            try {
+                const userDoc = await db.collection('users').doc(currentUser.uid).get();
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    
+                    // Update UI
+                    document.getElementById('userName').textContent = userData.firstName || 'User';
+                    document.getElementById('userAvatar').textContent = (userData.firstName?.[0] || 'U') + (userData.lastName?.[0] || '');
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+        
+        // Generate Employee Number
+        function generateEmployeeNumber() {
+            const timestamp = Date.now();
+            const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+            return `EMP-${timestamp.toString().slice(-6)}${random}`;
+        }
+        
+        function generateStaffId() {
+            return 'STAFF_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+        }
+        
+        // Photo Upload Handling
+        document.getElementById('photoInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                    showAlert('error', 'Photo size must be less than 5MB');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const photoPreview = document.getElementById('photoPreview');
+                    photoPreview.innerHTML = `<img src="${e.target.result}" alt="Profile Photo">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Update photo initials when name changes
+        function updatePhotoInitials() {
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const initials = (firstName[0] || '') + (lastName[0] || '');
+            
+            const photoInitials = document.getElementById('photoInitials');
+            if (photoInitials) {
+                photoInitials.textContent = initials.toUpperCase();
+            }
+        }
+        
+        document.getElementById('firstName').addEventListener('input', updatePhotoInitials);
+        document.getElementById('lastName').addEventListener('input', updatePhotoInitials);
+        
+        // Skills Management
+        function addSkill(skillName) {
+            skillName = skillName.trim();
+            if (!skillName || staffSkills.includes(skillName)) return;
+            
+            staffSkills.push(skillName);
+            renderSkills();
+        }
+        
+        function removeSkill(skillName) {
+            const index = staffSkills.indexOf(skillName);
+            if (index > -1) {
+                staffSkills.splice(index, 1);
+                renderSkills();
+            }
+        }
+        
+        function renderSkills() {
+            const skillsList = document.getElementById('skillsList');
+            
+            if (staffSkills.length === 0) {
+                skillsList.innerHTML = '';
+                return;
+            }
+            
+            skillsList.innerHTML = staffSkills.map(skill => `
+                <div class="skill-tag">
+                    <span>${skill}</span>
+                    <button type="button" class="skill-remove" onclick="removeSkill('${skill}')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+        
+        window.addSkillFromSuggestion = function(skillName) {
+            addSkill(skillName);
+            showAlert('success', `Added skill: ${skillName}`);
+        };
+        
+        // Skills input event handling
+        document.getElementById('skillsInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const skillName = this.value.trim();
+                if (skillName) {
+                    addSkill(skillName);
+                    this.value = '';
+                }
+            }
+        });
+        
+        // Qualifications Management
+        function addQualification() {
+            const qualificationsList = document.getElementById('qualificationsList');
+            const newItem = document.createElement('div');
+            newItem.className = 'qualification-item';
+            newItem.innerHTML = `
+                <input 
+                    type="text" 
+                    class="qualification-input" 
+                    placeholder="e.g. First Aid Certificate"
+                    name="qualifications[]"
+                >
+                <button type="button" class="remove-qualification-btn" onclick="removeQualification(this)">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            qualificationsList.appendChild(newItem);
+        }
+        
+        window.addQualification = addQualification;
+        
+        window.removeQualification = function(button) {
+            const item = button.closest('.qualification-item');
+            const qualificationsList = document.getElementById('qualificationsList');
+            
+            // Keep at least one qualification input
+            if (qualificationsList.children.length > 1) {
+                item.remove();
+            } else {
+                // Clear the input instead of removing
+                item.querySelector('.qualification-input').value = '';
+            }
+        };
+        
+        // Form Validation
+        function validateForm() {
+            const required = [
+                'firstName',
+                'lastName',
+                'email',
+                'phone',
+                'startDate',
+                'employmentType',
+                'role',
+                'emergencyName',
+                'emergencyPhone',
+                'emergencyRelationship'
+            ];
+            
+            for (const fieldId of required) {
+                const field = document.getElementById(fieldId);
+                if (!field.value.trim()) {
+                    showAlert('error', `${field.previousElementSibling.textContent.replace('*', '').trim()} is required`);
+                    field.focus();
+                    return false;
+                }
+            }
+            
+            // Email validation
+            const email = document.getElementById('email').value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showAlert('error', 'Please enter a valid email address');
+                document.getElementById('email').focus();
+                return false;
+            }
+            
+            // Phone validation
+            const phone = document.getElementById('phone').value;
+            const phoneRegex = /^[\d\s\-\+\(\)]{10,}$/;
+            if (!phoneRegex.test(phone.replace(/\s/g, ''))) {
+                showAlert('error', 'Please enter a valid phone number');
+                document.getElementById('phone').focus();
+                return false;
+            }
+            
+            // Start date validation
+            const startDate = new Date(document.getElementById('startDate').value);
+            const today = new Date();
+            const maxFutureDate = new Date();
+            maxFutureDate.setFullYear(maxFutureDate.getFullYear() + 1);
+            
+            if (startDate > maxFutureDate) {
+                showAlert('error', 'Start date cannot be more than 1 year in the future');
+                document.getElementById('startDate').focus();
+                return false;
+            }
+            
+            return true;
+        }
+        
+        // Collect Form Data
+        function collectFormData() {
+            const form = document.getElementById('staffForm');
+            const formData = new FormData(form);
+            
+            // Collect qualifications
+            const qualificationInputs = document.querySelectorAll('.qualification-input');
+            const qualifications = Array.from(qualificationInputs)
+                .map(input => input.value.trim())
+                .filter(qual => qual.length > 0);
+            
+            const staffData = {
+                // Staff metadata
+                staffId: isEditMode ? editStaffId : generateStaffId(),
+                employeeNumber: isEditMode ? null : generateEmployeeNumber(),
+                createdAt: isEditMode ? null : firebase.firestore.FieldValue.serverTimestamp(),
+                createdBy: currentUser.uid,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                
+                // Personal information
+                firstName: formData.get('firstName').trim(),
+                lastName: formData.get('lastName').trim(),
+                fullName: `${formData.get('firstName').trim()} ${formData.get('lastName').trim()}`,
+                email: formData.get('email').trim(),
+                phone: formData.get('phone').trim(),
+                address: formData.get('address')?.trim() || null,
+                
+                // Employment details
+                role: formData.get('role'),
+                department: formData.get('department') || 'General',
+                startDate: formData.get('startDate'),
+                employmentType: formData.get('employmentType'),
+                status: formData.get('status') || 'available',
+                hourlyRate: parseFloat(formData.get('hourlyRate')) || 0,
+                experienceYears: parseInt(formData.get('experienceYears')) || 0,
+                
+                // Skills and qualifications
+                skills: staffSkills,
+                qualifications: qualifications,
+                
+                // Performance metrics (initial values)
+                rating: 0,
+                completedProjects: 0,
+                onTimeCompletion: 100,
+                availability: formData.get('status') || 'available',
+                
+                // Work details
+                currentProject: null,
+                
+                // Emergency contact
+                emergencyContact: {
+                    name: formData.get('emergencyName').trim(),
+                    phone: formData.get('emergencyPhone').trim(),
+                    relationship: formData.get('emergencyRelationship')
+                },
+                
+                // Location (default to company locations)
+                location: 'manchester', // Can be updated based on assignment
+                
+                // Search indexing
+                searchTerms: [
+                    formData.get('firstName').toLowerCase(),
+                    formData.get('lastName').toLowerCase(),
+                    formData.get('email').toLowerCase(),
+                    formData.get('role').toLowerCase(),
+                    formData.get('department').toLowerCase(),
+                    ...staffSkills.map(skill => skill.toLowerCase())
+                ].filter(term => term && term.trim())
+            };
+            
+            // Remove null values for updates in edit mode
+            if (isEditMode) {
+                Object.keys(staffData).forEach(key => {
+                    if (staffData[key] === null) {
+                        delete staffData[key];
+                    }
+                });
+            }
+            
+            return staffData;
+        }
+        
+        // Save Staff to Firebase
+        async function saveStaffToFirebase(staffData, isDraft = false) {
+            if (!currentUser) {
+                throw new Error('User not authenticated');
+            }
+            
+            try {
+                // Add draft flag if saving as draft
+                if (isDraft) {
+                    staffData.isDraft = true;
+                    staffData.status = 'draft';
+                }
+                
+                let docRef;
+                
+                if (isEditMode && editStaffId) {
+                    // Update existing staff member
+                    docRef = db.collection('users').doc(currentUser.uid)
+                        .collection('staff').doc(editStaffId);
+                    await docRef.update(staffData);
+                    console.log('Staff member updated:', editStaffId);
+                    return editStaffId;
+                } else {
+                    // Create new staff member
+                    docRef = await db.collection('users').doc(currentUser.uid)
+                        .collection('staff').add(staffData);
+                    console.log('Staff member created:', docRef.id);
+                    return docRef.id;
+                }
+                
+            } catch (error) {
+                console.error('Error saving staff member:', error);
+                throw error;
+            }
+        }
+        
+        // Form Event Handlers
+        
+        // Save Draft
+        document.getElementById('saveDraft').addEventListener('click', async function() {
+            const button = this;
+            button.classList.add('btn-loading');
+            button.innerHTML = '<div class="spinner"></div>Saving Draft...';
+            button.disabled = true;
+            
+            try {
+                if (!currentUser) {
+                    showAlert('error', 'Please login to save staff member');
+                    return;
+                }
+                
+                // Basic validation for draft
+                const firstName = document.getElementById('firstName').value.trim();
+                const lastName = document.getElementById('lastName').value.trim();
+                
+                if (!firstName || !lastName) {
+                    showAlert('error', 'First and last name are required to save draft');
+                    return;
+                }
+                
+                const staffData = collectFormData();
+                const staffId = await saveStaffToFirebase(staffData, true);
+                
+                showAlert('success', `Staff draft saved successfully! Employee: ${staffData.fullName}`);
+                
+                // Store draft ID for later use
+                localStorage.setItem('lastStaffDraftId', staffId);
+                
+            } catch (error) {
+                console.error('Error saving draft:', error);
+                showAlert('error', 'Failed to save draft. Please try again.');
+            } finally {
+                button.classList.remove('btn-loading');
+                button.innerHTML = '<i class="fas fa-save"></i>Save as Draft';
+                button.disabled = false;
+            }
+        });
+        
+        // Reset Form
+        document.getElementById('resetForm').addEventListener('click', function() {
+            const confirmReset = confirm('Are you sure you want to reset the form? All entered data will be lost.');
+            if (confirmReset) {
+                document.getElementById('staffForm').reset();
+                staffSkills = [];
+                renderSkills();
+                updatePhotoInitials();
+                updateEmployeeNumberDisplay();
+                hideAllAlerts();
+                showAlert('info', 'Form has been reset');
+            }
+        });
+        
+        // Main Form Submit
+        document.getElementById('staffForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!validateForm()) return;
+            
+            const button = document.getElementById('addStaff');
+            button.classList.add('btn-loading');
+            button.innerHTML = '<div class="spinner"></div>Adding Staff Member...';
+            button.disabled = true;
+            
+            try {
+                if (!currentUser) {
+                    showAlert('error', 'Please login to add staff member');
+                    return;
+                }
+                
+                const staffData = collectFormData();
+                const staffId = await saveStaffToFirebase(staffData, false);
+                
+                showAlert('success', `Staff member added successfully! Employee Number: ${staffData.employeeNumber}`);
+                
+                // Store success data
+                localStorage.setItem('lastCreatedStaff', JSON.stringify({
+                    staffId: staffId,
+                    employeeNumber: staffData.employeeNumber,
+                    fullName: staffData.fullName,
+                    role: staffData.role,
+                    createdAt: new Date().toISOString()
+                }));
+                
+                // Show success message with additional info
+                setTimeout(() => {
+                    showAlert('info', `${staffData.fullName} has been added to your team and can now be assigned to projects!`);
+                }, 2000);
+                
+                // Clear form or redirect
+                setTimeout(() => {
+                    if (confirm('Staff member added successfully! Would you like to add another team member?')) {
+                        // Reset form for new entry
+                        document.getElementById('staffForm').reset();
+                        staffSkills = [];
+                        renderSkills();
+                        updatePhotoInitials();
+                        updateEmployeeNumberDisplay();
+                        hideAllAlerts();
+                        window.scrollTo(0, 0);
+                        document.getElementById('firstName').focus();
+                    } else {
+                        // Redirect to staff management page
+                        window.location.href = '/account/staff.html';
+                    }
+                }, 4000);
+                
+            } catch (error) {
+                console.error('Error adding staff member:', error);
+                
+                // Check if it's a duplicate email error
+                if (error.message && error.message.includes('email')) {
+                    showAlert('error', 'A staff member with this email already exists');
+                } else {
+                    showAlert('error', error.message || 'Failed to add staff member. Please try again.');
+                }
+            } finally {
+                button.classList.remove('btn-loading');
+                button.innerHTML = '<i class="fas fa-user-plus"></i>Add Staff Member';
+                button.disabled = false;
+            }
+        });
+        
+        // Auto-save functionality
+        let autoSaveTimeout;
+        
+        function autoSaveStaffDraft() {
+            clearTimeout(autoSaveTimeout);
+            autoSaveTimeout = setTimeout(async () => {
+                if (!currentUser || isEditMode) return;
+                
+                try {
+                    const firstName = document.getElementById('firstName').value.trim();
+                    const lastName = document.getElementById('lastName').value.trim();
+                    
+                    // Only auto-save if there's meaningful content
+                    if (firstName && lastName) {
+                        const existingDraftId = localStorage.getItem('autoSaveStaffDraftId');
+                        const staffData = collectFormData();
+                        staffData.isAutoSave = true;
+                        
+                        if (existingDraftId) {
+                            // Update existing auto-save draft
+                            await db.collection('users').doc(currentUser.uid)
+                                .collection('staff').doc(existingDraftId).update({
+                                    ...staffData,
+                                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                                });
+                        } else {
+                            // Create new auto-save draft
+                            const docRef = await db.collection('users').doc(currentUser.uid)
+                                .collection('staff').add({
+                                    ...staffData,
+                                    isDraft: true,
+                                    status: 'draft'
+                                });
+                            localStorage.setItem('autoSaveStaffDraftId', docRef.id);
+                        }
+                        
+                        console.log('Auto-saved staff draft');
+                    }
+                } catch (error) {
+                    console.error('Auto-save error:', error);
+                }
+            }, 60000); // Auto-save every 60 seconds
+        }
+        
+        // Add auto-save listeners to key fields
+        document.querySelectorAll('input, select, textarea').forEach(field => {
+            field.addEventListener('input', autoSaveStaffDraft);
+            field.addEventListener('change', autoSaveStaffDraft);
+        });
+        
+        // Load existing staff for editing
+        async function loadStaffForEdit() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const editId = urlParams.get('edit') || localStorage.getItem('editStaffId');
+            
+            if (!editId || !currentUser) return;
+            
+            try {
+                const staffDoc = await db.collection('users').doc(currentUser.uid)
+                    .collection('staff').doc(editId).get();
+                
+                if (staffDoc.exists) {
+                    const staffData = staffDoc.data();
+                    
+                    isEditMode = true;
+                    editStaffId = editId;
+                    
+                    // Update page title and buttons
+                    document.querySelector('.header-title').textContent = 'Edit Staff Member';
+                    document.querySelector('.page-title').textContent = 'Update Employee Information';
+                    document.getElementById('addStaff').innerHTML = '<i class="fas fa-save"></i>Update Staff Member';
+                    
+                    // Populate form fields
+                    document.getElementById('firstName').value = staffData.firstName || '';
+                    document.getElementById('lastName').value = staffData.lastName || '';
+                    document.getElementById('email').value = staffData.email || '';
+                    document.getElementById('phone').value = staffData.phone || '';
+                    document.getElementById('address').value = staffData.address || '';
+                    
+                    document.getElementById('employeeNumber').value = staffData.employeeNumber || '';
+                    document.getElementById('startDate').value = staffData.startDate || '';
+                    document.getElementById('employmentType').value = staffData.employmentType || '';
+                    document.getElementById('role').value = staffData.role || '';
+                    document.getElementById('department').value = staffData.department || '';
+                    document.getElementById('hourlyRate').value = staffData.hourlyRate || '';
+                    document.getElementById('experienceYears').value = staffData.experienceYears || '';
+                    document.getElementById('status').value = staffData.status || 'available';
+                    
+                    // Load skills
+                    if (staffData.skills && Array.isArray(staffData.skills)) {
+                        staffSkills = [...staffData.skills];
+                        renderSkills();
+                    }
+                    
+                    // Load qualifications
+                    if (staffData.qualifications && Array.isArray(staffData.qualifications)) {
+                        const qualificationsList = document.getElementById('qualificationsList');
+                        qualificationsList.innerHTML = '';
+                        
+                        staffData.qualifications.forEach((qualification, index) => {
+                            if (index === 0) {
+                                // Use the first qualification input
+                                addQualification();
+                            } else {
+                                addQualification();
+                            }
+                        });
+                        
+                        // Set values
+                        const qualificationInputs = document.querySelectorAll('.qualification-input');
+                        staffData.qualifications.forEach((qualification, index) => {
+                            if (qualificationInputs[index]) {
+                                qualificationInputs[index].value = qualification;
+                            }
+                        });
+                    }
+                    
+                    // Load emergency contact
+                    if (staffData.emergencyContact) {
+                        document.getElementById('emergencyName').value = staffData.emergencyContact.name || '';
+                        document.getElementById('emergencyPhone').value = staffData.emergencyContact.phone || '';
+                        document.getElementById('emergencyRelationship').value = staffData.emergencyContact.relationship || '';
+                    }
+                    
+                    // Update photo initials
+                    updatePhotoInitials();
+                    
+                    showAlert('info', 'Staff member loaded for editing');
+                    
+                    // Clear edit ID from localStorage
+                    localStorage.removeItem('editStaffId');
+                }
+            } catch (error) {
+                console.error('Error loading staff for edit:', error);
+                showAlert('error', 'Failed to load staff member for editing');
+            }
+        }
+        
+        // Employee number display update
+        function updateEmployeeNumberDisplay() {
+            if (!isEditMode) {
+                const tempNumber = generateEmployeeNumber();
+                document.getElementById('employeeNumber').value = `${tempNumber} (Preview)`;
+            }
+        }
+        
+        // Progress tracking
+        function updateProgressIndicator() {
+            const sections = document.querySelectorAll('.form-section');
+            const progressSteps = document.querySelectorAll('.progress-step');
+            
+            sections.forEach((section, index) => {
+                const requiredFields = section.querySelectorAll('input[required], select[required]');
+                let completedFields = 0;
+                
+                requiredFields.forEach(field => {
+                    if (field.value.trim()) {
+                        completedFields++;
+                    }
+                });
+                
+                const isComplete = completedFields === requiredFields.length;
+                const step = progressSteps[index];
+                
+                if (step) {
+                    step.classList.remove('active', 'completed');
+                    if (isComplete) {
+                        step.classList.add('completed');
+                    }
+                }
+            });
+        }
+        
+        // Real-time form validation feedback
+        function setupRealTimeValidation() {
+            // Email validation
+            document.getElementById('email').addEventListener('blur', function() {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (this.value && !emailRegex.test(this.value)) {
+                    this.style.borderColor = 'var(--danger-color)';
+                    showAlert('warning', 'Please enter a valid email address');
+                } else if (this.value) {
+                    this.style.borderColor = 'var(--success-color)';
+                }
+            });
+            
+            // Phone validation
+            document.getElementById('phone').addEventListener('blur', function() {
+                const phoneRegex = /^[\d\s\-\+\(\)]{10,}$/;
+                if (this.value && !phoneRegex.test(this.value.replace(/\s/g, ''))) {
+                    this.style.borderColor = 'var(--danger-color)';
+                    showAlert('warning', 'Please enter a valid phone number');
+                } else if (this.value) {
+                    this.style.borderColor = 'var(--success-color)';
+                }
+            });
+            
+            // Start date validation
+            document.getElementById('startDate').addEventListener('change', function() {
+                const startDate = new Date(this.value);
+                const today = new Date();
+                const maxFutureDate = new Date();
+                maxFutureDate.setFullYear(maxFutureDate.getFullYear() + 1);
+                
+                if (startDate > maxFutureDate) {
+                    this.style.borderColor = 'var(--danger-color)';
+                    showAlert('warning', 'Start date cannot be more than 1 year in the future');
+                } else {
+                    this.style.borderColor = 'var(--success-color)';
+                }
+            });
+        }
+        
+        // Role-based suggestions
+        function updateRoleBasedSuggestions() {
+            const role = document.getElementById('role').value;
+            const skillSuggestions = document.querySelector('.skills-suggestions');
+            
+            let suggestedSkills = [];
+            
+            switch(role) {
+                case 'Site Manager':
+                case 'Site Supervisor':
+                    suggestedSkills = ['Project Management', 'Team Leadership', 'Health & Safety', 'Quality Control', 'Budget Management'];
+                    break;
+                case 'Skilled Electrician':
+                    suggestedSkills = ['Electrical Installation', 'Fault Diagnosis', 'PAT Testing', 'LED Systems', 'Rewiring'];
+                    break;
+                case 'Plumber':
+                    suggestedSkills = ['Pipe Installation', 'Boiler Servicing', 'Bathroom Fitting', 'Gas Work', 'Leak Detection'];
+                    break;
+                case 'Carpenter':
+                    suggestedSkills = ['Wood Working', 'Cabinet Making', 'Door Installation', 'Window Fitting', 'Joinery'];
+                    break;
+                case 'Bricklayer':
+                    suggestedSkills = ['Brickwork', 'Blockwork', 'Pointing', 'Foundation Work', 'Stone Work'];
+                    break;
+                default:
+                    suggestedSkills = ['Project Management', 'Health & Safety', 'Team Leadership', 'Quality Control'];
+            }
+            
+            skillSuggestions.innerHTML = suggestedSkills.map(skill => `
+                <button type="button" class="skill-suggestion" onclick="addSkillFromSuggestion('${skill}')">${skill}</button>
+            `).join('');
+        }
+        
+        document.getElementById('role').addEventListener('change', updateRoleBasedSuggestions);
+        
+        // Load draft if exists
+        async function loadExistingDraft() {
+            const draftId = localStorage.getItem('autoSaveStaffDraftId');
+            if (!draftId || !currentUser || isEditMode) return;
+            
+            try {
+                const draftDoc = await db.collection('users').doc(currentUser.uid)
+                    .collection('staff').doc(draftId).get();
+                
+                if (draftDoc.exists && draftDoc.data().isDraft) {
+                    const shouldLoad = confirm('We found a saved staff member draft. Would you like to load it?');
+                    if (shouldLoad) {
+                        const draftData = draftDoc.data();
+                        
+                        // Populate form with draft data
+                        document.getElementById('firstName').value = draftData.firstName || '';
+                        document.getElementById('lastName').value = draftData.lastName || '';
+                        document.getElementById('email').value = draftData.email || '';
+                        document.getElementById('phone').value = draftData.phone || '';
+                        document.getElementById('address').value = draftData.address || '';
+                        
+                        document.getElementById('startDate').value = draftData.startDate || '';
+                        document.getElementById('employmentType').value = draftData.employmentType || '';
+                        document.getElementById('role').value = draftData.role || '';
+                        document.getElementById('department').value = draftData.department || '';
+                        document.getElementById('hourlyRate').value = draftData.hourlyRate || '';
+                        document.getElementById('experienceYears').value = draftData.experienceYears || '';
+                        document.getElementById('status').value = draftData.status || 'available';
+                        
+                        // Load skills
+                        if (draftData.skills) {
+                            staffSkills = [...draftData.skills];
+                            renderSkills();
+                        }
+                        
+                        // Load emergency contact
+                        if (draftData.emergencyContact) {
+                            document.getElementById('emergencyName').value = draftData.emergencyContact.name || '';
+                            document.getElementById('emergencyPhone').value = draftData.emergencyContact.phone || '';
+                            document.getElementById('emergencyRelationship').value = draftData.emergencyContact.relationship || '';
+                        }
+                        
+                        updatePhotoInitials();
+                        updateRoleBasedSuggestions();
+                        showAlert('info', 'Staff member draft loaded successfully');
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading draft:', error);
+            }
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+S to save draft
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                document.getElementById('saveDraft').click();
+            }
+            
+            // Ctrl+Enter to submit form
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                if (validateForm()) {
+                    document.getElementById('addStaff').click();
+                }
+            }
+            
+            // Escape to reset form (with confirmation)
+            if (e.key === 'Escape') {
+                document.getElementById('resetForm').click();
+            }
+        });
+        
+        // Form completion tracking
+        let formStartTime = Date.now();
+        
+        function trackFormCompletion() {
+            document.getElementById('addStaff').addEventListener('click', function() {
+                const completionTime = Date.now() - formStartTime;
+                console.log(`Staff form completion time: ${completionTime}ms`);
+                console.log(`Skills added: ${staffSkills.length}`);
+                console.log(`Qualifications: ${document.querySelectorAll('.qualification-input').length}`);
+            });
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('Add Staff Page Loaded - 2025-07-19T15:17:05Z');
+            console.log('Current User: Dad-Link');
+            
+            // Check authentication
+            const isAuthenticated = await checkAuthState();
+            if (!isAuthenticated) return;
+            
+            // Initialize form elements
+            updateEmployeeNumberDisplay();
+            updateRoleBasedSuggestions();
+            setupRealTimeValidation();
+            trackFormCompletion();
+            
+            // Load existing staff for editing if applicable
+            await loadStaffForEdit();
+            
+            // Load existing draft if not in edit mode
+            if (!isEditMode) {
+                setTimeout(() => {
+                    loadExistingDraft();
+                }, 1000);
+            }
+            
+            // Focus first field
+            document.getElementById('firstName').focus();
+            
+            // Setup progress tracking
+            document.querySelectorAll('input, select').forEach(field => {
+                field.addEventListener('input', updateProgressIndicator);
+                field.addEventListener('change', updateProgressIndicator);
+            });
+            
+            console.log('🚀 Add Staff System Ready!');
+            console.log('✓ Firebase Integration ✓ Form Validation ✓ Skills Management');
+            console.log('✓ Photo Upload ✓ Auto-save ✓ Progress Tracking');
+            console.log('✓ Edit Mode Support ✓ Draft Recovery ✓ Real-time Validation');
+        });
+        
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function(e) {
+            // Save draft if there's content
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            
+            if (firstName && lastName && currentUser && !isEditMode) {
+                // Quick auto-save attempt
+                autoSaveStaffDraft();
+            }
+        });
+        
+        // Expose functions globally for testing
+        window.addSkill = addSkill;
+        window.removeSkill = removeSkill;
+        
+        console.log('👷‍♂️ Building Group Staff Management - Add Employee System Initialized!');
+        console.log('📝 Features: Complete Employee Onboarding, Skills Tracking, Photo Upload');
+        console.log('💾 Auto-save: Every 60 seconds | 🔄 Draft Recovery: Available');
+        console.log('📊 Progress Tracking: Visual completion indicators');
+        console.log('✅ Validation: Real-time form validation with feedback');
+        console.log('🎯 Role-based: Dynamic skill suggestions based on job role');
+        console.log('📱 Mobile Ready: Fully responsive design');
+        console.log('🔥 Firebase Integration: Active | 👤 User: Dad-Link');
+        console.log('⏰ Current Date/Time: 2025-07-19 15:17:05 UTC');
+    </script>
+</body>
+</html>

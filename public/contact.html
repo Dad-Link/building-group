@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Building Group | Get Free Quote | Manchester, Liverpool, Leeds & Cheshire Builders</title>
+    <meta name="description" content="Contact Building Group for your free quote. Professional builders serving Manchester, Liverpool, Leeds & Cheshire. Upload project photos, get instant quotes. Call +44 7446 695 6867 or fill our contact form.">
+    <meta name="keywords" content="contact building group, free building quote, manchester builders contact, liverpool builders contact, cheshire builders contact, building quote form, construction quote, building contractors contact">
+    <meta name="author" content="Building Group">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.buildinggroup.co.uk/contact">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Contact Building Group | Free Building Quotes">
+    <meta property="og:description" content="Get your free building quote today. Professional contractors across North West England. Upload photos, describe your project, get instant response.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.buildinggroup.co.uk/contact">
+    <meta property="og:image" content="https://www.buildinggroup.co.uk/images/contact-building-group.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js"></script>
+    
+    <!-- Last Updated -->
+    <meta name="last-modified" content="2025-01-19T01:01:57Z">
+    
+    <style>
+        :root {
+            --primary-color: #e74c3c;
+            --primary-dark: #c0392b;
+            --secondary-color: #3498db;
+            --accent-color: #f39c12;
+            --dark-color: #2c3e50;
+            --darker-color: #1a252f;
+            --light-gray: #f8f9fa;
+            --medium-gray: #6c757d;
+            --border-color: #dee2e6;
+            --white: #ffffff;
+            --success-color: #27ae60;
+            --info-color: #17a2b8;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            color: var(--dark-color);
+            overflow-x: hidden;
+            font-size: 16px;
+            background: var(--light-gray);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header & Navigation */
+        .header {
+            background: var(--white);
+            box-shadow: var(--shadow-md);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        .logo i {
+            margin-right: 0.5rem;
+            font-size: 2rem;
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Burger Menu */
+        .burger {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            z-index: 1001;
+        }
+        
+        .burger span {
+            width: 28px;
+            height: 3px;
+            background: var(--dark-color);
+            margin: 4px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+        
+        .burger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-6px, 7px);
+            background: var(--white);
+        }
+        
+        .burger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .burger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-6px, -7px);
+            background: var(--white);
+        }
+
+        /* Navigation Overlay */
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            overflow-y: auto;
+        }
+
+        .nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .nav-content {
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: block;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background: var(--white);
+            padding: 1rem 0;
+            margin-top: 80px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .breadcrumb-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--medium-gray);
+        }
+
+        .breadcrumb-nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .breadcrumb-nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .hero-stat {
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-description {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Contact Content */
+        .contact-content {
+            padding: 4rem 0;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        /* Contact Info */
+        .contact-info {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            height: fit-content;
+        }
+
+        .contact-info h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--dark-color);
+        }
+
+        .contact-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-method {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--light-gray);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-method:hover {
+            background: var(--primary-color);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .contact-method i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            width: 30px;
+            text-align: center;
+        }
+
+        .contact-method:hover i {
+            color: var(--white);
+        }
+
+        .contact-method-info h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .contact-method-info p {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            margin: 0;
+        }
+
+        .office-hours {
+            background: var(--light-gray);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+        }
+
+        .office-hours h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        .hours-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .hours-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .hours-list li:last-child {
+            border-bottom: none;
+        }
+
+        /* Contact Form */
+        .contact-form-container {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .contact-form-container h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--dark-color);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: var(--white);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-group.required label::after {
+            content: '*';
+            color: var(--danger-color);
+            margin-left: 3px;
+        }
+
+        /* File Upload */
+        .file-upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            background: var(--light-gray);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .file-upload-area:hover,
+        .file-upload-area.dragover {
+            border-color: var(--primary-color);
+            background: rgba(231, 76, 60, 0.05);
+        }
+
+        .file-upload-area i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .file-upload-area h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+
+        .file-upload-area p {
+            color: var(--medium-gray);
+            margin-bottom: 1rem;
+        }
+
+        .file-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .file-preview-item {
+            position: relative;
+            background: var(--white);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+        }
+
+        .file-preview-item img {
+            max-width: 80px;
+            max-height: 80px;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-preview-item .file-name {
+            font-size: 0.8rem;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+            word-break: break-all;
+        }
+
+        .file-remove {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger-color);
+            color: var(--white);
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Upload Progress */
+        .upload-progress {
+            background: var(--light-gray);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .upload-progress.active {
+            display: block;
+        }
+
+        .progress-bar {
+            background: var(--border-color);
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            background: var(--success-color);
+            height: 100%;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--dark-color);
+        }
+
+        /* Form Button */
+        .form-button {
+            background: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 1.25rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(231, 76, 60, 0.3);
+        }
+
+        .form-button:disabled {
+            background: var(--medium-gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .form-button .spinner {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .form-button.loading .spinner {
+            display: block;
+        }
+
+        .form-button.loading .button-text {
+            opacity: 0;
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        /* Success/Error Messages */
+        .form-message {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            font-weight: 600;
+            display: none;
+        }
+
+        .form-message.success {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+
+        .form-message.error {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--danger-color);
+            border: 1px solid var(--danger-color);
+        }
+
+        .form-message.show {
+            display: block;
+        }
+
+        /* Services Section */
+        .services-section {
+            background: var(--white);
+            padding: 4rem 0;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .service-card {
+            background: var(--light-gray);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            background: var(--primary-color);
+            color: var(--white);
+            transform: translateY(-5px);
+        }
+
+        .service-card i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .service-card:hover i {
+            color: var(--white);
+        }
+
+        .service-card h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--darker-color);
+            color: var(--white);
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: #bdc3c7;
+            text-decoration: none;
+            line-height: 1.8;
+            margin-bottom: 0.5rem;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #34495e;
+            color: #7f8c8d;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-container {
+                padding: 1rem;
+            }
+
+            .contact-info,
+            .contact-form-container {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <a href="/" class="logo">
+                <i class="fas fa-hammer"></i>
+                Building Group
+            </a>
+            <button class="burger" id="burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Navigation Overlay -->
+    <div class="nav-overlay" id="navOverlay">
+        <div class="nav-content">
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About Us</a></li>
+                <li><a href="/services">Our Services</a></li>
+                <li><a href="/manchester">Manchester</a></li>
+                <li><a href="/liverpool">Liverpool</a></li>
+                <li><a href="/leeds">Leeds</a></li>
+                <li><a href="/cheshire">Cheshire</a></li>
+                <li><a href="/projects">Our Projects</a></li>
+                <li><a href="/testimonials">Testimonials</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+                <li><a href="/quote">Get Free Quote</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <section class="breadcrumb">
+        <div class="container">
+            <nav class="breadcrumb-nav">
+                <a href="/"><i class="fas fa-home"></i> Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Contact Us</span>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Contact Building Group</h1>
+            <p>Get your free quote today! Upload photos of your project and tell us about your vision. Our expert team will provide a detailed quote within 24 hours.</p>
+            
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                    <div class="stat-title">24 Hour Response</div>
+                    <div class="stat-description">Quick quotes and consultations</div>
+                </div>
+                
+                <div class="hero-stat">
+                    <div class="stat-icon"><i class="fas fa-phone"></i></div>
+                    <div class="stat-title">Free Consultations</div>
+                    <div class="stat-description">No obligation site visits</div>
+                </div>
+                
+                <div class="hero-stat">
+                    <div class="stat-icon"><i class="fas fa-camera"></i></div>
+                    <div class="stat-title">Photo Upload</div>
+                    <div class="stat-description">Upload project images for accurate quotes</div>
+                </div>
+                
+                <div class="hero-stat">
+                    <div class="stat-icon"><i class="fas fa-file-upload"></i></div>
+                    <div class="stat-title">Document Support</div>
+                    <div class="stat-description">Upload plans, drawings, specifications</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Content -->
+    <section class="contact-content">
+        <div class="container">
+            <div class="contact-grid">
+                <!-- Contact Information -->
+                <div class="contact-info">
+                    <h2>Get In Touch</h2>
+                    
+                    <div class="contact-methods">
+                        <div class="contact-method">
+                            <i class="fas fa-phone"></i>
+                            <div class="contact-method-info">
+                                <h4>Phone</h4>
+                                <p>+44 7446 695 6867</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-method">
+                            <i class="fas fa-envelope"></i>
+                            <div class="contact-method-info">
+                                <h4>Email</h4>
+                                <p>info@building-group.co.uk</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-method">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div class="contact-method-info">
+                                <h4>Service Areas</h4>
+                                <p>Manchester, Liverpool, Leeds & Cheshire</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-method">
+                            <i class="fas fa-calendar-check"></i>
+                            <div class="contact-method-info">
+                                <h4>Free Consultations</h4>
+                                <p>Book your no-obligation site visit</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="office-hours">
+                        <h4>Office Hours</h4>
+                        <ul class="hours-list">
+                            <li><span>Monday - Friday</span><span>8:00 AM - 6:00 PM</span></li>
+                            <li><span>Saturday</span><span>8:00 AM - 4:00 PM</span></li>
+                            <li><span>Sunday</span><span>Emergency Calls Only</span></li>
+                            <li><span>Bank Holidays</span><span>By Appointment</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="contact-form-container">
+                    <h2>Request Your Free Quote</h2>
+                    
+                    <form id="contactForm" class="contact-form">
+                        <div class="form-row">
+                            <div class="form-group required">
+                                <label for="firstName">First Name</label>
+                                <input type="text" id="firstName" name="firstName" required>
+                            </div>
+                            <div class="form-group required">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" id="lastName" name="lastName" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group required">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group required">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group required">
+                                <label for="location">Project Location</label>
+                                <select id="location" name="location" required>
+                                    <option value="">Select Location</option>
+                                    <option value="manchester">Manchester</option>
+                                    <option value="liverpool">Liverpool</option>
+                                    <option value="leeds">Leeds</option>
+                                    <option value="cheshire">Cheshire</option>
+                                    <option value="other">Other (Please Specify)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="postcode">Postcode</label>
+                                <input type="text" id="postcode" name="postcode">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group required">
+                            <label for="serviceType">Service Type</label>
+                            <select id="serviceType" name="serviceType" required>
+                                <option value="">Select Service</option>
+                                <option value="house-extension">House Extension</option>
+                                <option value="house-renovation">House Renovation</option>
+                                <option value="new-build">New Build</option>
+                                <option value="loft-conversion">Loft Conversion</option>
+                                <option value="kitchen-extension">Kitchen Extension</option>
+                                <option value="bathroom-fitting">Bathroom Fitting</option>
+                                <option value="planning-permission">Planning Permission Help</option>
+                                <option value="other">Other (Please Specify)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="budget">Estimated Budget</label>
+                                <select id="budget" name="budget">
+                                    <option value="">Select Budget Range</option>
+                                    <option value="under-25k">Under £25,000</option>
+                                    <option value="25k-50k">£25,000 - £50,000</option>
+                                    <option value="50k-100k">£50,000 - £100,000</option>
+                                    <option value="100k-200k">£100,000 - £200,000</option>
+                                    <option value="over-200k">Over £200,000</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="timeline">Project Timeline</label>
+                                <select id="timeline" name="timeline">
+                                    <option value="">Select Timeline</option>
+                                    <option value="asap">As Soon As Possible</option>
+                                    <option value="1-3-months">1-3 Months</option>
+                                    <option value="3-6-months">3-6 Months</option>
+                                    <option value="6-12-months">6-12 Months</option>
+                                    <option value="planning-stage">Planning Stage Only</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group required">
+                            <label for="projectDescription">Project Description</label>
+                            <textarea id="projectDescription" name="projectDescription" placeholder="Please describe your project in detail. Include dimensions, specific requirements, materials preferences, and any other relevant information..." required></textarea>
+                        </div>
+                        
+                        <!-- File Upload Section -->
+                        <div class="form-group">
+                            <label>Upload Project Photos & Documents</label>
+                            <div class="file-upload-area" id="fileUploadArea">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <h4>Drag & Drop Files Here</h4>
+                                <p>or click to browse</p>
+                                <p style="font-size: 0.8rem; opacity: 0.7;">Supported: JPG, PNG, PDF, DWG (Max 10MB each)</p>
+                                <input type="file" class="file-input" id="fileInput" multiple accept=".jpg,.jpeg,.png,.pdf,.dwg,.doc,.docx">
+                            </div>
+                            <div class="file-preview" id="filePreview"></div>
+                            <div class="upload-progress" id="uploadProgress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="progressFill"></div>
+                                </div>
+                                <div class="progress-text" id="progressText">Uploading files...</div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="additionalInfo">Additional Information</label>
+                            <textarea id="additionalInfo" name="additionalInfo" placeholder="Any additional information, special requirements, or questions you'd like to discuss..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="form-button" id="submitButton">
+                            <span class="button-text">Send My Quote Request</span>
+                            <div class="spinner"><i class="fas fa-spinner"></i></div>
+                        </button>
+                        
+                        <div class="form-message" id="formMessage"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services-section">
+        <div class="container">
+            <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 1rem;">Our Services</h2>
+            <p style="text-align: center; color: var(--medium-gray); margin-bottom: 2rem;">Professional building services across North West England</p>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <i class="fas fa-plus"></i>
+                    <h4>House Extensions</h4>
+                    <p>Single & double-storey extensions</p>
+                </div>
+                
+                <div class="service-card">
+                    <i class="fas fa-tools"></i>
+                    <h4>Renovations</h4>
+                    <p>Complete home refurbishments</p>
+                </div>
+                
+                <div class="service-card">
+                    <i class="fas fa-home"></i>
+                    <h4>New Builds</h4>
+                    <p>Custom home construction</p>
+                </div>
+                
+                <div class="service-card">
+                    <i class="fas fa-stairs"></i>
+                    <h4>Loft Conversions</h4>
+                    <p>Maximize your living space</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Building Group</h3>
+                    <p>Professional building contractors serving Manchester, Liverpool, Leeds & Cheshire since 2008. Get your free quote today!</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Contact</h3>
+                    <p><i class="fas fa-phone"></i> +44 7446 695 6867</p>
+                    <p><i class="fas fa-envelope"></i> info@building-group.co.uk</p>
+                    <p><i class="fas fa-clock"></i> Mon-Fri 8AM-6PM, Sat 8AM-4PM</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Service Areas</h3>
+                    <a href="/manchester">Manchester</a>
+                    <a href="/liverpool">Liverpool</a>
+                    <a href="/leeds">Leeds</a>
+                    <a href="/cheshire">Cheshire</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <a href="/services/house-extensions">House Extensions</a>
+                    <a href="/services/house-renovations">Renovations</a>
+                    <a href="/services/house-building">New Builds</a>
+                    <a href="/services/loft-conversions">Loft Conversions</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Building Group. All rights reserved. | Professional Building Services | North West England</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        // Firebase Configuration
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBI1M38HZH8-xY3nfoKmqoitmggq3C8zKE",
+            authDomain: "buildinggroup-4f8b9.firebaseapp.com",
+            projectId: "buildinggroup-4f8b9",
+            storageBucket: "buildinggroup-4f8b9.firebasestorage.app",
+            messagingSenderId: "353000992011",
+            appId: "1:353000992011:web:c834310d7d79dd1bf0c60e",
+            measurementId: "G-DF11Q5PZRT"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // Mobile Menu Toggle
+        const burger = document.getElementById('burger');
+        const navOverlay = document.getElementById('navOverlay');
+        
+        burger.addEventListener('click', function() {
+            burger.classList.toggle('active');
+            navOverlay.classList.toggle('active');
+            document.body.style.overflow = navOverlay.classList.contains('active') ? 'hidden' : 'auto';
+        });
+
+        // Close menu when clicking on overlay
+        navOverlay.addEventListener('click', function(e) {
+            if (e.target === navOverlay || e.target.tagName === 'A') {
+                burger.classList.remove('active');
+                navOverlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && navOverlay.classList.contains('active')) {
+                burger.classList.remove('active');
+                navOverlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // File Upload Functionality
+        let uploadedFiles = [];
+        const fileUploadArea = document.getElementById('fileUploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const filePreview = document.getElementById('filePreview');
+        const uploadProgress = document.getElementById('uploadProgress');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+
+        // Drag and Drop Events
+        fileUploadArea.addEventListener('click', () => fileInput.click());
+        
+        fileUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUploadArea.classList.add('dragover');
+        });
+
+        fileUploadArea.addEventListener('dragleave', () => {
+            fileUploadArea.classList.remove('dragover');
+        });
+
+        fileUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileUploadArea.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                if (validateFile(file)) {
+                    uploadedFiles.push(file);
+                    displayFilePreview(file);
+                }
+            });
+        }
+
+        function validateFile(file) {
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf', 'application/vnd.autocad.dwg'];
+            
+            if (file.size > maxSize) {
+                showMessage('File size must be less than 10MB', 'error');
+                return false;
+            }
+            
+            if (!allowedTypes.includes(file.type)) {
+                showMessage('Unsupported file type. Please use JPG, PNG, PDF, or DWG files.', 'error');
+                return false;
+            }
+            
+            return true;
+        }
+
+        function displayFilePreview(file) {
+            const previewItem = document.createElement('div');
+            previewItem.className = 'file-preview-item';
+            
+            const fileIcon = getFileIcon(file.type);
+            const fileName = file.name.length > 15 ? file.name.substring(0, 15) + '...' : file.name;
+            
+            previewItem.innerHTML = `
+                ${file.type.startsWith('image/') ? 
+                    `<img src="${URL.createObjectURL(file)}" alt="${file.name}">` : 
+                    `<i class="fas ${fileIcon}" style="font-size: 3rem; color: var(--primary-color);"></i>`
+                }
+                <div class="file-name">${fileName}</div>
+                <button type="button" class="file-remove" onclick="removeFile('${file.name}')">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            filePreview.appendChild(previewItem);
+        }
+
+        function getFileIcon(fileType) {
+            if (fileType.includes('pdf')) return 'fa-file-pdf';
+            if (fileType.includes('dwg')) return 'fa-file-alt';
+            return 'fa-file';
+        }
+
+        window.removeFile = function(fileName) {
+            uploadedFiles = uploadedFiles.filter(file => file.name !== fileName);
+            const previewItems = filePreview.querySelectorAll('.file-preview-item');
+            previewItems.forEach(item => {
+                if (item.querySelector('.file-name').textContent.includes(fileName.substring(0, 10))) {
+                    item.remove();
+                }
+            });
+        };
+
+        // Form Submission
+        const contactForm = document.getElementById('contactForm');
+        const submitButton = document.getElementById('submitButton');
+        const formMessage = document.getElementById('formMessage');
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!validateForm()) {
+                return;
+            }
+
+            submitButton.disabled = true;
+            submitButton.classList.add('loading');
+            showMessage('Submitting your request...', 'info');
+
+            try {
+                // Upload files first
+                const fileUrls = await uploadFiles();
+                
+                // Prepare form data
+                const formData = {
+                    firstName: document.getElementById('firstName').value,
+                    lastName: document.getElementById('lastName').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    location: document.getElementById('location').value,
+                    postcode: document.getElementById('postcode').value,
+                    serviceType: document.getElementById('serviceType').value,
+                    budget: document.getElementById('budget').value,
+                    timeline: document.getElementById('timeline').value,
+                    projectDescription: document.getElementById('projectDescription').value,
+                    additionalInfo: document.getElementById('additionalInfo').value,
+                    files: fileUrls,
+                    timestamp: serverTimestamp(),
+                    status: 'new',
+                    source: 'contact_form'
+                };
+
+                // Save to Firestore
+                const docRef = await addDoc(collection(db, 'contact_requests'), formData);
+                
+                showMessage('Thank you! Your request has been submitted successfully. We\'ll get back to you within 24 hours.', 'success');
+                contactForm.reset();
+                filePreview.innerHTML = '';
+                uploadedFiles = [];
+                
+                console.log('Contact request submitted with ID: ', docRef.id);
+                
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                showMessage('Sorry, there was an error submitting your request. Please try again or call us directly.', 'error');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.classList.remove('loading');
+                uploadProgress.classList.remove('active');
+            }
+        });
+
+        async function uploadFiles() {
+            if (uploadedFiles.length === 0) return [];
+            
+            uploadProgress.classList.add('active');
+            const fileUrls = [];
+            
+            for (let i = 0; i < uploadedFiles.length; i++) {
+                const file = uploadedFiles[i];
+                const progress = ((i + 1) / uploadedFiles.length) * 100;
+                
+                progressFill.style.width = `${progress}%`;
+                progressText.textContent = `Uploading file ${i + 1} of ${uploadedFiles.length}...`;
+                
+                try {
+                    const timestamp = Date.now();
+                    const fileName = `contact_requests/${timestamp}_${file.name}`;
+                    const fileRef = ref(storage, fileName);
+                    
+                    await uploadBytes(fileRef, file);
+                    const downloadURL = await getDownloadURL(fileRef);
+                    
+                    fileUrls.push({
+                        name: file.name,
+                        url: downloadURL,
+                        type: file.type,
+                        size: file.size
+                    });
+                } catch (error) {
+                    console.error('Error uploading file:', file.name, error);
+                }
+            }
+            
+            progressText.textContent = 'Files uploaded successfully!';
+            return fileUrls;
+        }
+
+        function validateForm() {
+            const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'location', 'serviceType', 'projectDescription'];
+            let isValid = true;
+            
+            requiredFields.forEach(fieldName => {
+                const field = document.getElementById(fieldName);
+                if (!field.value.trim()) {
+                    field.style.borderColor = 'var(--danger-color)';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = 'var(--border-color)';
+                }
+            });
+            
+            // Validate email
+            const email = document.getElementById('email').value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                document.getElementById('email').style.borderColor = 'var(--danger-color)';
+                isValid = false;
+            }
+            
+            if (!isValid) {
+                showMessage('Please fill in all required fields correctly.', 'error');
+            }
+            
+            return isValid;
+        }
+
+        function showMessage(message, type) {
+            formMessage.textContent = message;
+            formMessage.className = `form-message ${type} show`;
+            
+            setTimeout(() => {
+                formMessage.classList.remove('show');
+            }, 5000);
+        }
+
+        // Service card interactions
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const serviceType = this.querySelector('h4').textContent.toLowerCase().replace(' ', '-');
+                document.getElementById('serviceType').value = serviceType;
+                document.getElementById('serviceType').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+        });
+
+        // Initialize contact methods click handlers
+        document.querySelectorAll('.contact-method').forEach(method => {
+            method.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                if (icon.classList.contains('fa-phone')) {
+                    window.location.href = 'tel:+447446695687';
+                } else if (icon.classList.contains('fa-envelope')) {
+                    window.location.href = 'mailto:mathew@buildinggroupsurveys.com';
+                }
+            });
+        });
+
+        console.log('Contact Page Loaded - Dad-Link - 2025-01-19T01:01:57Z');
+        console.log('Firebase initialized successfully');
+        console.log('Contact form ready with file upload capabilities');
+    </script>
+</body>
+</html>
