@@ -475,6 +475,7 @@
         }
 
         .nav-content {
+            position: relative; /* for close button positioning */
             text-align: center;
             padding: 6rem 2rem 4rem;
             min-height: 100vh;
@@ -482,6 +483,26 @@
             flex-direction: column;
             justify-content: center;
         }
+
+        /* Close “X” button (matches pudsey-house-builds) */
+        .close-nav {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 2px solid rgba(255,255,255,0.7);
+            color: #fff;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .close-nav:hover { background: rgba(255,255,255,0.15); }
 
         .nav-links {
             list-style: none;
@@ -528,26 +549,33 @@
             text-decoration: underline;
         }
 
-        /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, rgba(14, 165, 233, 0.9), rgba(20, 184, 166, 0.9)),
-                        url('https://images.unsplash.com/photo-1620626011761-996317b8d101?ixlib=rb-4.0.3&auto=format&fit=crop&w=1973&q=80');
-            background-size: cover;
-            background-position: center;
+            position: relative;
             padding: 8rem 0 6rem;
             color: var(--white);
             text-align: center;
-            position: relative;
+            overflow: hidden;
         }
-
         .hero::before {
-            content: '';
+            content: "";
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(14, 165, 233, 0.8), rgba(20, 184, 166, 0.8));
+            inset: 0;
+            background-image: url('/assets/building-group-house.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            z-index: -2;
+        }
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.6), rgba(41, 128, 185, 0.6));
+            z-index: -1;
+        }
+        @media (max-width: 1024px) {
+            .hero::before { background-attachment: scroll; }
         }
 
         .hero-content {
@@ -1253,7 +1281,7 @@
                 <i class="fas fa-hammer"></i>
                 Building Group
             </a>
-            <button class="burger" id="burger">
+            <button class="burger" id="burger" aria-label="Open menu" aria-controls="navOverlay" aria-expanded="false">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -1261,10 +1289,10 @@
         </nav>
     </header>
 
-    <!-- Navigation Overlay -->
-    <div class="nav-overlay" id="navOverlay">
-        <div class="nav-content">
-            <ul class="nav-links">
+    <div class="nav-overlay" id="navOverlay" aria-hidden="true">
+        <div class="nav-content" role="dialog" aria-modal="true" aria-labelledby="menuTitle">
+            <button class="close-nav" id="closeNav" aria-label="Close menu"><i class="fas fa-times"></i></button>
+            <ul class="nav-links" aria-label="Main navigation">
                 <li><a href="/">Home</a></li>
                 <li><a href="/about">About Us</a></li>
                 <li><a href="/services">Our Services</a></li>
@@ -1784,30 +1812,46 @@
 
     <script>
         // Mobile Menu Toggle
+        // Mobile Menu Toggle (match pudsey behavior)
         const burger = document.getElementById('burger');
         const navOverlay = document.getElementById('navOverlay');
-        
+        const closeNav = document.getElementById('closeNav');
+
+        function setMenuState(open) {
+            burger.classList.toggle('active', open);
+            navOverlay.classList.toggle('active', open);
+            document.body.style.overflow = open ? 'hidden' : 'auto';
+            // a11y parity with pudsey
+            burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+            navOverlay.setAttribute('aria-hidden', open ? 'false' : 'true');
+            burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        }
+
         burger.addEventListener('click', function() {
-            burger.classList.toggle('active');
-            navOverlay.classList.toggle('active');
-            document.body.style.overflow = navOverlay.classList.contains('active') ? 'hidden' : 'auto';
+            const willOpen = !navOverlay.classList.contains('active');
+            setMenuState(willOpen);
         });
 
-        // Close menu when clicking on overlay
+        if (closeNav) {
+            closeNav.addEventListener('click', function() {
+                setMenuState(false);
+                burger.focus();
+            });
+        }
+
+        // Close when clicking overlay background or any nav link
         navOverlay.addEventListener('click', function(e) {
             if (e.target === navOverlay || e.target.tagName === 'A') {
-                burger.classList.remove('active');
-                navOverlay.classList.remove('active');
-                document.body.style.overflow = 'auto';
+                setMenuState(false);
+                burger.focus();
             }
         });
 
-        // Keyboard navigation
+        // ESC to close
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && navOverlay.classList.contains('active')) {
-                burger.classList.remove('active');
-                navOverlay.classList.remove('active');
-                document.body.style.overflow = 'auto';
+                setMenuState(false);
+                burger.focus();
             }
         });
 
