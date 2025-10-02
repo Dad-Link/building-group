@@ -356,15 +356,38 @@
             margin: 0 auto;
         }
         
+        /* Logo visuals (image + text) */
         .logo {
-            display: flex;
-            align-items: center;
-            font-size: 1.75rem;
-            font-weight: 800;
-            color: var(--primary-color);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            z-index: 1001;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-weight: 800;
+          color: var(--primary-color);
+          text-decoration: none;
+        }
+
+        .logo img {
+          height: 36px;     /* visual height in the header */
+          width: auto;      /* keep aspect ratio */
+          display: block;   /* remove baseline gap */
+        }
+
+        .logo-text {
+          line-height: 1;
+          font-size: 1.1rem;
+          color: var(--primary-color);
+          white-space: nowrap; /* avoid wrapping next to the small logo */
+        }
+
+        /* Optional: scale down on smaller screens */
+        @media (max-width: 768px) {
+          .logo img { height: 32px; }
+          .logo-text { font-size: 1rem; }
+        }
+
+        @media (max-width: 400px) {
+          .logo img { height: 28px; }
+          .logo-text { display: none; } /* hide text if space is tight */
         }
 
         .logo i {
@@ -429,8 +452,8 @@
             opacity: 1;
             visibility: visible;
         }
-
         .nav-content {
+            position: relative; /* needed for close button placement */
             text-align: center;
             padding: 6rem 2rem 4rem;
             min-height: 100vh;
@@ -438,6 +461,26 @@
             flex-direction: column;
             justify-content: center;
         }
+
+        /* Close “X” button (matches pudsey-house-builds) */
+        .close-nav {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 2px solid rgba(255,255,255,0.7);
+            color: #fff;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .close-nav:hover { background: rgba(255,255,255,0.15); }
 
         .nav-links {
             list-style: none;
@@ -484,13 +527,33 @@
             text-decoration: underline;
         }
 
-        /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, rgba(231, 76, 60, 0.9), rgba(52, 152, 219, 0.9)),
-                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23f8f9fa" width="1200" height="600"/><polygon fill="%23e74c3c" points="0,600 400,200 800,400 1200,100 1200,600"/><polygon fill="%233498db" opacity="0.7" points="200,600 600,150 1000,350 1200,50 1200,600"/></svg>');
+            position: relative;
             padding: 8rem 0 6rem;
             color: var(--white);
             text-align: center;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: url('/assets/loft-conversion.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            z-index: -2;
+        }
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(231,76,60,0.6), rgba(41,128,185,0.6));
+            z-index: -1;
+        }
+        @media (max-width: 1024px) {
+            .hero::before { background-attachment: scroll; }
         }
 
         .hero-content h1 {
@@ -784,12 +847,28 @@
             margin: 0 auto;
         }
 
-        /* CTA Section */
+        /* CTA Section (image background + gradient overlay) */
         .cta-section {
-            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+            position: relative;
             color: var(--white);
             padding: 5rem 0;
             text-align: center;
+
+            /* Layer the gradient over the image */
+            background-image:
+                linear-gradient(135deg, rgba(231, 76, 60, 0.65), rgba(44, 62, 80, 0.65)),
+                url('/assets/velux-loft-conversion.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            /* Parallax-like effect on larger screens (falls back on mobile) */
+            background-attachment: fixed;
+        }
+
+        /* Avoid jank on mobile */
+        @media (max-width: 1024px) {
+            .cta-section { background-attachment: scroll; }
         }
 
         .cta-section h2 {
@@ -879,23 +958,21 @@
 <body>
     <!-- Header -->
     <header class="header">
-        <nav class="nav-container">
-            <a href="/" class="logo">
-                <i class="fas fa-hammer"></i>
-                Building Group
+          <nav class="nav-container">
+            <a href="/" class="logo" aria-label="Building Group home">
+              <img src="/assets/logo-180.png" alt="Building Group logo" width="180" height="180" />
+              <span class="logo-text">Building Group</span>
             </a>
-            <button class="burger" id="burger">
-                <span></span>
-                <span></span>
-                <span></span>
+            <button class="burger" id="burger" aria-label="Open menu" aria-controls="navOverlay" aria-expanded="false">
+              <span></span><span></span><span></span>
             </button>
-        </nav>
-    </header>
+          </nav>
+        </header>
 
-    <!-- Navigation Overlay -->
-    <div class="nav-overlay" id="navOverlay">
-        <div class="nav-content">
-            <ul class="nav-links">
+    <div class="nav-overlay" id="navOverlay" aria-hidden="true">
+        <div class="nav-content" role="dialog" aria-modal="true" aria-labelledby="menuTitle">
+            <button class="close-nav" id="closeNav" aria-label="Close menu"><i class="fas fa-times"></i></button>
+            <ul class="nav-links" aria-label="Main navigation">
                 <li><a href="/">Home</a></li>
                 <li><a href="/about">About Us</a></li>
                 <li><a href="/services">Our Services</a></li>
@@ -1306,30 +1383,46 @@
 
     <script>
         // Mobile Menu Toggle
+        // Mobile Menu Toggle (match pudsey behavior)
         const burger = document.getElementById('burger');
         const navOverlay = document.getElementById('navOverlay');
-        
+        const closeNav = document.getElementById('closeNav');
+
+        function setMenuState(open) {
+            burger.classList.toggle('active', open);
+            navOverlay.classList.toggle('active', open);
+            document.body.style.overflow = open ? 'hidden' : 'auto';
+            // a11y parity
+            burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+            navOverlay.setAttribute('aria-hidden', open ? 'false' : 'true');
+            burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        }
+
         burger.addEventListener('click', function() {
-            burger.classList.toggle('active');
-            navOverlay.classList.toggle('active');
-            document.body.style.overflow = navOverlay.classList.contains('active') ? 'hidden' : 'auto';
+            const willOpen = !navOverlay.classList.contains('active');
+            setMenuState(willOpen);
         });
 
-        // Close menu when clicking on overlay
+        if (closeNav) {
+            closeNav.addEventListener('click', function() {
+                setMenuState(false);
+                burger.focus();
+            });
+        }
+
+        // Close on overlay background or nav link click
         navOverlay.addEventListener('click', function(e) {
             if (e.target === navOverlay || e.target.tagName === 'A') {
-                burger.classList.remove('active');
-                navOverlay.classList.remove('active');
-                document.body.style.overflow = 'auto';
+                setMenuState(false);
+                burger.focus();
             }
         });
 
-        // Keyboard navigation
+        // ESC to close
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && navOverlay.classList.contains('active')) {
-                burger.classList.remove('active');
-                navOverlay.classList.remove('active');
-                document.body.style.overflow = 'auto';
+                setMenuState(false);
+                burger.focus();
             }
         });
 
