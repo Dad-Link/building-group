@@ -197,16 +197,40 @@
             margin: 0 auto;
         }
         
+        /* Logo visuals (image + text) */
         .logo {
-            display: flex;
-            align-items: center;
-            font-size: 1.75rem;
-            font-weight: 800;
-            color: var(--primary-color);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            z-index: 1001;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-weight: 800;
+          color: var(--primary-color);
+          text-decoration: none;
         }
+
+        .logo img {
+          height: 36px;     /* visual height in the header */
+          width: auto;      /* keep aspect ratio */
+          display: block;   /* remove baseline gap */
+        }
+
+        .logo-text {
+          line-height: 1;
+          font-size: 1.1rem;
+          color: var(--primary-color);
+          white-space: nowrap; /* avoid wrapping next to the small logo */
+        }
+
+        /* Optional: scale down on smaller screens */
+        @media (max-width: 768px) {
+          .logo img { height: 32px; }
+          .logo-text { font-size: 1rem; }
+        }
+
+        @media (max-width: 400px) {
+          .logo img { height: 28px; }
+          .logo-text { display: none; } /* hide text if space is tight */
+        }
+
 
         .logo i {
             margin-right: 0.5rem;
@@ -345,7 +369,6 @@
         .breadcrumb-nav a:hover {
             text-decoration: underline;
         }
-
         .hero {
             position: relative;
             padding: 8rem 0 6rem;
@@ -368,10 +391,12 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, rgba(231, 76, 60, 0.6), rgba(41, 128, 185, 0.6));
+            background: linear-gradient(135deg, rgba(231,76,60,0.6), rgba(41,128,185,0.6));
             z-index: -1;
         }
-
+        @media (max-width: 1024px) {
+            .hero::before { background-attachment: scroll; }
+        }
         .hero-content {
             position: relative;
             z-index: 2;
@@ -952,12 +977,28 @@
             font-size: 1.05rem;
         }
 
-        /* CTA Section */
+        /* CTA Section (image background + gradient overlay) */
         .cta-section {
-            background: linear-gradient(135deg, var(--house-green), var(--house-blue));
+            position: relative;
             color: var(--white);
-            padding: 6rem 0;
+            padding: 5rem 0;
             text-align: center;
+
+            /* Layer the gradient over the image */
+            background-image:
+                linear-gradient(135deg, rgba(231, 76, 60, 0.65), rgba(44, 62, 80, 0.65)),
+                url('/assets/building-services.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            /* Parallax-like effect on larger screens (falls back on mobile) */
+            background-attachment: fixed;
+        }
+
+        /* Avoid jank on mobile */
+        @media (max-width: 1024px) {
+            .cta-section { background-attachment: scroll; }
         }
 
         .cta-section h2 {
@@ -1107,18 +1148,16 @@
 <body>
     <!-- Header -->
     <header class="header">
-        <nav class="nav-container">
-            <a href="/" class="logo">
-                <i class="fas fa-hammer"></i>
-                Building Group
+          <nav class="nav-container">
+            <a href="/" class="logo" aria-label="Building Group home">
+              <img src="/assets/logo-180.png" alt="Building Group logo" width="180" height="180" />
+              <span class="logo-text">Building Group</span>
             </a>
-            <button class="burger" id="burger">
-                <span></span>
-                <span></span>
-                <span></span>
+            <button class="burger" id="burger" aria-label="Open menu" aria-controls="navOverlay" aria-expanded="false">
+              <span></span><span></span><span></span>
             </button>
-        </nav>
-    </header>
+          </nav>
+        </header>
 
     <!-- Navigation Overlay -->
     <div class="nav-overlay" id="navOverlay" aria-hidden="true">
