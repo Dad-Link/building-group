@@ -8,7 +8,7 @@
     <meta name="keywords" content="liverpool kitchen fitters, kitchen fitters liverpool, liverpool kitchen installation, kitchen fitting liverpool, liverpool fitted kitchens, kitchen installers liverpool, liverpool kitchen design, professional kitchen fitters liverpool, bespoke kitchen liverpool, liverpool kitchen renovation">
     <meta name="author" content="Building Group">
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-    <link rel="canonical" href="https://www.building-group.co.uk/liverpool-kitchen-fitters">
+    <link rel="canonical" href="https://www.building-group.co.uk/services/liverpool-kitchen-fitters/liverpool-kitchen-fitters">
     
     <!-- Mobile App Meta -->
     <meta name="mobile-web-app-capable" content="yes">
@@ -20,7 +20,7 @@
     <meta property="og:title" content="Liverpool Kitchen Fitters | Professional Kitchen Installation Liverpool | 4.9⭐ Rating">
     <meta property="og:description" content="Expert Liverpool kitchen fitters specializing in professional kitchen installation and fitted kitchens. Premier kitchen fitting services across Liverpool from £5,000. 156 verified reviews.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.building-group.co.uk/liverpool-kitchen-fitters">
+    <meta property="og:url" content="https://www.building-group.co.uk/services/liverpool-kitchen-fitters/liverpool-kitchen-fitters">
     <meta property="og:image" content="https://www.building-group.co.uk/assets/liverpool-kitchen-fitters.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -78,7 +78,7 @@
             "logo": "https://www.building-group.co.uk/logo.png",
             "telephone": "+447446695686",
             "email": "info@building-group.co.uk",
-            "url": "https://www.building-group.co.uk/liverpool-kitchen-fitters",
+            "url": "https://www.building-group.co.uk/services/liverpool-kitchen-fitters/liverpool-kitchen-fitters",
             "address": {
                 "@type": "PostalAddress",
                 "addressLocality": "Liverpool",
@@ -166,7 +166,7 @@
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
         "name": "Building Group Liverpool Kitchen Fitters",
-        "url": "https://www.building-group.co.uk/liverpool-kitchen-fitters",
+        "url": "https://www.building-group.co.uk/services/liverpool-kitchen-fitters/liverpool-kitchen-fitters",
         "telephone": "+447446695686",
         "address": {
             "@type": "PostalAddress",
@@ -300,7 +300,7 @@
                 "@type": "ListItem",
                 "position": 3,
                 "name": "Liverpool Kitchen Fitters",
-                "item": "https://www.building-group.co.uk/liverpool-kitchen-fitters"
+                "item": "https://www.building-group.co.uk/services/liverpool-kitchen-fitters/liverpool-kitchen-fitters"
             }
         ]
     }
@@ -398,15 +398,38 @@
             margin: 0 auto;
         }
         
+        /* Logo visuals (image + text) */
         .logo {
-            display: flex;
-            align-items: center;
-            font-size: 1.75rem;
-            font-weight: 800;
-            color: var(--primary-color);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            z-index: 1001;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-weight: 800;
+          color: var(--primary-color);
+          text-decoration: none;
+        }
+
+        .logo img {
+          height: 36px;     /* visual height in the header */
+          width: auto;      /* keep aspect ratio */
+          display: block;   /* remove baseline gap */
+        }
+
+        .logo-text {
+          line-height: 1;
+          font-size: 1.1rem;
+          color: var(--primary-color);
+          white-space: nowrap; /* avoid wrapping next to the small logo */
+        }
+
+        /* Optional: scale down on smaller screens */
+        @media (max-width: 768px) {
+          .logo img { height: 32px; }
+          .logo-text { font-size: 1rem; }
+        }
+
+        @media (max-width: 400px) {
+          .logo img { height: 28px; }
+          .logo-text { display: none; } /* hide text if space is tight */
         }
 
         .logo i {
@@ -438,52 +461,249 @@
             border-radius: 2px;
         }
 
-        /* Navigation overlay styles - condensed for space */
+        /* Complete Navigation Overlay Styles (match Manchester) */
         .nav-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s ease;
-            overflow-y: auto;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100vh;
+          background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+          z-index: 1000;
+          opacity: 0;
+          visibility: hidden;
+          transition: all 0.4s ease;
+          overflow-y: auto;
+          overflow-x: hidden;
         }
-
         .nav-overlay.active {
-            opacity: 1;
-            visibility: visible;
+          opacity: 1;
+          visibility: visible;
+        }
+        .nav-overlay::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.3);
+          transition: left 0.4s ease;
+        }
+        .nav-overlay.active::before {
+          left: 0;
         }
 
+        .nav-content {
+          text-align: center;
+          padding: 6rem 2rem 4rem;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          transform: translateY(50px);
+          transition: transform 0.4s ease;
+        }
+        .nav-overlay.active .nav-content {
+          transform: translateY(0);
+        }
+
+        .nav-links {
+          list-style: none;
+          padding: 0;
+          margin-bottom: 2rem;
+        }
+        .nav-links li {
+          margin: 1rem 0;
+          opacity: 0;
+          transform: translateX(-50px);
+          transition: all 0.4s ease;
+        }
+        .nav-overlay.active .nav-links li {
+          opacity: 1;
+          transform: translateX(0);
+        }
+        .nav-links li:nth-child(1) { transition-delay: 0.1s; }
+        .nav-links li:nth-child(2) { transition-delay: 0.2s; }
+        .nav-links li:nth-child(3) { transition-delay: 0.3s; }
+        .nav-links li:nth-child(4) { transition-delay: 0.4s; }
+        .nav-links li:nth-child(5) { transition-delay: 0.5s; }
+        .nav-links li:nth-child(6) { transition-delay: 0.6s; }
+        .nav-links li:nth-child(7) { transition-delay: 0.7s; }
+        .nav-links li:nth-child(8) { transition-delay: 0.8s; }
+        .nav-links li:nth-child(9) { transition-delay: 0.9s; }
+        .nav-links li:nth-child(10) { transition-delay: 1s; }
+
+        .nav-links a {
+          color: var(--white);
+          text-decoration: none;
+          font-size: 2rem;
+          font-weight: 700;
+          display: block;
+          padding: 0.75rem 1.5rem;
+          transition: all 0.3s ease;
+          position: relative;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          border-radius: 10px;
+        }
+        .nav-links a::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          width: 0;
+          height: 3px;
+          background: var(--accent-color);
+          transition: all 0.3s ease;
+          transform: translateX(-50%);
+        }
+        .nav-links a:hover {
+          color: var(--accent-color);
+          background: rgba(255, 255, 255, 0.1);
+          transform: scale(1.05);
+        }
+        .nav-links a:hover::after {
+          width: 80%;
+        }
+
+        .nav-submenu {
+          margin-top: 0.5rem;
+          opacity: 0;
+          max-height: 0;
+          overflow: hidden;
+          transition: all 0.3s ease;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 10px;
+          margin-left: 1rem;
+          margin-right: 1rem;
+        }
+        .nav-submenu.active {
+          opacity: 1;
+          max-height: 800px;
+          padding: 1rem 0;
+        }
+        .nav-submenu a {
+          font-size: 1rem !important;
+          font-weight: 500 !important;
+          padding: 0.5rem 1rem !important;
+          color: rgba(255, 255, 255, 0.9) !important;
+          text-transform: none !important;
+          letter-spacing: 0 !important;
+        }
+        .nav-submenu a:hover {
+          color: var(--accent-color) !important;
+          background: rgba(255, 255, 255, 0.1) !important;
+          transform: scale(1.02) !important;
+        }
+
+        .nav-contact {
+          margin-top: 2rem;
+          opacity: 0;
+          transform: translateY(30px);
+          transition: all 0.4s ease 1.2s;
+        }
+        .nav-overlay.active .nav-contact {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .nav-contact-item {
+          color: var(--white);
+          margin: 1rem 0;
+          font-size: 1rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.75rem;
+        }
+        .nav-contact-item i {
+          color: var(--accent-color);
+          width: 25px;
+        }
+
+        .nav-social {
+          display: flex;
+          justify-content: center;
+          gap: 1.5rem;
+          margin-top: 1.5rem;
+        }
+        .nav-social a {
+          color: var(--white);
+          font-size: 1.5rem;
+          transition: all 0.3s ease;
+          padding: 0.75rem;
+        }
+        .nav-social a:hover {
+          color: var(--accent-color);
+          transform: scale(1.2);
+        }
+
+        /* Burger active (X) */
+        .burger.active span:nth-child(1) {
+          transform: rotate(-45deg) translate(-6px, 7px);
+          background: var(--white);
+        }
+        .burger.active span:nth-child(2) {
+          opacity: 0;
+        }
+        .burger.active span:nth-child(3) {
+          transform: rotate(45deg) translate(-6px, -7px);
+          background: var(--white);
+        }
+
+        /* Close button */
+        .nav-close {
+          position: absolute;
+          top: 2rem;
+          right: 2rem;
+          background: none;
+          border: none;
+          color: var(--white);
+          font-size: 2rem;
+          cursor: pointer;
+          z-index: 1002;
+          padding: 0.5rem;
+          border-radius: 50%;
+          transition: all 0.3s ease;
+          width: 50px;
+          height: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .nav-close:hover {
+          background: rgba(255, 255, 255, 0.1);
+          transform: rotate(90deg);
+          color: var(--accent-color);
+        }
+        .nav-close i { pointer-events: none; }
         /* Hero Section - Liverpool Kitchen Fitters Specific */
         .hero {
-            background: linear-gradient(135deg, rgba(44, 62, 80, 0.9), rgba(236, 240, 241, 0.8)),
-                        url('/assets/kitchen-extension-modern.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: var(--white);
-            position: relative;
-            margin-top: 80px;
+          background: url('/assets/kitchen-extension-modern.jpg') no-repeat center / cover fixed;
+          height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          color: var(--white);
+          position: relative;
+          margin-top: 80px;
         }
 
         .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: 1;
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.4); /* 30% black overlay */
+          z-index: 1;
+        }
+
+        /* Keep the mobile fallback (no parallax), no gradient needed */
+        @media (max-width: 768px) {
+          .hero {
+            background: url('/assets/kitchen-extension-modern-m.jpg') no-repeat center / cover;
+            background-attachment: scroll;
+          }
         }
 
         .hero-content {
@@ -956,22 +1176,26 @@
         }
         
         .contact-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 4rem;
+          align-items: start; /* top align both columns */
         }
+
+        .contact-info {
+          text-align: center;
+        }
+
         
         .contact-info h3 {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            font-weight: 700;
+          text-align: center;
         }
         
         .contact-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
+          justify-content: center; /* center the icon + text row */
         }
+
+
         
         .contact-item i {
             font-size: 1.4rem;
@@ -985,10 +1209,9 @@
         }
         
         .contact-form {
-            background: rgba(255,255,255,0.1);
-            padding: 2.5rem;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
+          max-width: 580px;
+          margin-left: auto;
+          margin-right: auto;
         }
         
         .form-group {
@@ -1272,21 +1495,87 @@
         <div class="spinner"></div>
     </div>
     
-    <!-- Header -->
     <header class="header">
-        <nav class="nav-container">
-            <a href="/" class="logo">
-                <i class="fas fa-hammer"></i>
-                Building Group
+          <nav class="nav-container">
+            <a href="/" class="logo" aria-label="Building Group home">
+              <img src="/assets/logo-180.png" alt="Building Group logo" width="180" height="180" />
+              <span class="logo-text">Building Group</span>
             </a>
-            <button class="burger" id="burger">
-                <span></span>
-                <span></span>
-                <span></span>
+            <button class="burger" id="burger" aria-label="Open menu" aria-controls="navOverlay" aria-expanded="false">
+              <span></span><span></span><span></span>
             </button>
-        </nav>
-    </header>
+          </nav>
+        </header>
+    <div class="nav-overlay" id="navOverlay">
+      <button class="nav-close" id="navClose" aria-label="Close Navigation">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="nav-content">
+        <ul class="nav-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About Us</a></li>
+          <li>
+            <a href="#" onclick="toggleSubmenu(event, 'servicesSubmenu')">
+              Our Services <i class="fas fa-chevron-down" style="margin-left: 0.5rem; font-size: 1rem;"></i>
+            </a>
+            <div class="nav-submenu" id="servicesSubmenu">
+              <a href="/services">Full Service list</a>
+              <a href="/services/house-building">New House Building</a>
+              <a href="/services/house-renovations">House Renovations</a>
+              <a href="/services/house-extensions">House Extensions</a>
+              <a href="/services/loft-conversions">Loft Conversions</a>
+              <a href="/services/building-regulations">Building Regulations</a>
+              <a href="/services/commercial-construction">Commercial Construction</a>
+              <a href="/services/full-rewire">Full House Rewiring</a>
+              <a href="/services/re-roofing">Re-Roofing Services</a>
+              <a href="/services/bathroom-fitting">Bathroom Fitting</a>
+              <a href="/services/kitchen-fitting">Kitchen Fitting</a>
+              <a href="/services/groundworks">Groundworks & Foundations</a>
+              <a href="/services/planning-permission">Planning Permission</a>
+            </div>
+          </li>
+          <li>
+            <a href="#" onclick="toggleSubmenu(event, 'locationsSubmenu')">
+              Locations <i class="fas fa-chevron-down" style="margin-left: 0.5rem; font-size: 1rem;"></i>
+            </a>
+            <div class="nav-submenu" id="locationsSubmenu">
+              <a href="/manchester">Manchester</a>
+              <a href="/liverpool">Liverpool</a>
+              <a href="/leeds">Leeds</a>
+              <a href="/cheshire">Cheshire</a>
+            </div>
+          </li>
+          <li><a href="/projects">Our Projects</a></li>
+          <li><a href="/testimonials">Testimonials</a></li>
+          <li><a href="/blog">News & Blog</a></li>
+          <li><a href="/careers">Careers</a></li>
+          <li><a href="/contact">Contact Us</a></li>
+          <li><a href="/quote" style="color: var(--accent-color);">Get Free Quote</a></li>
+        </ul>
 
+        <div class="nav-contact">
+          <div class="nav-contact-item">
+            <i class="fas fa-phone"></i>
+            <span>+44 7446 695 686</span>
+          </div>
+          <div class="nav-contact-item">
+            <i class="fas fa-envelope"></i>
+            <span>info@building-group.co.uk</span>
+          </div>
+          <div class="nav-contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Liverpool • Merseyside</span>
+          </div>
+
+          <div class="nav-social">
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- Breadcrumb Navigation -->
     <nav class="breadcrumb">
         <div class="container">
@@ -1575,94 +1864,6 @@
             </div>
         </div>
     </section>
-    
-    <!-- Contact Section -->
-    <section class="contact" id="contact">
-        <div class="container">
-            <h2 class="section-title">Get Liverpool Kitchen Installation Quote</h2>
-            <div class="contact-content">
-                <div class="contact-info fade-in">
-                    <h3>Professional Liverpool Kitchen Fitters</h3>
-                    <div class="contact-item">
-                        <i class="fas fa-phone"></i>
-                        <span>+44 7446 695 686</span>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-envelope"></i>
-                        <span>info@building-group.co.uk</span>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>Liverpool & Merseyside</span>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-clock"></i>
-                        <span>Mon-Fri: 8:00-18:00, Sat: 8:00-16:00</span>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-tools"></i>
-                        <span>Expert Liverpool Kitchen Fitters & Fully Insured</span>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-award"></i>
-                        <span>15+ Years Liverpool Kitchen Installation Experience</span>
-                    </div>
-                    
-                    <form class="contact-form fade-in" id="contactForm">
-                        <div class="form-group">
-                            <label for="name">Full Name *</label>
-                            <input type="text" id="name" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email Address *</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Phone Number *</label>
-                            <input type="tel" id="phone" name="phone" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="service">Liverpool Kitchen Service</label>
-                            <select id="service" name="service">
-                                <option value="">Select Liverpool Kitchen Service</option>
-                                <option value="liverpool-kitchen-installation">Liverpool Kitchen Installation</option>
-                                <option value="liverpool-kitchen-design">Liverpool Kitchen Design</option>
-                                <option value="liverpool-fitted-kitchen">Liverpool Fitted Kitchen</option>
-                                <option value="liverpool-kitchen-renovation">Liverpool Kitchen Renovation</option>
-                                <option value="liverpool-worktop-fitting">Liverpool Worktop Fitting</option>
-                                <option value="liverpool-appliance-integration">Liverpool Appliance Integration</option>
-                                <option value="liverpool-kitchen-refit">Liverpool Kitchen Refit</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="location">Liverpool Area</label>
-                            <select id="location" name="location">
-                                <option value="">Select Liverpool Area</option>
-                                <option value="liverpool-city-centre">Liverpool City Centre</option>
-                                <option value="anfield">Anfield</option>
-                                <option value="kensington">Kensington</option>
-                                <option value="everton">Everton</option>
-                                <option value="toxteth">Toxteth</option>
-                                <option value="woolton">Woolton</option>
-                                <option value="allerton">Allerton</option>
-                                <option value="garston">Garston</option>
-                                <option value="wavertree">Wavertree</option>
-                                <option value="childwall">Childwall</option>
-                                <option value="birkenhead">Birkenhead</option>
-                                <option value="wallasey">Wallasey</option>
-                                <option value="southport">Southport</option>
-                                <option value="merseyside">Other Merseyside Area</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="project">Liverpool Kitchen Project Details *</label>
-                            <textarea id="project" name="project" placeholder="Tell us about your Liverpool kitchen installation requirements - kitchen size, style preferences, budget, timeline for Liverpool fitted kitchen installation..." required></textarea>
-                        </div>
-                        <button type="submit" class="submit-btn">Get Liverpool Kitchen Fitting Quote</button>
-                    </form>
-                </div>
-            </div>
-        </section>
         
         <!-- Footer -->
         <footer class="footer">
@@ -1680,25 +1881,25 @@
                 
                 <div class="footer-section">
                     <h3>Liverpool Kitchen Services</h3>
-                    <a href="/liverpool-kitchen-installation">Liverpool Kitchen Installation</a>
-                    <a href="/liverpool-kitchen-design">Liverpool Kitchen Design</a>
-                    <a href="/liverpool-fitted-kitchens">Liverpool Fitted Kitchens</a>
-                    <a href="/liverpool-kitchen-renovation">Liverpool Kitchen Renovation</a>
-                    <a href="/liverpool-worktop-fitting">Liverpool Worktop Fitting</a>
-                    <a href="/liverpool-appliance-integration">Liverpool Appliance Integration</a>
-                    <a href="/liverpool-kitchen-refit">Liverpool Kitchen Refit</a>
+                    <a href="/services/liverpool-kitchen-fitters/liverpool-kitchen-installation">Liverpool Kitchen Installation</a>
+                    <a href="/services/liverpool-kitchen-fitters/liverpool-kitchen-design">Liverpool Kitchen Design</a>
+                    <a href="/services/liverpool-kitchen-fitters/liverpool-fitted-kitchens">Liverpool Fitted Kitchens</a>
+                    <a href="/services/liverpool-kitchen-fitters/liverpool-kitchen-renovation">Liverpool Kitchen Renovation</a>
+                    <a href="/services/liverpool-kitchen-fitters/liverpool-worktop-fitting">Liverpool Worktop Fitting</a>
+                    <a href="/services/liverpool-kitchen-fitters/liverpool-appliance-integration">Liverpool Appliance Integration</a>
+                    <a href="/services/liverpool-kitchen-fitters/liverpool-kitchen-refit">Liverpool Kitchen Refit</a>
                 </div>
                 
                 <div class="footer-section">
                     <h3>Liverpool Areas Covered</h3>
-                    <a href="/liverpool-city-centre-kitchen-fitters">Liverpool City Centre Kitchen Fitters</a>
-                    <a href="/anfield-kitchen-fitters">Anfield Kitchen Fitters</a>
-                    <a href="/kensington-kitchen-fitters">Kensington Kitchen Fitters</a>
-                    <a href="/everton-kitchen-fitters">Everton Kitchen Fitters</a>
-                    <a href="/woolton-kitchen-fitters">Woolton Kitchen Fitters</a>
-                    <a href="/wavertree-kitchen-fitters">Wavertree Kitchen Fitters</a>
-                    <a href="/birkenhead-kitchen-fitters">Birkenhead Kitchen Fitters</a>
-                    <a href="/southport-kitchen-fitters">Southport Kitchen Fitters</a>
+                    <a href="/services/liverpool-kitchen-fitters/liverpool-city-centre-kitchen-fitters">Liverpool City Centre Kitchen Fitters</a>
+                    <a href="/services/liverpool-kitchen-fitters/anfield-kitchen-fitters">Anfield Kitchen Fitters</a>
+                    <a href="/services/liverpool-kitchen-fitters/kensington-kitchen-fitters">Kensington Kitchen Fitters</a>
+                    <a href="/services/liverpool-kitchen-fitters/everton-kitchen-fitters">Everton Kitchen Fitters</a>
+                    <a href="/services/liverpool-kitchen-fitters/woolton-kitchen-fitters">Woolton Kitchen Fitters</a>
+                    <a href="/services/liverpool-kitchen-fitters/wavertree-kitchen-fitters">Wavertree Kitchen Fitters</a>
+                    <a href="/services/liverpool-kitchen-fitters/birkenhead-kitchen-fitters">Birkenhead Kitchen Fitters</a>
+                    <a href="/services/liverpool-kitchen-fitters/southport-kitchen-fitters">Southport Kitchen Fitters</a>
                 </div>
                 
                 <div class="footer-section">
@@ -1707,8 +1908,7 @@
                     <p><i class="fas fa-envelope"></i> info@building-group.co.uk</p>
                     <p><i class="fas fa-map-marker-alt"></i> Liverpool & Merseyside</p>
                     <p><i class="fas fa-tools"></i> Professional Liverpool Kitchen Fitters</p>
-                    <a href="/liverpool-kitchen-quote">Liverpool Kitchen Quote</a>
-                    <a href="/liverpool-kitchen-gallery">Liverpool Kitchen Gallery</a>
+                    <a href="/quote">Liverpool Kitchen Quote</a>
                 </div>
             </div>
             
@@ -1728,12 +1928,87 @@
                 }, 800);
             });
             
-            // Burger Menu Toggle
-            const burger = document.getElementById('burger');
-            
-            burger.addEventListener('click', function() {
-                burger.classList.toggle('active');
-            });
+            // Navigation System - Full Overlay (match Manchester)
+            (function () {
+              const burger = document.getElementById('burger');
+              const navOverlay = document.getElementById('navOverlay');
+              const navClose = document.getElementById('navClose');
+
+              if (!burger || !navOverlay) {
+                console.error('Burger or navOverlay element not found');
+                return;
+              }
+
+              function openMenu() {
+                burger.classList.add('active');
+                navOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                console.log('Menu opened');
+              }
+
+              function closeMenu() {
+                burger.classList.remove('active');
+                navOverlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                console.log('Menu closed');
+              }
+
+              // Toggle overlay when burger is clicked
+              burger.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (navOverlay.classList.contains('active')) {
+                  closeMenu();
+                } else {
+                  openMenu();
+                }
+              });
+
+              // Close button click handler
+              if (navClose) {
+                navClose.addEventListener('click', (e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  closeMenu();
+                });
+              }
+
+              // Close menu when clicking outside content or on regular links
+              navOverlay.addEventListener('click', (e) => {
+                if (e.target === navOverlay) {
+                  closeMenu();
+                  return;
+                }
+                if (e.target.tagName === 'A' && !e.target.hasAttribute('onclick')) {
+                  closeMenu();
+                }
+              });
+
+              // ESC key closes menu
+              document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && navOverlay.classList.contains('active')) {
+                  closeMenu();
+                }
+              });
+
+              // Global submenu toggle function
+              window.toggleSubmenu = function (event, submenuId) {
+                if (event) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                }
+                const submenu = document.getElementById(submenuId);
+                if (!submenu) {
+                  console.error('Submenu not found:', submenuId);
+                  return;
+                }
+                document.querySelectorAll('.nav-submenu').forEach(m => {
+                  if (m !== submenu) m.classList.remove('active');
+                });
+                submenu.classList.toggle('active');
+                console.log('Toggled submenu:', submenuId);
+              };
+            })();
             
             // Smooth Scrolling
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
