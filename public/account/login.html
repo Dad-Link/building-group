@@ -10,7 +10,24 @@
     <meta name="robots" content="noindex, nofollow">
     
     <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.googleapis.com;">
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      base-uri 'self';
+      form-action 'self';
+      frame-ancestors 'none';
+      object-src 'none';
+      img-src 'self' data:;
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+      font-src  'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+      script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.googleapis.com;
+      connect-src 'self'
+        https://www.googleapis.com
+        https://identitytoolkit.googleapis.com
+        https://securetoken.googleapis.com
+        https://www.gstatic.com
+        https://firestore.googleapis.com
+        https://firebaseinstallations.googleapis.com;
+    ">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
@@ -1338,7 +1355,7 @@
         
         // Auto-fill demo credentials for easy testing (Development only)
         function fillDemoCredentials() {
-            emailInput.value = 'dad-link@buildinggroup.co.uk';
+            emailInput.value = 'info@building-group.co.uk';
             passwordInput.value = 'BuildingGroup2025!';
             showAlert('info', 'Demo credentials filled. Click Sign In to login.');
         }
@@ -1399,7 +1416,7 @@
             
             // Show demo info in console
             console.log('Demo Login Credentials (Development):');
-            console.log('Email: dad-link@buildinggroup.co.uk');
+            console.log('Email: info@building-group.co.uk');
             console.log('Password: BuildingGroup2025!');
             console.log('Or double-click the hammer icon to auto-fill demo credentials');
         });

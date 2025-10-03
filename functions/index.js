@@ -104,6 +104,101 @@ exports.sendQuoteNotification = onCall({
     }
 });
 
+exports.sendSupportNotification = onCall({ region: 'us-central1', cors: true }, async (request) => {
+  try {
+    const data = request.data || {};
+    if (!data.email || !data.firstName || !data.message) {
+      throw new Error('Missing required fields: email, firstName, message');
+    }
+
+    const sendgridApiKey = process.env.SENDGRID_API_KEY;
+    if (!sendgridApiKey) throw new Error('SendGrid API key not configured');
+
+    sgMail.setApiKey(sendgridApiKey);
+
+    const fromEmail = 'info@building-group.co.uk';
+    const supportId = data.supportId || `SUP-${Date.now()}`;
+
+    const safe = (s) => (s || '').toString();
+
+    // Company email
+    const companyHtml = `
+      <h2>New Support Message</h2>
+      <p><strong>Support ID:</strong> ${supportId}</p>
+      <p><strong>Name:</strong> ${safe(data.firstName)} ${safe(data.lastName || '')}</p>
+      <p><strong>Email:</strong> ${safe(data.email)}</p>
+      <p><strong>Phone:</strong> ${safe(data.phone || 'N/A')}</p>
+      <p><strong>Subject:</strong> ${safe(data.subject || 'N/A')}</p>
+      <p><strong>Message:</strong></p>
+      <div style="white-space:pre-wrap">${safe(data.message)}</div>
+      <hr/>
+      <p><small>Source: ${safe(data.source || '')}</small></p>
+      <p><small>Timestamp: ${safe(data.timestamp || new Date().toISOString())}</small></p>
+    `;
+    const companyText = `New Support Message
+Support ID: ${supportId}
+Name: ${safe(data.firstName)} ${safe(data.lastName || '')}
+Email: ${safe(data.email)}
+Phone: ${safe(data.phone || 'N/A')}
+Subject: ${safe(data.subject || 'N/A')}
+Message:
+${safe(data.message)}
+Source: ${safe(data.source || '')}
+Timestamp: ${safe(data.timestamp || new Date().toISOString())}
+`;
+
+    const companyMsg = {
+      to: 'info@building-group.co.uk',
+      from: fromEmail,
+      replyTo: data.email,
+      subject: `New Support Message - ${supportId} - ${safe(data.firstName)} ${safe(data.lastName || '')}`,
+      html: companyHtml,
+      text: companyText
+    };
+
+    // Customer confirmation
+    const customerHtml = `
+      <h2>Thank you for contacting Building Group</h2>
+      <p>Hi ${safe(data.firstName)},</p>
+      <p>We've received your message and our team will be in touch shortly.</p>
+      <p><strong>Support ID:</strong> ${supportId}</p>
+      <p><strong>Subject:</strong> ${safe(data.subject || 'N/A')}</p>
+      <p><strong>Your message:</strong></p>
+      <div style="white-space:pre-wrap">${safe(data.message)}</div>
+      <hr/>
+      <p><strong>Need to speak now?</strong></p>
+      <p>Head Office: +44 161 524 0819<br/>Emergency Contact: +44 7446 695 686</p>
+      <p>Kind regards,<br/>Building Group</p>
+    `;
+    const customerText = `Thank you for contacting Building Group
+
+Hi ${safe(data.firstName)},
+
+We've received your message and will be in touch shortly.
+
+Support ID: ${supportId}
+Subject: ${safe(data.subject || 'N/A')}
+Your message:
+${safe(data.message)}
+
+Head Office: +44 161 524 0819
+Emergency Contact: +44 7446 695 686
+
+Kind regards,
+Building Group
+`;
+
+    await Promise.all([
+      sgMail.send(companyMsg),
+      sgMail.send({ to: data.email, from: fromEmail, subject: `We received your message - ${supportId}`, html: customerHtml, text: customerText })
+    ]);
+
+    return { success: true, supportId };
+  } catch (err) {
+    console.error('sendSupportNotification error:', err?.message, err?.response?.body);
+    throw new Error(`Support email sending failed: ${err.message}`);
+  }
+});
 // ... rest of your functions stay exactly the same ...
 function generateCustomerEmail(quoteData) {
     const formatDate = (isoString) => {

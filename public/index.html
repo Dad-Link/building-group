@@ -50,9 +50,11 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+        
+    <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-functions-compat.js"></script>
     <!-- Last Updated -->
-    <meta name="last-modified" content="2025-08-25T23:24:12Z">
+    <meta name="last-modified" content="2025-10-25T23:24:12Z">
     
     <!-- Enhanced Schema Markup - LocalBusiness -->
     <script type="application/ld+json">
@@ -1788,86 +1790,6 @@
         </div>
     </section>
     
-    <!-- Contact Section -->
-    <section class="contact" id="contact">
-        <div class="container">
-            <h2 class="section-title">Get Your Free Quote Today</h2>
-            <div class="contact-content">
-                <div class="contact-info fade-in">
-                    <h3>Contact Building Group</h3>
-                    <div class="contact-item">
-                        <i class="fas fa-phone"></i>
-                        <span>+44 7446 695 686</span>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-envelope"></i>
-                        <span>info@building-group.co.uk</span>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>Manchester • Liverpool • Leeds • Cheshire</span>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-clock"></i>
-                        <span>Mon-Fri: 8:00-18:00, Sat: 8:00-16:00</span>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-shield-alt"></i>
-                        <span>CITB Certified & Fully Insured</span>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-award"></i>
-                        <span>15+ Years Experience</span>
-                    </div>
-                </div>
-                
-                <form class="contact-form fade-in" id="contactForm">
-                    <div class="form-group">
-                        <label for="name">Full Name *</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email Address *</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Phone Number *</label>
-                        <input type="tel" id="phone" name="phone" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="service">Service Required</label>
-                        <select id="service" name="service">
-                            <option value="">Select Service</option>
-                            <option value="house-building">New House Building</option>
-                            <option value="house-renovations">House Renovations</option>
-                            <option value="house-extensions">House Extensions</option>
-                            <option value="loft-conversions">Loft Conversions</option>
-                            <option value="full-rewire">Full Rewiring</option>
-                            <option value="re-roofing">Re-Roofing</option>
-                            <option value="commercial">Commercial Construction</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="location">Preferred Location</label>
-                        <select id="location" name="location">
-                            <option value="">Select Location</option>
-                            <option value="manchester">Manchester</option>
-                            <option value="liverpool">Liverpool</option>
-                            <option value="leeds">Leeds</option>
-                            <option value="cheshire">Cheshire</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="project">Project Details *</label>
-                        <textarea id="project" name="project" placeholder="Tell us about your building project..." required></textarea>
-                    </div>
-                    <button type="submit" class="submit-btn">Get Free Quote</button>
-                </form>
-            </div>
-        </div>
-    </section>
     
     <!-- Footer -->
     <footer class="footer">
@@ -1921,251 +1843,324 @@
     </footer>
     
     <script>
-        // Loading Screen
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                document.getElementById('loading').style.opacity = '0';
-                setTimeout(function() {
-                    document.getElementById('loading').style.display = 'none';
-                }, 500);
-            }, 800);
-        });
-        
-        // Full Screen Menu Toggle
-        // Mobile Menu Toggle (match pudsey behavior)
-        const burger = document.getElementById('burger');
-        const navOverlay = document.getElementById('navOverlay');
-        const closeNav = document.getElementById('closeNav');
+      // Loading Screen
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          document.getElementById('loading').style.opacity = '0';
+          setTimeout(function() {
+            document.getElementById('loading').style.display = 'none';
+          }, 500);
+        }, 800);
+      });
+      
+      // Full Screen Menu Toggle
+      // Mobile Menu Toggle (match pudsey behavior)
+      const burger = document.getElementById('burger');
+      const navOverlay = document.getElementById('navOverlay');
+      const closeNav = document.getElementById('closeNav');
 
-        function setMenuState(open) {
-            burger.classList.toggle('active', open);
-            navOverlay.classList.toggle('active', open);
-            document.body.style.overflow = open ? 'hidden' : 'auto';
-            // a11y parity with pudsey
-            burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-            navOverlay.setAttribute('aria-hidden', open ? 'false' : 'true');
-            burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      function setMenuState(open) {
+        burger.classList.toggle('active', open);
+        navOverlay.classList.toggle('active', open);
+        document.body.style.overflow = open ? 'hidden' : 'auto';
+        // a11y parity with pudsey
+        burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        navOverlay.setAttribute('aria-hidden', open ? 'false' : 'true');
+        burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      }
+
+      burger.addEventListener('click', function() {
+        const willOpen = !navOverlay.classList.contains('active');
+        setMenuState(willOpen);
+      });
+
+      if (closeNav) {
+        closeNav.addEventListener('click', function() {
+          setMenuState(false);
+          burger.focus();
+        });
+      }
+
+      // Close when clicking overlay background or any nav link
+      navOverlay.addEventListener('click', function(e) {
+        if (e.target === navOverlay || e.target.tagName === 'A') {
+          setMenuState(false);
+          burger.focus();
         }
+      });
 
-        burger.addEventListener('click', function() {
-            const willOpen = !navOverlay.classList.contains('active');
-            setMenuState(willOpen);
-        });
-
-        if (closeNav) {
-            closeNav.addEventListener('click', function() {
-                setMenuState(false);
-                burger.focus();
-            });
+      // ESC to close
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && navOverlay.classList.contains('active')) {
+          setMenuState(false);
+          burger.focus();
         }
+      });
 
-        // Close when clicking overlay background or any nav link
-        navOverlay.addEventListener('click', function(e) {
-            if (e.target === navOverlay || e.target.tagName === 'A') {
-                setMenuState(false);
-                burger.focus();
-            }
+      // Toggle submenus
+      function toggleSubmenu(event, submenuId) {
+        event.preventDefault();
+        event.stopPropagation();
+        
+        const submenu = document.getElementById(submenuId);
+        const allSubmenus = document.querySelectorAll('.nav-submenu');
+        
+        // Close all other submenus
+        allSubmenus.forEach(menu => {
+          if (menu.id !== submenuId) {
+            menu.classList.remove('active');
+          }
         });
+        
+        // Toggle the clicked submenu
+        submenu.classList.toggle('active');
+      }
 
-        // ESC to close
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && navOverlay.classList.contains('active')) {
-                setMenuState(false);
-                burger.focus();
-            }
-        });
-
-        // Toggle submenus
-        function toggleSubmenu(event, submenuId) {
-            event.preventDefault();
-            event.stopPropagation();
-            
-            const submenu = document.getElementById(submenuId);
-            const allSubmenus = document.querySelectorAll('.nav-submenu');
-            
-            // Close all other submenus
-            allSubmenus.forEach(menu => {
-                if (menu.id !== submenuId) {
-                    menu.classList.remove('active');
-                }
-            });
-            
-            // Toggle the clicked submenu
-            submenu.classList.toggle('active');
+      // Keyboard navigation
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && navOverlay.classList.contains('active')) {
+          burger.classList.remove('active');
+          navOverlay.classList.remove('active');
+          document.body.style.overflow = 'auto';
         }
-
-        // Keyboard navigation
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && navOverlay.classList.contains('active')) {
-                burger.classList.remove('active');
-                navOverlay.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            }
-        });
-        
-        // Smooth Scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    const headerOffset = 80;
-                    const elementPosition = target.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                    
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth'
-                    });
-
-                    // Close menu after scroll
-                    if (navOverlay.classList.contains('active')) {
-                        burger.classList.remove('active');
-                        navOverlay.classList.remove('active');
-                        document.body.style.overflow = 'auto';
-                    }
-                }
+      });
+      
+      // Smooth Scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            const headerOffset = 80;
+            const elementPosition = target.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
             });
-        });
-        
-        // Header Scroll Effect
-        let lastScrollTop = 0;
-        const header = document.querySelector('.header');
-        
-        window.addEventListener('scroll', function() {
-            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
-            if (scrollTop > lastScrollTop && scrollTop > 100 && !navOverlay.classList.contains('active')) {
-                header.style.transform = 'translateY(-100%)';
-            } else {
-                header.style.transform = 'translateY(0)';
-            }
-            
-            if (scrollTop > 50) {
-                header.style.background = 'rgba(255, 255, 255, 0.95)';
-                header.style.backdropFilter = 'blur(10px)';
-            } else {
-                header.style.background = '#fff';
-                header.style.backdropFilter = 'none';
-            }
-            
-            lastScrollTop = scrollTop;
-        });
 
-        // Scroll animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
+            // Close menu after scroll
+            if (navOverlay.classList.contains('active')) {
+              burger.classList.remove('active');
+              navOverlay.classList.remove('active');
+              document.body.style.overflow = 'auto';
+            }
+          }
+        });
+      });
+      
+      // Header Scroll Effect
+      let lastScrollTop = 0;
+      const header = document.querySelector('.header');
+      
+      window.addEventListener('scroll', function() {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (scrollTop > lastScrollTop && scrollTop > 100 && !navOverlay.classList.contains('active')) {
+          header.style.transform = 'translateY(-100%)';
+        } else {
+          header.style.transform = 'translateY(0)';
+        }
+        
+        if (scrollTop > 50) {
+          header.style.background = 'rgba(255, 255, 255, 0.95)';
+          header.style.backdropFilter = 'blur(10px)';
+        } else {
+          header.style.background = '#fff';
+          header.style.backdropFilter = 'none';
+        }
+        
+        lastScrollTop = scrollTop;
+      });
+
+      // Scroll animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, observerOptions);
+
+      // Observe all elements with fade-in class
+      document.querySelectorAll('.fade-in').forEach(el => {
+        observer.observe(el);
+      });
+
+      // ============================
+      // Firebase + Cloud Function
+      // ============================
+
+      // Initialize Firebase with your config (compat SDK loaded above)
+      (function initFirebase() {
+        const firebaseConfig = {
+          apiKey: "AIzaSyBI1M38HZH8-xY3nfoKmqoitmggq3C8zKE",
+          authDomain: "buildinggroup-4f8b9.firebaseapp.com",
+          projectId: "buildinggroup-4f8b9",
+          storageBucket: "buildinggroup-4f8b9.firebasestorage.app",
+          messagingSenderId: "353000992011",
+          appId: "1:353000992011:web:c834310d7d79dd1bf0c60e",
+          measurementId: "G-DF11Q5PZRT"
+        };
+        if (!firebase.apps.length) {
+          firebase.initializeApp(firebaseConfig);
+        }
+      })();
+
+      // Use the same region as your deployed callable function
+      const functions = firebase.app().functions('us-central1');
+      const sendQuoteNotification = functions.httpsCallable('sendQuoteNotification');
+
+      // Contact Form Handling (calls Cloud Function -> SendGrid emails)
+      document.getElementById('contactForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Get form data
+        const form = this;
+        const formData = new FormData(form);
+        const name = (formData.get('name') || '').trim();
+        const email = (formData.get('email') || '').trim();
+        const phone = (formData.get('phone') || '').trim();
+        const serviceRaw = formData.get('service') || 'other';
+        const locationSel = formData.get('location') || '';
+        const project = (formData.get('project') || '').trim();
+        
+        // Validation
+        if (!name || !email || !phone || !project) {
+          alert('Please fill in all required fields');
+          return;
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          alert('Please enter a valid email address');
+          return;
+        }
+        const phoneRegex = /^(\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3}$|^(\+44\s?1\d{2,4}|\(?01\d{2,4}\)?)\s?\d{6}$|^(\+44\s?2\d{2}|\(?02\d{2}\)?)\s?\d{4}\s?\d{4}$/;
+        if (!phoneRegex.test(phone.replace(/\s/g, ''))) {
+          alert('Please enter a valid UK phone number');
+          return;
+        }
+        
+        // Button state
+        const submitBtn = form.querySelector('.submit-btn');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Sending Quote Request...';
+        submitBtn.disabled = true;
+
+        // Helpers
+        const toTitle = (s) => (s || '').split('-').map(w => w ? (w[0].toUpperCase() + w.slice(1)) : '').join(' ');
+        const [firstName, ...rest] = name.split(' ').filter(Boolean);
+        const lastName = rest.join(' ');
+        const quoteId = `BG-${new Date().toISOString().replace(/[-:.TZ]/g,'').slice(0,14)}-${Math.floor(Math.random()*1000).toString().padStart(3,'0')}`;
+        const timestamp = new Date().toISOString();
+
+        // Map select values to the serviceType labels your function knows
+        const serviceMap = {
+          'house-building': 'new-house-building',
+          'commercial': 'commercial-construction'
+          // pass-through for others: house-renovations, house-extensions, loft-conversions, full-rewire, re-roofing, other
+        };
+        const serviceType = serviceMap[serviceRaw] || serviceRaw;
+
+        // Optional: capture client IP (best effort, won't block if it fails)
+        let ip = 'N/A';
+        try {
+          const ipRes = await fetch('https://api.ipify.org?format=json', { cache: 'no-store' });
+          const ipJson = await ipRes.json();
+          if (ipJson?.ip) ip = ipJson.ip;
+        } catch (_) {}
+
+        // Build payload expected by your Cloud Function
+        const payload = {
+          email,
+          firstName: firstName || name,
+          lastName,
+          phone,
+          preferredContact: 'email',
+          address: '',
+          city: toTitle(locationSel),
+          postcode: '',
+          propertyType: 'other',
+          serviceType,
+          budget: 0,
+          timeline: 'flexible',
+          projectDescription: project,
+          additionalInfo: '',
+          budgetNotes: '',
+          files: [],
+          fileCount: 0,
+          hearAbout: 'google',
+          ip,
+          source: window.location.href,
+          quoteId,
+          timestamp
         };
 
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
+        try {
+          // Call the function (sends 2 emails via SendGrid)
+          const result = await sendQuoteNotification(payload);
+          console.log('sendQuoteNotification result:', result?.data || result);
+          alert(`Thank you ${firstName || name}! Your quote request has been received. We'll contact you within 2 hours to discuss your project.`);
+          form.reset();
+        } catch (err) {
+          console.error('sendQuoteNotification failed:', err);
+          const msg = err?.message || 'Sending failed. Please try again later.';
+          alert(msg.includes('Email sending failed') ? msg : `Email sending failed: ${msg}`);
+        } finally {
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
+        }
+      });
 
-        // Observe all elements with fade-in class
-        document.querySelectorAll('.fade-in').forEach(el => {
-            observer.observe(el);
+      // Performance optimizations
+      let ticking = false;
+
+      function updateOnScroll() {
+        // Add any additional scroll-based animations here
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', function() {
+        if (!ticking) {
+          requestAnimationFrame(updateOnScroll);
+          ticking = true;
+        }
+      });
+
+      // Preload critical resources
+      const preloadLinks = [
+        'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap',
+        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'
+      ];
+
+      preloadLinks.forEach(href => {
+        const link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'style';
+        link.href = href;
+        document.head.appendChild(link);
+      });
+
+      // Add some interaction enhancements
+      document.querySelectorAll('.service-card, .location-card, .review-card').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-8px) scale(1.02)';
         });
         
-        // Contact Form Handling
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form data
-            const formData = new FormData(this);
-            const name = formData.get('name').trim();
-            const email = formData.get('email').trim();
-            const phone = formData.get('phone').trim();
-            const service = formData.get('service');
-            const location = formData.get('location');
-            const project = formData.get('project').trim();
-            
-            // Validation
-            if (!name || !email || !phone || !project) {
-                alert('Please fill in all required fields');
-                return;
-            }
-            
-            // Email validation
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                alert('Please enter a valid email address');
-                return;
-            }
-            
-            // Phone validation (UK format)
-            const phoneRegex = /^(\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3}$|^(\+44\s?1\d{2,4}|\(?01\d{2,4}\)?)\s?\d{6}$|^(\+44\s?2\d{2}|\(?02\d{2}\)?)\s?\d{4}\s?\d{4}$/;
-            if (!phoneRegex.test(phone.replace(/\s/g, ''))) {
-                alert('Please enter a valid UK phone number');
-                return;
-            }
-            
-            // Simulate form submission
-            const submitBtn = this.querySelector('.submit-btn');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Sending Quote Request...';
-            submitBtn.disabled = true;
-            
-            // Simulate API call
-            setTimeout(() => {
-                let serviceText = service ? service.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()) : '';
-                let locationText = location ? location.charAt(0).toUpperCase() + location.slice(1) : '';
-                
-                alert(`Thank you ${name}! Your quote request for ${serviceText} in ${locationText} has been received. We'll contact you within 2 hours to discuss your building project.`);
-                this.reset();
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-            }, 2000);
+        card.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0) scale(1)';
         });
+      });
 
-        // Performance optimizations
-        let ticking = false;
-
-        function updateOnScroll() {
-            // Add any additional scroll-based animations here
-            ticking = false;
-        }
-
-        window.addEventListener('scroll', function() {
-            if (!ticking) {
-                requestAnimationFrame(updateOnScroll);
-                ticking = true;
-            }
-        });
-
-        // Preload critical resources
-        const preloadLinks = [
-            'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap',
-            'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'
-        ];
-
-        preloadLinks.forEach(href => {
-            const link = document.createElement('link');
-            link.rel = 'preload';
-            link.as = 'style';
-            link.href = href;
-            document.head.appendChild(link);
-        });
-
-        // Add some interaction enhancements
-        document.querySelectorAll('.service-card, .location-card, .review-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-8px) scale(1.02)';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-
-        // Console log for debugging
-        console.log('Building Group Website Loaded - ' + new Date().toISOString());
-        console.log('Current User: Dad-Link');
-        console.log('Last Modified: 2025-07-18T23:38:06Z');
-    </script>
-</body>
+      // Console log for debugging
+      console.log('Building Group Website Loaded - ' + new Date().toISOString());
+      console.log('Current User: Dad-Link');
+      console.log('Last Modified: 2025-07-18T23:38:06Z');
+    </script></body>
 </html>
