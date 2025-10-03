@@ -199,6 +199,92 @@ Building Group
     throw new Error(`Support email sending failed: ${err.message}`);
   }
 });
+
+// Replace the existing sendContactReply function with this v2 version:
+
+exports.sendContactReply = onCall({
+    region: 'us-central1',
+    cors: true
+}, async (request) => {
+    try {
+        // Check authentication
+        if (!request.auth || request.auth.uid !== '2sBxzDGRO9Z3GDSTSF6DsRTkcDv2') {
+            throw new Error('Only admin can send replies');
+        }
+
+        const { toEmail, toName, subject, message, originalMessage, contactId } = request.data;
+
+        // Validate required fields
+        if (!toEmail || !subject || !message) {
+            throw new Error('Missing required fields: toEmail, subject, message');
+        }
+
+        // Get SendGrid API key
+        const sendgridApiKey = process.env.SENDGRID_API_KEY;
+        if (!sendgridApiKey) {
+            throw new Error('SendGrid API key not configured');
+        }
+
+        // Initialize SendGrid
+        sgMail.setApiKey(sendgridApiKey);
+
+        const msg = {
+            to: toEmail,
+            from: {
+                email: 'info@building-group.co.uk',
+                name: 'Building Group'
+            },
+            subject: subject,
+            text: message,
+            html: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <div style="background: #e74c3c; padding: 20px; text-align: center;">
+                        <h1 style="color: white; margin: 0;">Building Group</h1>
+                    </div>
+                    <div style="padding: 30px; background: #f8f9fa;">
+                        <p>${message.replace(/\n/g, '<br>')}</p>
+                        
+                        ${originalMessage ? `
+                        <hr style="margin: 30px 0; border: none; border-top: 1px solid #dee2e6;">
+                        
+                        <div style="background: #ffffff; padding: 15px; border-radius: 8px; margin-top: 20px;">
+                            <p style="color: #6c757d; margin: 0 0 10px 0;"><strong>Your original message:</strong></p>
+                            <p style="color: #6c757d; margin: 0;">${originalMessage.replace(/\n/g, '<br>')}</p>
+                        </div>
+                        ` : ''}
+                    </div>
+                    <div style="background: #2c3e50; color: white; padding: 20px; text-align: center;">
+                        <p style="margin: 0;">Building Group - Professional Building Services</p>
+                        <p style="margin: 10px 0 0 0;">Manchester | Liverpool | Leeds | Cheshire</p>
+                    </div>
+                </div>
+            `
+        };
+
+        console.log('📧 Sending contact reply to:', toEmail);
+
+        const result = await sgMail.send(msg);
+        
+        console.log('✅ Contact reply sent successfully!', {
+            status: result[0].statusCode,
+            contactId: contactId
+        });
+
+        return {
+            success: true,
+            messageId: Date.now(),
+            status: result[0].statusCode
+        };
+
+    } catch (error) {
+        console.error('❌ sendContactReply error:', {
+            message: error.message,
+            code: error.code,
+            response: error.response?.body || 'no response body'
+        });
+        throw new Error(`Failed to send reply: ${error.message}`);
+    }
+});
 // ... rest of your functions stay exactly the same ...
 function generateCustomerEmail(quoteData) {
     const formatDate = (isoString) => {

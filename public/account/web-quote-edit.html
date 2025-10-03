@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Web Quote | Building Group</title>
+  <meta name="description" content="Edit a website-submitted quote (internal view)."/>
+
+  <!-- FIREBASE-COMPATIBLE CSP -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' 'unsafe-eval'
+      https://www.gstatic.com
+      https://www.googleapis.com
+      https://apis.google.com;
+    connect-src 'self'
+      https://identitytoolkit.googleapis.com
+      https://www.googleapis.com
+      https://securetoken.googleapis.com
+      https://buildinggroup-4f8b9-default-rtdb.firebaseio.com
+      https://firestore.googleapis.com
+      https://buildinggroup-4f8b9.firebasestorage.app
+      https://www.gstatic.com
+      https://*.gstatic.com;
+    img-src 'self' data: https://www.gstatic.com https://fonts.gstatic.com https://firebasestorage.googleapis.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+    font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+    frame-src 'self' https://buildinggroup-4f8b9.firebaseapp.com;
+  ">
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+
+  <!-- Last Updated -->
+  <meta name="last-modified" content="2025-10-03T03:41:43Z" />
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary-color: #e74c3c;
+      --primary-dark: #c0392b;
+      --secondary-color: #3498db;
+      --accent-color: #f39c12;
+      --success-color: #27ae60;
+      --warning-color: #f39c12;
+      --danger-color: #e74c3c;
+      --text-color: #2c3e50;
+      --text-secondary: #6c757d;
+      --background-color: #f8fafc;
+      --background-secondary: #ecf0f1;
+      --card-background: #ffffff;
+      --border-color: #dee2e6;
+      --border-light: #f1f3f4;
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.15);
+      --gradient-info: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    }
+
+    [data-theme="dark"] {
+      --text-color: #ffffff;
+      --text-secondary: #bdc3c7;
+      --background-color: #0f0f0f;
+      --background-secondary: #1a1a1a;
+      --card-background: #1e1e1e;
+      --border-color: #333333;
+      --border-light: #2a2a2a;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--background-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container { max-width: 1000px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    /* Header */
+    .page-header {
+      background: var(--card-background);
+      padding: 1.25rem 1.25rem 1rem;
+      border-radius: 14px;
+      box-shadow: var(--shadow-md);
+      margin: 1rem 0 1.25rem;
+      position: relative;
+    }
+    .back-btn {
+      position: absolute; top: 1rem; right: 1rem;
+      background: var(--primary-color); color: #fff; border: none; border-radius: 8px;
+      padding: .5rem .9rem; text-decoration: none; display: inline-flex; align-items: center; gap: .5rem; font-weight: 700;
+    }
+    .back-btn:hover { background: var(--primary-dark); transform: translateY(-1px); }
+    .page-title { font-size: 1.8rem; font-weight: 800; margin-bottom: .25rem; }
+    .page-sub { color: var(--text-secondary); font-weight: 600; display: flex; align-items: center; gap: .5rem; }
+    .web-badge {
+      display: inline-flex; align-items: center; gap: .4rem; font-weight: 800; font-size: .8rem; text-transform: uppercase;
+      color: #fff; background: var(--gradient-info); padding: .3rem .55rem; border-radius: 999px; letter-spacing: .3px;
+    }
+
+    /* Alerts */
+    .alert { padding: .9rem 1rem; border-radius: 10px; margin: .75rem 0; font-weight: 600; display: none; }
+    .alert.show { display: block; }
+    .alert-success { background: rgba(39,174,96,.12); color: var(--success-color); border: 1px solid rgba(39,174,96,.25); }
+    .alert-error { background: rgba(231,76,60,.12); color: var(--danger-color); border: 1px solid rgba(231,76,60,.25); }
+    .alert-info { background: rgba(52,152,219,.12); color: #2980b9; border: 1px solid rgba(52,152,219,.25); }
+
+    /* Card/Form */
+    .card { background: var(--card-background); padding: 1.25rem; border-radius: 14px; box-shadow: var(--shadow-md); margin-bottom: 1rem; }
+    .section-title { font-size: 1.1rem; font-weight: 800; margin-bottom: .9rem; display: flex; gap: .6rem; align-items: center; }
+    .section-title i { color: var(--primary-color); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+    .form-group { margin-bottom: 1rem; }
+    label { display: block; font-weight: 700; margin-bottom: .4rem; color: var(--text-secondary); }
+    input, select, textarea {
+      width: 100%; padding: .8rem; border: 2px solid var(--border-color); border-radius: 8px; font-size: 1rem; background: transparent; color: var(--text-color);
+    }
+    textarea { min-height: 110px; resize: vertical; }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(231,76,60,0.08); }
+
+    .muted { color: var(--text-secondary); }
+
+    /* Files */
+    .file-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: .8rem; }
+    .file-card { border: 1px solid var(--border-light); border-radius: 10px; overflow: hidden; background: var(--background-secondary); position: relative; }
+    .file-thumb { width: 100%; height: 130px; object-fit: cover; display: block; background: #f2f2f2; }
+    .file-info { padding: .5rem .6rem; display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+    .file-name { font-size: .9rem; font-weight: 600; color: var(--text-color); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+    .file-actions { display: flex; gap: .35rem; }
+    .btn-mini { padding: .25rem .45rem; border-radius: 6px; border: none; background: var(--secondary-color); color: #fff; font-size: .75rem; cursor: pointer; }
+    .btn-mini.danger { background: var(--danger-color); }
+    .add-file { border: 2px dashed var(--border-color); border-radius: 10px; padding: 1rem; text-align: center; cursor: pointer; }
+    .add-file:hover { border-color: var(--primary-color); background: rgba(231,76,60,0.03); }
+    .hidden-input { display: none; }
+
+    /* Actions */
+    .actions { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: .5rem; }
+    .btn {
+      padding: .75rem 1rem; border-radius: 8px; border: none; cursor: pointer; font-weight: 800; display: inline-flex; align-items: center; gap: .5rem;
+    }
+    .btn-primary { background: var(--primary-color); color: #fff; }
+    .btn-secondary { background: var(--background-secondary); color: var(--text-color); border: 1px solid var(--border-color); }
+    .btn-success { background: var(--success-color); color: #fff; }
+    .btn-danger { background: var(--danger-color); color: #fff; }
+    .btn:disabled { opacity: .6; cursor: not-allowed; }
+
+    /* Progress */
+    .progress { display: none; margin-top: .5rem; height: 10px; background: var(--background-secondary); border-radius: 8px; overflow: hidden; }
+    .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary-color), var(--accent-color)); transition: width .25s ease; }
+
+    @media (max-width: 800px) {
+      .form-row, .form-row-3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Alerts -->
+    <div class="alert alert-error" id="errorAlert" role="alert"></div>
+    <div class="alert alert-success" id="successAlert" role="alert"></div>
+    <div class="alert alert-info" id="infoAlert" role="alert"></div>
+
+    <!-- Header -->
+    <div class="page-header">
+      <a href="/account/web-quote-details.html" class="back-btn" id="backToDetails"><i class="fas fa-arrow-left"></i> Back to Details</a>
+      <div class="web-badge"><i class="fas fa-globe"></i> Website Lead</div>
+      <h1 class="page-title" id="pageTitle">Edit Web Quote</h1>
+      <div class="page-sub">
+        Update information submitted via website. Changes are saved to the web quote record.
+      </div>
+    </div>
+
+    <!-- Form -->
+    <form id="editForm">
+      <!-- Contact -->
+      <div class="card">
+        <div class="section-title"><i class="fas fa-user"></i> Contact Information</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input id="firstName" name="firstName" type="text" required />
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input id="lastName" name="lastName" type="text" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required />
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input id="phone" name="phone" type="tel" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Address -->
+      <div class="card">
+        <div class="section-title"><i class="fas fa-map-marker-alt"></i> Property Address</div>
+        <div class="form-group">
+          <label for="address">Full Address</label>
+          <input id="address" name="address" type="text" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="city">City</label>
+            <select id="city" name="city">
+              <option value="">Select City</option>
+              <option value="manchester">Manchester</option>
+              <option value="liverpool">Liverpool</option>
+              <option value="leeds">Leeds</option>
+              <option value="chester">Chester</option>
+              <option value="stockport">Stockport</option>
+              <option value="bolton">Bolton</option>
+              <option value="salford">Salford</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="postcode">Postcode</label>
+            <input id="postcode" name="postcode" type="text" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Project -->
+      <div class="card">
+        <div class="section-title"><i class="fas fa-tools"></i> Project Details</div>
+        <div class="form-group">
+          <label for="serviceType">Service Type</label>
+          <select id="serviceType" name="serviceType" required>
+            <option value="">Select Service Type</option>
+            <option value="new-house-building">New House Building</option>
+            <option value="house-renovations">House Renovations</option>
+            <option value="house-extensions">House Extensions</option>
+            <option value="loft-conversions">Loft Conversions</option>
+            <option value="kitchen-fitting">Kitchen Fitting</option>
+            <option value="bathroom-fitting">Bathroom Fitting</option>
+            <option value="full-rewire">Full House Rewiring</option>
+            <option value="re-roofing">Re-Roofing</option>
+            <option value="groundworks">Groundworks & Foundations</option>
+            <option value="planning-permission">Planning Permission</option>
+            <option value="building-regulations">Building Regulations</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="projectDescription">Project Description</label>
+          <textarea id="projectDescription" name="projectDescription" placeholder="Scope, materials, timeline, requirements..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="timeline">Preferred Timeline</label>
+            <select id="timeline" name="timeline">
+              <option value="">Select Timeline</option>
+              <option value="asap">As Soon As Possible</option>
+              <option value="1-3months">1-3 Months</option>
+              <option value="3-6months">3-6 Months</option>
+              <option value="6-12months">6-12 Months</option>
+              <option value="12months+">12+ Months</option>
+              <option value="flexible">Flexible</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="propertyType">Property Type</label>
+            <select id="propertyType" name="propertyType">
+              <option value="">Select Property Type</option>
+              <option value="detached">Detached House</option>
+              <option value="semi-detached">Semi-Detached House</option>
+              <option value="terraced">Terraced House</option>
+              <option value="bungalow">Bungalow</option>
+              <option value="flat">Flat/Apartment</option>
+              <option value="commercial">Commercial Property</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Budget & Preferences -->
+      <div class="card">
+        <div class="section-title"><i class="fas fa-sterling-sign"></i> Budget & Preferences</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="budget">Budget (£)</label>
+            <input id="budget" name="budget" type="number" min="0" step="1" />
+          </div>
+          <div class="form-group">
+            <label for="preferredContact">Preferred Contact</label>
+            <select id="preferredContact" name="preferredContact">
+              <option value="">Select</option>
+              <option value="email">Email</option>
+              <option value="phone">Phone Call</option>
+              <option value="text">Text Message</option>
+              <option value="any">Any Method</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="budgetNotes">Budget Notes</label>
+          <textarea id="budgetNotes" name="budgetNotes"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="hearAbout">How did you hear about us?</label>
+            <select id="hearAbout" name="hearAbout">
+              <option value="">Select</option>
+              <option value="google">Google Search</option>
+              <option value="social-media">Social Media</option>
+              <option value="recommendation">Recommendation</option>
+              <option value="previous-customer">Previous Customer</option>
+              <option value="local-advertising">Local Advertising</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="additionalInfo">Additional Requirements</label>
+            <textarea id="additionalInfo" name="additionalInfo" placeholder="Planning, access, materials, sustainability, etc."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Files -->
+      <div class="card">
+        <div class="section-title"><i class="fas fa-paperclip"></i> Attachments</div>
+        <div class="muted" style="margin-bottom:.6rem;">Remove existing files or add new ones. Changes apply on Save.</div>
+        <div id="existingFilesSection">
+          <div class="file-grid" id="existingFilesGrid"></div>
+        </div>
+        <div class="add-file" id="addFileBox">
+          <input type="file" id="newFilesInput" class="hidden-input" multiple accept="image/*,video/*,.pdf,.dwg,.doc,.docx" />
+          <div><i class="fas fa-cloud-upload-alt" style="font-size:2rem;color:var(--primary-color)"></i></div>
+          <div style="font-weight:800;">Click to upload or drag files here</div>
+          <div class="muted" style="font-size:.9rem;">Images, videos, PDFs, plans. Max 10MB each.</div>
+        </div>
+        <div class="file-grid" id="newFilesGrid" style="margin-top:.75rem;"></div>
+
+        <div class="progress" id="uploadProgress">
+          <div class="progress-bar" id="uploadProgressBar"></div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="card">
+        <div class="section-title"><i class="fas fa-cogs"></i> Actions</div>
+        <div class="actions">
+          <button type="button" class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> Save Changes</button>
+          <button type="button" class="btn btn-success" id="saveViewBtn"><i class="fas fa-eye"></i> Save & View</button>
+          <button type="button" class="btn btn-secondary" id="cancelBtn"><i class="fas fa-times"></i> Cancel</button>
+          <button type="button" class="btn btn-danger" id="deleteBtn"><i class="fas fa-trash"></i> Delete Web Quote</button>
+        </div>
+        <div class="muted" style="margin-top:.5rem;">Unsaved changes will be lost if you leave this page.</div>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBI1M38HZH8-xY3nfoKmqoitmggq3C8zKE",
+      authDomain: "buildinggroup-4f8b9.firebaseapp.com",
+      projectId: "buildinggroup-4f8b9",
+      storageBucket: "buildinggroup-4f8b9.firebasestorage.app",
+      messagingSenderId: "353000992011",
+      appId: "1:353000992011:web:c834310d7d79dd1bf0c60e",
+      measurementId: "G-DF11Q5PZRT"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    // State
+    let currentUser = null;
+    let webQuoteId = null;
+    let webQuote = null;
+    let existingFiles = [];
+    let newFiles = [];
+    let removedUploadPaths = new Set();
+    let isDirty = false;
+
+    // Elements
+    const errorAlert = document.getElementById('errorAlert');
+    const successAlert = document.getElementById('successAlert');
+    const infoAlert = document.getElementById('infoAlert');
+    const pageTitleEl = document.getElementById('pageTitle');
+
+    const backToDetails = document.getElementById('backToDetails');
+
+    const editForm = document.getElementById('editForm');
+    const firstName = document.getElementById('firstName');
+    const lastName = document.getElementById('lastName');
+    const email = document.getElementById('email');
+    const phone = document.getElementById('phone');
+    const address = document.getElementById('address');
+    const city = document.getElementById('city');
+    const postcode = document.getElementById('postcode');
+    const serviceType = document.getElementById('serviceType');
+    const projectDescription = document.getElementById('projectDescription');
+    const timeline = document.getElementById('timeline');
+    const propertyType = document.getElementById('propertyType');
+    const budget = document.getElementById('budget');
+    const budgetNotes = document.getElementById('budgetNotes');
+    const additionalInfo = document.getElementById('additionalInfo');
+    const hearAbout = document.getElementById('hearAbout');
+    const preferredContact = document.getElementById('preferredContact');
+
+    const existingFilesGrid = document.getElementById('existingFilesGrid');
+    const newFilesInput = document.getElementById('newFilesInput');
+    const addFileBox = document.getElementById('addFileBox');
+    const newFilesGrid = document.getElementById('newFilesGrid');
+    const uploadProgress = document.getElementById('uploadProgress');
+    const uploadProgressBar = document.getElementById('uploadProgressBar');
+
+    const saveBtn = document.getElementById('saveBtn');
+    const saveViewBtn = document.getElementById('saveViewBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const deleteBtn = document.getElementById('deleteBtn');
+
+    // Helpers
+    function showAlert(type, msg) {
+      const el = type === 'error' ? errorAlert : type === 'success' ? successAlert : infoAlert;
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 6000);
+    }
+    function getParamOrStorage() {
+      const p = new URLSearchParams(window.location.search).get('id');
+      return p || localStorage.getItem('selectedWebQuoteId') || '';
+    }
+    function humanize(s) {
+      if (!s) return '';
+      return s.replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    }
+    function markDirty() { isDirty = true; }
+    function setProgress(val) {
+      uploadProgress.style.display = 'block';
+      uploadProgressBar.style.width = `${Math.max(0, Math.min(100, val))}%`;
+      if (val >= 100) setTimeout(() => uploadProgress.style.display = 'none', 600);
+    }
+
+    // Auth
+    function checkAuth() {
+      return new Promise((resolve) => {
+        const un = auth.onAuthStateChanged(u => {
+          un();
+          if (u && u.emailVerified) { currentUser = u; resolve(true); }
+          else {
+            showAlert('error', 'Please login to edit web quotes');
+            setTimeout(() => { window.location.href = '/account/login.html'; }, 1500);
+            resolve(false);
+          }
+        });
+      });
+    }
+
+    // Load
+    async function loadWebQuote() {
+      try {
+        const doc = await db.collection('public_quotes').doc(webQuoteId).get();
+        if (!doc.exists) {
+          showAlert('error', 'Web quote not found');
+          setTimeout(() => { window.location.href = '/account/quotes.html'; }, 1200);
+          return false;
+        }
+        webQuote = { id: doc.id, ...doc.data() };
+        existingFiles = Array.isArray(webQuote.files) ? [...webQuote.files] : [];
+        populateForm();
+        renderExistingFiles();
+        return true;
+      } catch (e) {
+        console.error(e);
+        showAlert('error', 'Failed to load web quote');
+        return false;
+      }
+    }
+
+    // Populate
+    function populateForm() {
+      pageTitleEl.textContent = `Edit Web Quote • ${humanize(webQuote.serviceType || 'project')}`;
+      backToDetails.href = `/account/web-quote-details.html?id=${encodeURIComponent(webQuote.id)}`;
+
+      firstName.value = webQuote.firstName || '';
+      lastName.value = webQuote.lastName || '';
+      email.value = webQuote.email || '';
+      phone.value = webQuote.phone || '';
+      address.value = webQuote.address || '';
+      city.value = (webQuote.city || '').toLowerCase();
+      postcode.value = webQuote.postcode || '';
+      serviceType.value = webQuote.serviceType || '';
+      projectDescription.value = webQuote.projectDescription || '';
+      timeline.value = webQuote.timeline || '';
+      propertyType.value = webQuote.propertyType || '';
+      budget.value = typeof webQuote.budget === 'number' ? webQuote.budget : (parseInt(webQuote.budget || '0', 10) || 0);
+      budgetNotes.value = webQuote.budgetNotes || '';
+      additionalInfo.value = webQuote.additionalInfo || '';
+      hearAbout.value = webQuote.hearAbout || '';
+      preferredContact.value = webQuote.preferredContact || '';
+      isDirty = false;
+    }
+
+    // Existing files UI
+    function renderExistingFiles() {
+      existingFilesGrid.innerHTML = '';
+      if (!existingFiles.length) {
+        existingFilesGrid.innerHTML = `<div class="muted">No existing files.</div>`;
+        return;
+      }
+      existingFiles.forEach((f, idx) => {
+        const url = f.url || '#';
+        const name = f.name || f.uploadPath || `file_${idx+1}`;
+        const type = (f.type || '').toLowerCase();
+        const isImage = type.startsWith('image/');
+        const thumb = isImage ? url : '';
+
+        const card = document.createElement('div');
+        card.className = 'file-card';
+        card.dataset.index = idx;
+
+        if (thumb) {
+          const img = document.createElement('img');
+          img.className = 'file-thumb';
+          img.src = thumb;
+          img.alt = name;
+          card.appendChild(img);
+        } else {
+          const ph = document.createElement('div');
+          ph.className = 'file-thumb';
+          ph.style.display = 'flex';
+          ph.style.alignItems = 'center';
+          ph.style.justifyContent = 'center';
+          ph.style.color = 'var(--text-secondary)';
+          ph.style.fontSize = '2rem';
+          ph.innerHTML = '<i class="fas fa-file"></i>';
+          card.appendChild(ph);
+        }
+
+        const info = document.createElement('div');
+        info.className = 'file-info';
+
+        const nm = document.createElement('div');
+        nm.className = 'file-name';
+        nm.title = name;
+        nm.textContent = name;
+
+        const actions = document.createElement('div');
+        actions.className = 'file-actions';
+
+        const openBtn = document.createElement('button');
+        openBtn.className = 'btn-mini';
+        openBtn.type = 'button';
+        openBtn.textContent = 'Open';
+        openBtn.onclick = () => window.open(url, '_blank', 'noopener');
+
+        const rmBtn = document.createElement('button');
+        rmBtn.className = 'btn-mini danger';
+        rmBtn.type = 'button';
+        rmBtn.textContent = 'Remove';
+        rmBtn.onclick = () => {
+          // Mark for deletion by removing from array and tracking path
+          const item = existingFiles[idx];
+          if (item && item.uploadPath) removedUploadPaths.add(item.uploadPath);
+          existingFiles.splice(idx, 1);
+          renderExistingFiles();
+          markDirty();
+        };
+
+        actions.appendChild(openBtn);
+        actions.appendChild(rmBtn);
+        info.appendChild(nm);
+        info.appendChild(actions);
+        card.appendChild(info);
+
+        existingFilesGrid.appendChild(card);
+      });
+    }
+
+    // New files
+    addFileBox.addEventListener('click', () => newFilesInput.click());
+    addFileBox.addEventListener('dragover', (e) => { e.preventDefault(); addFileBox.style.borderColor = 'var(--primary-color)'; });
+    addFileBox.addEventListener('dragleave', () => { addFileBox.style.borderColor = 'var(--border-color)'; });
+    addFileBox.addEventListener('drop', (e) => { e.preventDefault(); addFileBox.style.borderColor = 'var(--border-color)'; handleNewFiles(e.dataTransfer.files); });
+    newFilesInput.addEventListener('change', (e) => handleNewFiles(e.target.files));
+
+    function handleNewFiles(fileList) {
+      const filesArr = Array.from(fileList || []);
+      const maxSize = 10 * 1024 * 1024;
+      const allowed = ['image/', 'video/', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword'];
+      for (const f of filesArr) {
+        const okType = allowed.some(t => f.type.startsWith(t) || f.name.toLowerCase().endsWith('.dwg'));
+        if (!okType) { showAlert('error', `Unsupported file type: ${f.name}`); continue; }
+        if (f.size > maxSize) { showAlert('error', `File too large (>10MB): ${f.name}`); continue; }
+        newFiles.push(f);
+      }
+      renderNewFiles();
+      markDirty();
+      newFilesInput.value = '';
+    }
+
+    function renderNewFiles() {
+      newFilesGrid.innerHTML = '';
+      if (!newFiles.length) return;
+      newFiles.forEach((f, idx) => {
+        const card = document.createElement('div');
+        card.className = 'file-card';
+
+        const isImg = f.type.startsWith('image/');
+        if (isImg) {
+          const img = document.createElement('img');
+          img.className = 'file-thumb';
+          img.src = URL.createObjectURL(f);
+          img.alt = f.name;
+          card.appendChild(img);
+        } else {
+          const ph = document.createElement('div');
+          ph.className = 'file-thumb';
+          ph.style.display = 'flex';
+          ph.style.alignItems = 'center';
+          ph.style.justifyContent = 'center';
+          ph.style.color = 'var(--text-secondary)';
+          ph.style.fontSize = '2rem';
+          ph.innerHTML = '<i class="fas fa-file"></i>';
+          card.appendChild(ph);
+        }
+
+        const info = document.createElement('div');
+        info.className = 'file-info';
+        const nm = document.createElement('div');
+        nm.className = 'file-name';
+        nm.title = f.name;
+        nm.textContent = f.name;
+
+        const actions = document.createElement('div');
+        actions.className = 'file-actions';
+        const rmBtn = document.createElement('button');
+        rmBtn.className = 'btn-mini danger';
+        rmBtn.type = 'button';
+        rmBtn.textContent = 'Remove';
+        rmBtn.onclick = () => { newFiles.splice(idx, 1); renderNewFiles(); markDirty(); };
+
+        actions.appendChild(rmBtn);
+        info.appendChild(nm);
+        info.appendChild(actions);
+        card.appendChild(info);
+
+        newFilesGrid.appendChild(card);
+      });
+    }
+
+    // Save pipeline
+    async function uploadNewFiles() {
+      if (!newFiles.length) return [];
+      const uploaded = [];
+      let completed = 0;
+      for (let i = 0; i < newFiles.length; i++) {
+        const f = newFiles[i];
+        const fileName = `${webQuoteId}/${Date.now()}_${i}_${f.name}`;
+        const ref = storage.ref().child(`quotes/${fileName}`);
+        try {
+          const snap = await ref.put(f);
+          const url = await snap.ref.getDownloadURL();
+          uploaded.push({
+            name: f.name,
+            type: f.type,
+            size: f.size,
+            url,
+            uploadPath: fileName
+          });
+        } catch (e) {
+          console.error('Upload failed', f.name, e);
+          showAlert('error', `Upload failed: ${f.name}`);
+        } finally {
+          completed++;
+          setProgress(Math.round((completed / newFiles.length) * 100));
+        }
+      }
+      return uploaded;
+    }
+
+    async function saveChanges(thenView = false) {
+      if (!currentUser || !webQuoteId) return;
+
+      // Build update
+      const updated = {
+        firstName: firstName.value.trim(),
+        lastName: lastName.value.trim(),
+        email: email.value.trim(),
+        phone: phone.value.trim(),
+        address: address.value.trim(),
+        city: (city.value || '').trim().toLowerCase(),
+        postcode: postcode.value.trim(),
+        serviceType: serviceType.value || '',
+        projectDescription: projectDescription.value.trim(),
+        timeline: timeline.value || '',
+        propertyType: propertyType.value || '',
+        budget: parseInt(budget.value || '0', 10) || 0,
+        budgetNotes: budgetNotes.value.trim(),
+        additionalInfo: additionalInfo.value.trim(),
+        hearAbout: hearAbout.value || '',
+        preferredContact: preferredContact.value || '',
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      // Upload new files
+      saveBtn.disabled = true; saveViewBtn.disabled = true;
+      saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+      saveViewBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+      try {
+        const newUploaded = await uploadNewFiles();
+
+        // Merge files: keep existing (already filtered by removal), add uploaded
+        const mergedFiles = [...existingFiles, ...newUploaded];
+
+        await db.collection('public_quotes').doc(webQuoteId).update({
+          ...updated,
+          files: mergedFiles,
+          fileCount: mergedFiles.length
+        });
+
+        // Reset new files and removed tracking
+        newFiles = [];
+        removedUploadPaths.clear();
+        renderNewFiles();
+
+        showAlert('success', 'Web quote updated');
+        isDirty = false;
+
+        if (thenView) {
+          setTimeout(() => {
+            window.location.href = `/account/web-quote-details.html?id=${encodeURIComponent(webQuoteId)}`;
+          }, 500);
+        } else {
+          // Reload latest
+          await loadWebQuote();
+        }
+      } catch (e) {
+        console.error(e);
+        showAlert('error', e.message || 'Failed to save changes');
+      } finally {
+        saveBtn.disabled = false; saveViewBtn.disabled = false;
+        saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+        saveViewBtn.innerHTML = '<i class="fas fa-eye"></i> Save & View';
+        setProgress(100);
+        setTimeout(() => { uploadProgress.style.display = 'none'; }, 600);
+      }
+    }
+
+    // Delete web quote
+    async function deleteWebQuote() {
+      const ok = confirm('Delete this web quote? This cannot be undone.');
+      if (!ok) return;
+      try {
+        deleteBtn.disabled = true;
+        deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+        await db.collection('public_quotes').doc(webQuoteId).delete();
+        showAlert('success', 'Web quote deleted');
+        setTimeout(() => { window.location.href = '/account/quotes.html'; }, 800);
+      } catch (e) {
+        console.error(e);
+        showAlert('error', e.message || 'Failed to delete web quote');
+        deleteBtn.disabled = false;
+        deleteBtn.innerHTML = '<i class="fas fa-trash"></i> Delete Web Quote';
+      }
+    }
+
+    // Warn on unsaved changes
+    window.addEventListener('beforeunload', (e) => {
+      if (isDirty) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
+
+    // Bind changes to dirty
+    Array.from(editForm.querySelectorAll('input, select, textarea')).forEach(el => {
+      el.addEventListener('input', markDirty);
+      el.addEventListener('change', markDirty);
+    });
+
+    // Buttons
+    saveBtn.addEventListener('click', () => saveChanges(false));
+    saveViewBtn.addEventListener('click', () => saveChanges(true));
+    cancelBtn.addEventListener('click', () => {
+      if (isDirty && !confirm('Discard unsaved changes?')) return;
+      window.location.href = `/account/web-quote-details.html?id=${encodeURIComponent(webQuoteId)}`;
+    });
+    deleteBtn.addEventListener('click', deleteWebQuote);
+
+    // Init
+    (async function init() {
+      webQuoteId = getParamOrStorage();
+      if (!webQuoteId) {
+        showAlert('error', 'Missing web quote ID');
+        setTimeout(() => { window.location.href = '/account/quotes.html'; }, 1200);
+        return;
+      }
+      const ok = await checkAuth();
+      if (!ok) return;
+      const loaded = await loadWebQuote();
+      if (!loaded) return;
+      // Ensure "Back to Details" keeps id
+      backToDetails.href = `/account/web-quote-details.html?id=${encodeURIComponent(webQuoteId)}`;
+    })();
+  </script>
+</body>
+</html>

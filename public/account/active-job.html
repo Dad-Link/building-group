@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Active Job | Building Group | Job Management</title>
+  <meta name="description" content="View and manage an active job. Add line items with quantities and rates, update materials, notes, and status."/>
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- CSP (Firebase + fonts/icons) -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' 'unsafe-eval'
+      https://www.gstatic.com
+      https://www.googleapis.com
+      https://apis.google.com;
+    connect-src 'self'
+      https://identitytoolkit.googleapis.com
+      https://www.googleapis.com
+      https://securetoken.googleapis.com
+      https://buildinggroup-4f8b9-default-rtdb.firebaseio.com
+      https://firestore.googleapis.com
+      https://buildinggroup-4f8b9.firebasestorage.app
+      https://www.gstatic.com
+      https://*.gstatic.com;
+    img-src 'self' data:
+      https://www.gstatic.com
+      https://fonts.gstatic.com;
+    style-src 'self' 'unsafe-inline'
+      https://fonts.googleapis.com
+      https://cdnjs.cloudflare.com;
+    font-src 'self'
+      https://fonts.gstatic.com
+      https://cdnjs.cloudflare.com;
+    frame-src 'self' https://buildinggroup-4f8b9.firebaseapp.com;
+  ">
+
+  <!-- Fonts / Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <!-- Last Updated -->
+  <meta name="last-modified" content="2025-10-03T03:57:17Z">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* Theme (match quotes/jobs pages) */
+    :root {
+      --primary-color: #e74c3c;
+      --primary-dark: #c0392b;
+      --primary-light: #ec7063;
+      --secondary-color: #3498db;
+      --accent-color: #f39c12;
+      --success-color: #27ae60;
+      --warning-color: #f39c12;
+      --danger-color: #e74c3c;
+      --info-color: #17a2b8;
+      --text-color: #2c3e50;
+      --text-secondary: #6c757d;
+      --text-light: #95a5a6;
+      --background-color: #f8fafc;
+      --background-secondary: #ecf0f1;
+      --card-background: #ffffff;
+      --input-background: #ffffff;
+      --border-color: #dee2e6;
+      --border-light: #f1f3f4;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.15);
+      --gradient-primary: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+      --gradient-secondary: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+      --gradient-success: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+      --gradient-jobs: linear-gradient(135deg, #8e44ad 0%, #6c3483 100%);
+    }
+    [data-theme="dark"] {
+      --text-color: #ffffff;
+      --text-secondary: #bdc3c7;
+      --text-light: #95a5a6;
+      --background-color: #0f0f0f;
+      --background-secondary: #1a1a1a;
+      --card-background: #1e1e1e;
+      --input-background: #2a2a2a;
+      --border-color: #333333;
+      --border-light: #2a2a2a;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root[data-theme="auto"] {
+        --text-color: #ffffff;
+        --text-secondary: #bdc3c7;
+        --text-light: #95a5a6;
+        --background-color: #0f0f0f;
+        --background-secondary: #1a1a1a;
+        --card-background: #1e1e1e;
+        --input-background: #2a2a2a;
+        --border-color: #333333;
+        --border-light: #2a2a2a;
+      }
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: var(--text-color);
+      background: var(--background-color);
+      min-height: 100vh;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+    /* Header */
+    .header { background: var(--card-background); box-shadow: var(--shadow-md); padding: 1rem 0; position: sticky; top: 0; z-index: 100; }
+    .header-content { display: flex; justify-content: space-between; align-items: center; }
+    .header-left { display: flex; align-items: center; gap: 1rem; }
+    .back-btn {
+      background: var(--background-secondary); color: var(--text-color); border: 1px solid var(--border-color);
+      padding: 0.5rem 1rem; border-radius: 8px; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; font-weight: 500; transition: all 0.3s ease;
+    }
+    .back-btn:hover { background: var(--primary-color); color: #fff; border-color: var(--primary-color); transform: translateY(-1px); }
+    .header-title { font-size: 1.8rem; font-weight: 700; color: var(--text-color); }
+
+    .header-right { display: flex; align-items: center; gap: 1rem; }
+    .theme-toggle {
+      background: var(--background-secondary); color: var(--text-color); border: 2px solid var(--border-color);
+      padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; font-size: 1.1rem; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+    }
+    .theme-toggle:hover { background: var(--primary-color); color: #fff; border-color: var(--primary-color); transform: scale(1.1); }
+    .user-info { display: flex; align-items: center; gap: 0.75rem; color: var(--text-color); font-weight: 500; }
+    .user-avatar { width: 35px; height: 35px; border-radius: 50%; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 0.9rem; }
+
+    /* Main */
+    .main-content { padding: 2rem 0; }
+    .alert { padding: 1rem; border-radius: 8px; margin-bottom: 1.25rem; font-weight: 600; display: none; }
+    .alert.show { display: block; }
+    .alert-success { background: rgba(39,174,96,.1); color: var(--success-color); border: 1px solid rgba(39,174,96,.2); }
+    .alert-error { background: rgba(231,76,60,.1); color: var(--danger-color); border: 1px solid rgba(231,76,60,.2); }
+    .alert-info { background: rgba(52,152,219,.1); color: #2980b9; border: 1px solid rgba(52,152,219,.2); }
+
+    /* Header card */
+    .job-header { background: var(--card-background); padding: 1.5rem; border-radius: 16px; box-shadow: var(--shadow-md); margin-bottom: 1.5rem; position: relative; }
+    .status-badge { display: inline-block; padding: 0.35rem 0.75rem; border-radius: 999px; font-weight: 800; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 0.5rem; }
+    .status-badge.open { background: rgba(142,68,173,.12); color: #7d3c98; }
+    .status-badge.in-progress { background: rgba(52,152,219,.12); color: #2980b9; }
+    .status-badge.completed { background: rgba(39,174,96,.12); color: #27ae60; }
+    .status-badge.on-hold { background: rgba(243,156,18,.12); color: #f39c12; }
+    .status-badge.cancelled { background: rgba(231,76,60,.12); color: #e74c3c; }
+    .job-title { font-size: 2rem; font-weight: 800; margin-bottom: 0.25rem; }
+    .job-sub { color: var(--text-secondary); font-weight: 600; }
+
+    .meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; margin-top: 1rem; }
+    .meta-item { background: var(--background-secondary); padding: 1rem; border-radius: 10px; text-align: center; }
+    .meta-value { font-weight: 800; color: var(--primary-color); font-size: 1.2rem; }
+    .meta-label { color: var(--text-secondary); font-size: 0.85rem; text-transform: uppercase; letter-spacing: .4px; margin-top: .25rem; }
+
+    /* Grid layout */
+    .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
+    @media (max-width: 980px) { .content-grid { grid-template-columns: 1fr; } }
+
+    .card { background: var(--card-background); padding: 1.25rem; border-radius: 16px; box-shadow: var(--shadow-md); margin-bottom: 1.25rem; }
+    .section-title { font-size: 1.1rem; font-weight: 800; display: flex; align-items: center; gap: .6rem; margin-bottom: .75rem; }
+    .section-title i { color: var(--primary-color); }
+
+    /* Items table */
+    .table { width: 100%; border-collapse: collapse; }
+    .table th, .table td { padding: 0.75rem; border-bottom: 1px solid var(--border-light); text-align: left; }
+    .table th { background: var(--background-secondary); font-size: 0.85rem; text-transform: uppercase; letter-spacing: .35px; }
+    .row-actions { display: flex; gap: .35rem; }
+    .input-sm { padding: 0.5rem; border: 2px solid var(--border-color); border-radius: 8px; background: var(--input-background); color: var(--text-color); width: 100%; }
+    .input-sm:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(231,76,60,0.08); }
+    .qty, .rate, .total { max-width: 120px; }
+    .desc { min-width: 240px; }
+    .name { min-width: 180px; }
+
+    .add-row { background: var(--gradient-secondary); color: #fff; border: none; padding: .55rem .9rem; border-radius: 8px; font-weight: 700; cursor: pointer; }
+    .add-row:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+    .danger { background: var(--danger-color); color: #fff; border: none; padding: .4rem .6rem; border-radius: 6px; cursor: pointer; }
+    .secondary { background: var(--background-secondary); color: var(--text-color); border: 1px solid var(--border-color); padding: .55rem .9rem; border-radius: 8px; font-weight: 700; cursor: pointer; }
+    .primary { background: var(--primary-color); color: #fff; border: none; padding: .55rem .9rem; border-radius: 8px; font-weight: 700; cursor: pointer; }
+    .success { background: var(--gradient-success); color: #fff; border: none; padding: .55rem .9rem; border-radius: 8px; font-weight: 700; cursor: pointer; }
+
+    .totals { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: .6rem; margin-top: .75rem; }
+    .total-box { background: var(--background-secondary); border-radius: 10px; padding: .75rem; text-align: center; }
+    .total-label { color: var(--text-secondary); font-size: .8rem; text-transform: uppercase; }
+    .total-value { font-size: 1.15rem; font-weight: 800; color: var(--primary-color); }
+
+    /* Customer card */
+    .kv { display: grid; grid-template-columns: 130px 1fr; gap: .5rem; padding: .5rem .6rem; background: var(--background-secondary); border-radius: 10px; margin-bottom: .5rem; }
+    .kv-label { font-weight: 800; color: var(--text-secondary); }
+    .kv-value { font-weight: 600; color: var(--text-color); }
+
+    /* Actions */
+    .actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .5rem; }
+
+    /* Loading */
+    .loading { display: flex; justify-content: center; align-items: center; min-height: 40vh; }
+    .spinner { width: 40px; height: 40px; border: 3px solid var(--border-color); border-top: 3px solid var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
+
+    @media (max-width: 768px) {
+      .kv { grid-template-columns: 1fr; }
+      .qty, .rate, .total { max-width: 100%; }
+    }
+
+    @media print {
+      .header, .actions, .add-row, .danger, .secondary, .primary, .success { display: none !important; }
+      .card, .job-header { box-shadow: none !important; }
+      body { background: #fff; }
+    }
+    *:focus-visible { outline: 2px solid var(--primary-color); outline-offset: 2px; }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="header-left">
+          <a href="/account/jobs.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Jobs</a>
+          <h1 class="header-title">Active Job</h1>
+        </div>
+        <div class="header-right">
+          <button class="theme-toggle" id="themeToggle" title="Toggle Theme"><i class="fas fa-moon"></i></button>
+          <div class="user-info">
+            <div class="user-avatar" id="userAvatar">DL</div>
+            <span id="userName">Dad-Link</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="main-content">
+    <div class="container">
+      <!-- Alerts -->
+      <div class="alert alert-error" id="errorAlert"></div>
+      <div class="alert alert-success" id="successAlert"></div>
+      <div class="alert alert-info" id="infoAlert"></div>
+
+      <!-- Loading -->
+      <div class="loading" id="loading"><div class="spinner"></div></div>
+
+      <!-- Content -->
+      <div id="content" style="display:none;">
+        <!-- Job Header -->
+        <div class="job-header">
+          <div class="status-badge" id="statusBadge">open</div>
+          <div class="job-title" id="jobTitle">Loading...</div>
+          <div class="job-sub" id="jobSub">Job #: -</div>
+
+          <div class="meta-grid">
+            <div class="meta-item">
+              <div class="meta-value" id="metaBudget">£0</div>
+              <div class="meta-label">Quoted Amount</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-value" id="metaItemsTotal">£0</div>
+              <div class="meta-label">Items Total</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-value" id="metaMaterialsTotal">£0</div>
+              <div class="meta-label">Materials Total</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-value" id="metaCreated">-</div>
+              <div class="meta-label">Created</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-grid">
+          <!-- Left: Items + Materials + Notes -->
+          <div>
+            <!-- Line Items -->
+            <div class="card">
+              <div class="section-title"><i class="fas fa-list-ul"></i> Job Line Items</div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="min-width: 180px;">Item</th>
+                    <th style="min-width: 240px;">Description</th>
+                    <th style="width: 120px;">Qty</th>
+                    <th style="width: 140px;">Rate (£)</th>
+                    <th style="width: 140px;">Total (£)</th>
+                    <th style="width: 80px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="itemsTbody">
+                  <!-- Dynamic rows -->
+                </tbody>
+              </table>
+
+              <div class="actions" style="margin-top:.75rem;">
+                <button class="add-row" id="addItemBtn"><i class="fas fa-plus"></i> Add Item</button>
+                <button class="secondary" id="recalcBtn"><i class="fas fa-calculator"></i> Recalculate</button>
+                <button class="primary" id="saveItemsBtn"><i class="fas fa-save"></i> Save Items</button>
+              </div>
+
+              <div class="totals">
+                <div class="total-box">
+                  <div class="total-label">Items Subtotal</div>
+                  <div class="total-value" id="itemsSubtotalDisplay">£0.00</div>
+                </div>
+                <div class="total-box">
+                  <div class="total-label">Materials Total</div>
+                  <div class="total-value" id="materialsTotalDisplay">£0.00</div>
+                </div>
+                <div class="total-box">
+                  <div class="total-label">Grand Total</div>
+                  <div class="total-value" id="grandTotalDisplay">£0.00</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Materials -->
+            <div class="card">
+              <div class="section-title"><i class="fas fa-boxes"></i> Materials & Supplies</div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="min-width: 180px;">Material</th>
+                    <th style="width: 120px;">Qty</th>
+                    <th style="min-width: 140px;">Unit</th>
+                    <th style="width: 140px;">Cost (£)</th>
+                    <th style="width: 140px;">Line Total (£)</th>
+                    <th style="width: 80px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="materialsTbody"></tbody>
+              </table>
+              <div class="actions" style="margin-top:.75rem;">
+                <button class="add-row" id="addMaterialBtn"><i class="fas fa-plus"></i> Add Material</button>
+                <button class="primary" id="saveMaterialsBtn"><i class="fas fa-save"></i> Save Materials</button>
+              </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="card">
+              <div class="section-title"><i class="fas fa-sticky-note"></i> Notes</div>
+              <div style="display:grid; gap:.75rem;">
+                <div>
+                  <label for="specialRequirements" class="kv-label" style="display:block;margin-bottom:.35rem;">Special Requirements</label>
+                  <textarea id="specialRequirements" class="input-sm" rows="3" placeholder="Access, restrictions, special handling..."></textarea>
+                </div>
+                <div>
+                  <label for="internalNotes" class="kv-label" style="display:block;margin-bottom:.35rem;">Internal Notes</label>
+                  <textarea id="internalNotes" class="input-sm" rows="3" placeholder="Private notes for team"></textarea>
+                </div>
+              </div>
+              <div class="actions" style="margin-top:.75rem;">
+                <button class="primary" id="saveNotesBtn"><i class="fas fa-save"></i> Save Notes</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Customer + Status/Actions -->
+          <div>
+            <!-- Customer -->
+            <div class="card">
+              <div class="section-title"><i class="fas fa-user"></i> Customer</div>
+              <div class="kv"><div class="kv-label">Name</div><div class="kv-value" id="custName">-</div></div>
+              <div class="kv"><div class="kv-label">Phone</div><div class="kv-value" id="custPhone">-</div></div>
+              <div class="kv"><div class="kv-label">Email</div><div class="kv-value" id="custEmail">-</div></div>
+              <div class="kv"><div class="kv-label">Address</div><div class="kv-value" id="custAddress">-</div></div>
+            </div>
+
+            <!-- Status & Actions -->
+            <div class="card">
+              <div class="section-title"><i class="fas fa-cogs"></i> Status & Actions</div>
+              <div class="kv" style="grid-template-columns: 1fr;">
+                <label for="statusSelect" class="kv-label" style="margin-bottom:.25rem;">Job Status</label>
+                <select id="statusSelect" class="input-sm">
+                  <option value="open">Open</option>
+                  <option value="in-progress">In Progress</option>
+                  <option value="completed">Completed</option>
+                  <option value="on-hold">On Hold</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+              </div>
+              <div class="actions">
+                <button class="success" id="saveStatusBtn"><i class="fas fa-check"></i> Save Status</button>
+                <button class="secondary" id="printBtn"><i class="fas fa-print"></i> Print</button>
+              </div>
+            </div>
+
+            <!-- Quick Budget -->
+            <div class="card">
+              <div class="section-title"><i class="fas fa-sterling-sign"></i> Budget</div>
+              <div class="kv">
+                <div class="kv-label">Quoted Amount</div>
+                <div class="kv-value"><input id="quotedAmountInput" type="number" class="input-sm" min="0" step="0.01" placeholder="0.00"/></div>
+              </div>
+              <div class="actions">
+                <button class="primary" id="saveBudgetBtn"><i class="fas fa-save"></i> Save Budget</button>
+                <button class="secondary" id="applyItemsToQuoteBtn"><i class="fas fa-arrow-down"></i> Apply Items Subtotal</button>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /grid -->
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBI1M38HZH8-xY3nfoKmqoitmggq3C8zKE",
+      authDomain: "buildinggroup-4f8b9.firebaseapp.com",
+      projectId: "buildinggroup-4f8b9",
+      storageBucket: "buildinggroup-4f8b9.firebasestorage.app",
+      messagingSenderId: "353000992011",
+      appId: "1:353000992011:web:c834310d7d79dd1bf0c60e",
+      measurementId: "G-DF11Q5PZRT"
+    };
+
+    // Init Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // State
+    let currentUser = null;
+    let jobId = null;
+    let jobDoc = null;
+
+    // Elements
+    const loadingEl = document.getElementById('loading');
+    const contentEl = document.getElementById('content');
+    const errorAlert = document.getElementById('errorAlert');
+    const successAlert = document.getElementById('successAlert');
+    const infoAlert = document.getElementById('infoAlert');
+
+    const jobTitleEl = document.getElementById('jobTitle');
+    const jobSubEl = document.getElementById('jobSub');
+    const statusBadgeEl = document.getElementById('statusBadge');
+    const metaBudgetEl = document.getElementById('metaBudget');
+    const metaItemsTotalEl = document.getElementById('metaItemsTotal');
+    const metaMaterialsTotalEl = document.getElementById('metaMaterialsTotal');
+    const metaCreatedEl = document.getElementById('metaCreated');
+
+    const itemsTbody = document.getElementById('itemsTbody');
+    const materialsTbody = document.getElementById('materialsTbody');
+
+    const itemsSubtotalDisplay = document.getElementById('itemsSubtotalDisplay');
+    const materialsTotalDisplay = document.getElementById('materialsTotalDisplay');
+    const grandTotalDisplay = document.getElementById('grandTotalDisplay');
+
+    const custNameEl = document.getElementById('custName');
+    const custPhoneEl = document.getElementById('custPhone');
+    const custEmailEl = document.getElementById('custEmail');
+    const custAddressEl = document.getElementById('custAddress');
+
+    const statusSelect = document.getElementById('statusSelect');
+    const quotedAmountInput = document.getElementById('quotedAmountInput');
+    const specialRequirementsEl = document.getElementById('specialRequirements');
+    const internalNotesEl = document.getElementById('internalNotes');
+
+    // UI helpers
+    function showAlert(type, message) {
+      const el = type === 'error' ? errorAlert : type === 'success' ? successAlert : infoAlert;
+      el.textContent = message;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 6000);
+    }
+    function money(n) {
+      const v = parseFloat(n || 0);
+      return '£' + (isNaN(v) ? 0 : v).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    function asDate(v) {
+      if (!v) return null;
+      if (typeof v.toDate === 'function') return v.toDate();
+      if (v instanceof Date) return v;
+      if (typeof v === 'number') return new Date(v);
+      if (typeof v === 'string') { const d = new Date(v); return isNaN(d) ? null : d; }
+      return null;
+    }
+    function getParamOrStorage() {
+      const p = new URLSearchParams(window.location.search).get('id');
+      return p || localStorage.getItem('selectedJobId') || '';
+    }
+    function setStatusBadge(status) {
+      const s = (status || 'open').toLowerCase();
+      statusBadgeEl.textContent = s;
+      statusBadgeEl.className = 'status-badge ' + s;
+    }
+
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const htmlRoot = document.documentElement;
+    let currentTheme = localStorage.getItem('theme') || 'auto';
+    htmlRoot.setAttribute('data-theme', currentTheme);
+    updateThemeIcon();
+    themeToggle.addEventListener('click', () => {
+      currentTheme = currentTheme === 'auto' ? 'light' : currentTheme === 'light' ? 'dark' : 'auto';
+      htmlRoot.setAttribute('data-theme', currentTheme);
+      localStorage.setItem('theme', currentTheme);
+      updateThemeIcon();
+    });
+    function updateThemeIcon() {
+      const icon = themeToggle.querySelector('i');
+      icon.className = currentTheme === 'light' ? 'fas fa-sun' : currentTheme === 'dark' ? 'fas fa-moon' : 'fas fa-adjust';
+    }
+
+    // Auth
+    function checkAuth() {
+      return new Promise((resolve) => {
+        const un = auth.onAuthStateChanged(u => {
+          un();
+          if (u && u.emailVerified) { currentUser = u; loadUser(); resolve(true); }
+          else {
+            showAlert('error', 'Please login to view job');
+            setTimeout(() => { window.location.href = '/account/login.html'; }, 1500);
+            resolve(false);
+          }
+        });
+      });
+    }
+    async function loadUser() {
+      try {
+        const doc = await db.collection('users').doc(currentUser.uid).get();
+        if (doc.exists) {
+          const u = doc.data();
+          document.getElementById('userName').textContent = u.firstName || 'User';
+          document.getElementById('userAvatar').textContent = (u.firstName?.[0] || 'U') + (u.lastName?.[0] || '');
+        }
+      } catch {}
+    }
+
+    // Load job
+    async function loadJob() {
+      try {
+        const ref = db.collection('users').doc(currentUser.uid).collection('jobs').doc(jobId);
+        const snap = await ref.get();
+        if (!snap.exists) {
+          showAlert('error', 'Job not found');
+          setTimeout(() => { window.location.href = '/account/jobs.html'; }, 1200);
+          return false;
+        }
+        jobDoc = { id: snap.id, ...snap.data() };
+        renderJob();
+        return true;
+      } catch (e) {
+        console.error(e);
+        showAlert('error', 'Failed to load job');
+        return false;
+      }
+    }
+
+    // Render
+    function renderJob() {
+      // Header
+      jobTitleEl.textContent = jobDoc.title || jobDoc.jobTitle || 'Untitled Job';
+      jobSubEl.textContent = `Job #: ${jobDoc.jobNumber || jobDoc.id}`;
+      setStatusBadge(jobDoc.status);
+      metaBudgetEl.textContent = money(jobDoc.quotedAmount || jobDoc.budget || 0);
+      const created = asDate(jobDoc.createdAt);
+      metaCreatedEl.textContent = created ? created.toLocaleString() : 'Unknown';
+
+      // Customer
+      const c = jobDoc.customer || {};
+      const fullName = c.fullName || [c.firstName, c.lastName].filter(Boolean).join(' ') || 'Unknown';
+      custNameEl.textContent = fullName;
+      custPhoneEl.textContent = c.phone || '—';
+      custEmailEl.textContent = c.email || '—';
+      custAddressEl.textContent = c.address || '—';
+
+      // Notes
+      specialRequirementsEl.value = jobDoc.specialRequirements || '';
+      internalNotesEl.value = jobDoc.internalNotes || '';
+
+      // Status select
+      statusSelect.value = (jobDoc.status || 'open').toLowerCase();
+
+      // Budget input
+      quotedAmountInput.value = jobDoc.quotedAmount != null ? parseFloat(jobDoc.quotedAmount) : '';
+
+      // Items
+      const items = Array.isArray(jobDoc.items) ? jobDoc.items : [];
+      itemsTbody.innerHTML = '';
+      items.forEach((it, idx) => addItemRow(it, idx));
+      // Materials
+      const mats = Array.isArray(jobDoc.materials) ? jobDoc.materials : [];
+      materialsTbody.innerHTML = '';
+      mats.forEach((m, idx) => addMaterialRow(m, idx));
+
+      // Totals
+      recalcAll();
+
+      // Show
+      loadingEl.style.display = 'none';
+      contentEl.style.display = 'block';
+    }
+
+    // Items handlers
+    function addItemRow(item = {}, index = null) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><input class="input-sm name" type="text" value="${escapeHtml(item.name || item.item || '')}" placeholder="Item name"></td>
+        <td><input class="input-sm desc" type="text" value="${escapeHtml(item.description || '')}" placeholder="Description (optional)"></td>
+        <td><input class="input-sm qty" type="number" min="0" step="1" value="${num(item.quantity)}"></td>
+        <td><input class="input-sm rate" type="number" min="0" step="0.01" value="${num(item.rate,2)}"></td>
+        <td><input class="input-sm total" type="number" min="0" step="0.01" value="${num(item.total ?? (num(item.quantity)*num(item.rate)),2)}"></td>
+        <td class="row-actions">
+          <button class="danger" title="Remove"><i class="fas fa-trash"></i></button>
+        </td>
+      `;
+      // attach listeners
+      const [nameEl, descEl, qtyEl, rateEl, totalEl, actionsTd] = [
+        tr.querySelector('.name'), tr.querySelector('.desc'),
+        tr.querySelector('.qty'), tr.querySelector('.rate'), tr.querySelector('.total'),
+        tr.querySelector('.row-actions')
+      ];
+      function recalcRow() {
+        const q = parseFloat(qtyEl.value || 0);
+        const r = parseFloat(rateEl.value || 0);
+        totalEl.value = (q * r).toFixed(2);
+        recalcAll();
+      }
+      qtyEl.addEventListener('input', recalcRow);
+      rateEl.addEventListener('input', recalcRow);
+      totalEl.addEventListener('input', () => recalcAll());
+      actionsTd.querySelector('button').addEventListener('click', () => {
+        tr.remove();
+        recalcAll();
+      });
+      itemsTbody.appendChild(tr);
+    }
+
+    function collectItems() {
+      const rows = Array.from(itemsTbody.querySelectorAll('tr'));
+      return rows.map(r => {
+        const name = r.querySelector('.name').value.trim();
+        const description = r.querySelector('.desc').value.trim();
+        const quantity = parseInt(r.querySelector('.qty').value || '0', 10) || 0;
+        const rate = parseFloat(r.querySelector('.rate').value || '0') || 0;
+        const total = parseFloat(r.querySelector('.total').value || (quantity * rate) || '0') || 0;
+        return { item: name, description, quantity, rate, total };
+      }).filter(x => x.item); // keep rows with a name
+    }
+
+    // Materials handlers
+    function addMaterialRow(mat = {}, index = null) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><input class="input-sm m-name" type="text" value="${escapeHtml(mat.name || '')}" placeholder="Material"></td>
+        <td><input class="input-sm m-qty" type="number" min="0" step="1" value="${num(mat.quantity)}"></td>
+        <td>
+          <select class="input-sm m-unit">
+            ${['', 'pieces','boxes','bags','metres','square-metres','cubic-metres','litres','kilos','tonnes','other']
+              .map(u => `<option value="${u}" ${u===(mat.unit||'')?'selected':''}>${u||'Select unit'}</option>`).join('')}
+          </select>
+        </td>
+        <td><input class="input-sm m-cost" type="number" min="0" step="0.01" value="${num(mat.cost,2)}"></td>
+        <td><input class="input-sm m-total" type="number" min="0" step="0.01" value="${num((num(mat.cost)*num(mat.quantity)),2)}"></td>
+        <td class="row-actions">
+          <button class="danger" title="Remove"><i class="fas fa-trash"></i></button>
+        </td>
+      `;
+      const qtyEl = tr.querySelector('.m-qty');
+      const costEl = tr.querySelector('.m-cost');
+      const totalEl = tr.querySelector('.m-total');
+      function recalcRow() {
+        totalEl.value = (num(qtyEl.value) * num(costEl.value)).toFixed(2);
+        recalcAll();
+      }
+      qtyEl.addEventListener('input', recalcRow);
+      costEl.addEventListener('input', recalcRow);
+      tr.querySelector('.row-actions button').addEventListener('click', () => {
+        tr.remove();
+        recalcAll();
+      });
+      materialsTbody.appendChild(tr);
+    }
+
+    function collectMaterials() {
+      const rows = Array.from(materialsTbody.querySelectorAll('tr'));
+      return rows.map(r => {
+        const name = r.querySelector('.m-name').value.trim();
+        const quantity = parseInt(r.querySelector('.m-qty').value || '0', 10) || 0;
+        const unit = r.querySelector('.m-unit').value || '';
+        const cost = parseFloat(r.querySelector('.m-cost').value || '0') || 0;
+        return { name, quantity, unit, cost };
+      }).filter(x => x.name);
+    }
+
+    // Totals
+    function recalcAll() {
+      const items = collectItems();
+      const mats = collectMaterials();
+      const itemsSubtotal = +items.reduce((s, it) => s + (parseFloat(it.total)||0), 0).toFixed(2);
+      const matsTotal = +mats.reduce((s, m) => s + ((parseFloat(m.cost)||0) * (parseInt(m.quantity)||0)), 0).toFixed(2);
+      const grand = +(itemsSubtotal + matsTotal).toFixed(2);
+
+      itemsSubtotalDisplay.textContent = money(itemsSubtotal);
+      materialsTotalDisplay.textContent = money(matsTotal);
+      grandTotalDisplay.textContent = money(grand);
+
+      metaItemsTotalEl.textContent = money(itemsSubtotal);
+      metaMaterialsTotalEl.textContent = money(matsTotal);
+    }
+
+    // Save segments
+    async function saveItems() {
+      if (!currentUser || !jobId) return;
+      try {
+        const items = collectItems();
+        await db.collection('users').doc(currentUser.uid).collection('jobs').doc(jobId).update({
+          items,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        showAlert('success', 'Line items saved');
+      } catch (e) {
+        console.error(e);
+        showAlert('error', 'Failed to save items');
+      }
+    }
+
+    async function saveMaterials() {
+      if (!currentUser || !jobId) return;
+      try {
+        const materials = collectMaterials();
+        const materialsCost = +materials.reduce((s, m) => s + ((parseFloat(m.cost)||0) * (parseInt(m.quantity)||0)), 0).toFixed(2);
+        await db.collection('users').doc(currentUser.uid).collection('jobs').doc(jobId).update({
+          materials,
+          materialsCost,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        showAlert('success', 'Materials saved');
+      } catch (e) {
+        console.error(e);
+        showAlert('error', 'Failed to save materials');
+      }
+    }
+
+    async function saveNotes() {
+      if (!currentUser || !jobId) return;
+      try {
+        await db.collection('users').doc(currentUser.uid).collection('jobs').doc(jobId).update({
+          specialRequirements: specialRequirementsEl.value.trim() || null,
+          internalNotes: internalNotesEl.value.trim() || null,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        showAlert('success', 'Notes saved');
+      } catch (e) {
+        console.error(e);
+        showAlert('error', 'Failed to save notes');
+      }
+    }
+
+    async function saveStatus() {
+      if (!currentUser || !jobId) return;
+      try {
+        const status = statusSelect.value;
+        await db.collection('users').doc(currentUser.uid).collection('jobs').doc(jobId).update({
+          status,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        setStatusBadge(status);
+        showAlert('success', 'Status updated');
+      } catch (e) {
+        console.error(e);
+        showAlert('error', 'Failed to update status');
+      }
+    }
+
+    async function saveBudget() {
+      if (!currentUser || !jobId) return;
+      try {
+        const q = parseFloat(quotedAmountInput.value || '0') || 0;
+        await db.collection('users').doc(currentUser.uid).collection('jobs').doc(jobId).update({
+          quotedAmount: q,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        metaBudgetEl.textContent = money(q);
+        showAlert('success', 'Budget updated');
+      } catch (e) {
+        console.error(e);
+        showAlert('error', 'Failed to update budget');
+      }
+    }
+
+    function applyItemsToQuote() {
+      const items = collectItems();
+      const itemsSubtotal = +items.reduce((s, it) => s + (parseFloat(it.total)||0), 0).toFixed(2);
+      quotedAmountInput.value = itemsSubtotal.toFixed(2);
+      showAlert('info', 'Items subtotal applied to quoted amount (remember to Save Budget).');
+    }
+
+    // Utils
+    function num(v, fix=null) {
+      const n = parseFloat(v || 0) || 0;
+      return fix==null ? n : n.toFixed(fix);
+    }
+    function escapeHtml(s) {
+      return (s || '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    }
+
+    // Events
+    document.getElementById('addItemBtn').addEventListener('click', () => addItemRow());
+    document.getElementById('recalcBtn').addEventListener('click', recalcAll);
+    document.getElementById('saveItemsBtn').addEventListener('click', saveItems);
+
+    document.getElementById('addMaterialBtn').addEventListener('click', () => addMaterialRow());
+    document.getElementById('saveMaterialsBtn').addEventListener('click', saveMaterials);
+
+    document.getElementById('saveNotesBtn').addEventListener('click', saveNotes);
+    document.getElementById('saveStatusBtn').addEventListener('click', saveStatus);
+    document.getElementById('saveBudgetBtn').addEventListener('click', saveBudget);
+    document.getElementById('applyItemsToQuoteBtn').addEventListener('click', applyItemsToQuote);
+    document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+    // Init
+    document.addEventListener('DOMContentLoaded', async () => {
+      jobId = getParamOrStorage();
+      if (!jobId) {
+        showAlert('error', 'Missing job ID');
+        setTimeout(() => { window.location.href = '/account/jobs.html'; }, 1200);
+        return;
+      }
+      const ok = await checkAuth();
+      if (!ok) return;
+      await loadJob();
+    });
+  </script>
+</body>
+</html>

@@ -381,21 +381,22 @@
 
       // Save to Firestore (hardcoded user ID)
       const userId = '2sBxzDGRO9Z3GDSTSF6DsRTkcDv2';
-      const supportCollectionPath = `users/${userId}/customerSupport`;
+      const supportCollectionPath = 'public_contact';
 
       try {
-        const docRef = await addDoc(collection(db, supportCollectionPath), {
-          firstName,
-          lastName,
-          email,
-          phone,
-          subject,
-          message,
-          status: 'new',
-          channel: 'contact_us',
-          source: window.location.href,
-          createdAt: serverTimestamp()
-        });
+          const docRef = await addDoc(collection(db, supportCollectionPath), {
+            firstName,
+            lastName,
+            email,
+            phone,
+            subject,
+            message,
+            status: 'new',
+            channel: 'contact_us',
+            source: window.location.href,
+            submittedTo: userId, // Track which user this is for
+            createdAt: serverTimestamp()
+          });
 
         const supportId = docRef.id;
 

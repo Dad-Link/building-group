@@ -13,6 +13,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
     <style>
         /* Reset and Base Styles */
         * {
@@ -1056,7 +1061,37 @@
         .theme-transition * {
             transition: all 0.3s ease !important;
         }
-        
+        /* Add these new stat card styles */
+        .stat-card.contacts {
+            border-left-color: var(--secondary-color);
+        }
+
+        .stat-card.public-quotes {
+            border-left-color: var(--accent-color);
+        }
+        /* Badge for unread count */
+        .stat-card .unread-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
         /* Enhanced Responsive Design */
         @media (max-width: 1024px) {
             .section-card {
@@ -1137,9 +1172,94 @@
                 transition-duration: 0.01ms !important;
             }
         }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--overlay-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-content {
+            text-align: center;
+            color: white;
+        }
+
+        .loading-content .loading-spinner {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1rem;
+            border-width: 4px;
+        }
+
+        .loading-text {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .loading-subtext {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            opacity: 0.3;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state-text {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state-action {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .empty-state-action:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading Dashboard...</div>
+            <div class="loading-subtext">Fetching your data from Firebase</div>
+        </div>
+    </div>
+
     <!-- Header -->
     <header>
         <nav class="container">
@@ -1150,10 +1270,10 @@
                 <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
                     <i class="fas fa-moon"></i>
                 </button>
-                <div class="user-avatar" id="userAvatar">DL</div>
+                <div class="user-avatar" id="userAvatar">--</div>
                 <div class="user-details">
-                    <div class="user-name" id="userName">Dad-Link</div>
-                    <div class="user-role" id="userRole">Building Manager</div>
+                    <div class="user-name" id="userName">Loading...</div>
+                    <div class="user-role" id="userRole">--</div>
                 </div>
                 <button class="logout-btn" id="logoutBtn">Logout</button>
             </div>
@@ -1174,6 +1294,7 @@
                 <i class="fas fa-times"></i>
             </button>
         </div>
+        <!-- Update the mobile menu links in my-dash.html -->
         <ul class="mobile-nav-links">
             <li><a href="#" class="active"><span class="nav-icon"><i class="fas fa-home"></i></span> Dashboard</a></li>
             <li><a href="/account/projects.html"><span class="nav-icon"><i class="fas fa-building"></i></span> My Projects</a></li>
@@ -1195,9 +1316,9 @@
             <!-- Welcome Message -->
             <div class="welcome-message">
                 <div class="welcome-content">
-                    <h1 class="welcome-title">Welcome back Dad-Link! <i class="fas fa-hammer"></i></h1>
+                    <h1 class="welcome-title">Welcome back <span id="welcomeName">--</span>! <i class="fas fa-hammer"></i></h1>
                     <p class="welcome-subtitle">Ready to manage your building projects across Manchester, Liverpool, Leeds & Cheshire?</p>
-                    <div class="current-time" id="currentTime">Current Time: 2025-01-19 11:50:59 UTC</div>
+                    <div class="current-time" id="currentTime">Loading...</div>
                 </div>
             </div>
             
@@ -1206,7 +1327,7 @@
                 <div class="job-card active">
                     <div class="job-header">
                         <span class="job-icon"><i class="fas fa-tools"></i></span>
-                        <div class="job-number" id="activeJobs">8</div>
+                        <div class="job-number" id="activeJobs">--</div>
                     </div>
                     <div class="job-label">Active Jobs</div>
                     <div class="job-details">Currently in progress</div>
@@ -1215,7 +1336,7 @@
                 <div class="job-card completed">
                     <div class="job-header">
                         <span class="job-icon"><i class="fas fa-check-circle"></i></span>
-                        <div class="job-number" id="completedJobs">156</div>
+                        <div class="job-number" id="completedJobs">--</div>
                     </div>
                     <div class="job-label">Completed Jobs</div>
                     <div class="job-details">This year</div>
@@ -1224,7 +1345,7 @@
                 <div class="job-card pending">
                     <div class="job-header">
                         <span class="job-icon"><i class="fas fa-clock"></i></span>
-                        <div class="job-number" id="pendingJobs">12</div>
+                        <div class="job-number" id="pendingJobs">--</div>
                     </div>
                     <div class="job-label">Pending Jobs</div>
                     <div class="job-details">Awaiting start dates</div>
@@ -1233,7 +1354,7 @@
                 <div class="job-card quoted">
                     <div class="job-header">
                         <span class="job-icon"><i class="fas fa-file-alt"></i></span>
-                        <div class="job-number" id="quotedJobs">23</div>
+                        <div class="job-number" id="quotedJobs">--</div>
                     </div>
                     <div class="job-label">Quoted Jobs</div>
                     <div class="job-details">Awaiting approval</div>
@@ -1245,39 +1366,58 @@
                 <div class="stat-card revenue">
                     <div class="stat-header">
                         <span class="stat-icon"><i class="fas fa-pound-sign"></i></span>
-                        <div class="stat-number" id="totalRevenue">£485k</div>
+                        <div class="stat-number" id="totalRevenue">£--</div>
                     </div>
                     <div class="stat-label">Total Revenue</div>
-                    <div class="stat-change">+12% this month</div>
+                    <div class="stat-change" id="revenueChange">Calculating...</div>
                 </div>
                 
                 <div class="stat-card invoices">
                     <div class="stat-header">
                         <span class="stat-icon"><i class="fas fa-receipt"></i></span>
-                        <div class="stat-number" id="totalInvoices">89</div>
+                        <div class="stat-number" id="totalInvoices">--</div>
                     </div>
                     <div class="stat-label">Total Invoices</div>
-                    <div class="stat-change">£42k outstanding</div>
+                    <div class="stat-change" id="invoiceChange">£-- outstanding</div>
                 </div>
                 
                 <div class="stat-card quotes">
                     <div class="stat-header">
                         <span class="stat-icon"><i class="fas fa-calculator"></i></span>
-                        <div class="stat-number" id="totalQuotes">145</div>
+                        <div class="stat-number" id="totalQuotes">--</div>
                     </div>
                     <div class="stat-label">Quotes Sent</div>
-                    <div class="stat-change">68% conversion rate</div>
+                    <div class="stat-change" id="quoteChange">--% conversion rate</div>
                 </div>
                 
                 <div class="stat-card customers">
                     <div class="stat-header">
                         <span class="stat-icon"><i class="fas fa-users"></i></span>
-                        <div class="stat-number" id="totalCustomers">234</div>
+                        <div class="stat-number" id="totalCustomers">--</div>
                     </div>
                     <div class="stat-label">Happy Customers</div>
-                    <div class="stat-change">4.9★ average rating</div>
+                    <div class="stat-change" id="customerChange">--★ average rating</div>
                 </div>
             </div>
+            <!-- Add these two new cards after the existing stat cards in the Quick Stats section -->
+            <div class="stat-card contacts">
+                <div class="stat-header">
+                    <span class="stat-icon"><i class="fas fa-envelope"></i></span>
+                    <div class="stat-number" id="totalContacts">--</div>
+                </div>
+                <div class="stat-label">Customer Messages</div>
+                <div class="stat-change" id="contactChange">-- unread</div>
+            </div>
+
+            <div class="stat-card public-quotes">
+                <div class="stat-header">
+                    <span class="stat-icon"><i class="fas fa-clipboard-list"></i></span>
+                    <div class="stat-number" id="totalPublicQuotes">--</div>
+                </div>
+                <div class="stat-label">Quote Requests</div>
+                <div class="stat-change" id="publicQuoteChange">-- new today</div>
+            </div>
+            
             
             <!-- Horizontal Scrollable Sections -->
             <div class="sections-container">
@@ -1288,52 +1428,9 @@
                         <a href="/jobs" class="view-all-btn">View All →</a>
                     </div>
                     <div class="section-content" id="recentJobsContent">
-                        <div class="job-item">
-                            <div class="job-item-icon extension">
-                                <i class="fas fa-plus"></i>
-                            </div>
-                            <div class="job-item-details">
-                                <div class="job-name">Kitchen Extension - Didsbury</div>
-                                <div class="job-client">The Johnson Family</div>
-                                <div class="job-date">Started: Jan 15, 2025</div>
-                            </div>
-                            <div class="job-status status-active">Active</div>
-                        </div>
-                        
-                        <div class="job-item">
-                            <div class="job-item-icon renovation">
-                                <i class="fas fa-tools"></i>
-                            </div>
-                            <div class="job-item-details">
-                                <div class="job-name">Victorian Renovation - Liverpool</div>
-                                <div class="job-client">Heritage Properties Ltd</div>
-                                <div class="job-date">Started: Jan 10, 2025</div>
-                            </div>
-                            <div class="job-status status-active">Active</div>
-                        </div>
-                        
-                        <div class="job-item">
-                            <div class="job-item-icon new-build">
-                                <i class="fas fa-home"></i>
-                            </div>
-                            <div class="job-item-details">
-                                <div class="job-name">New Build - Knutsford</div>
-                                <div class="job-client">Brown Construction</div>
-                                <div class="job-date">Completed: Jan 8, 2025</div>
-                            </div>
-                            <div class="job-status status-completed">Completed</div>
-                        </div>
-                        
-                        <div class="job-item">
-                            <div class="job-item-icon loft">
-                                <i class="fas fa-stairs"></i>
-                            </div>
-                            <div class="job-item-details">
-                                <div class="job-name">Loft Conversion - Roundhay</div>
-                                <div class="job-client">The Smith Residence</div>
-                                <div class="job-date">Quoted: Jan 5, 2025</div>
-                            </div>
-                            <div class="job-status status-quoted">Quoted</div>
+                        <div class="loading-placeholder">
+                            <div class="loading-spinner"></div>
+                            <span>Loading jobs...</span>
                         </div>
                     </div>
                 </div>
@@ -1345,40 +1442,9 @@
                         <a href="/accounts/invoices.html" class="view-all-btn">View All →</a>
                     </div>
                     <div class="section-content" id="recentInvoicesContent">
-                        <div class="invoice-item">
-                            <div class="invoice-info">
-                                <div class="invoice-title">INV-2025-089</div>
-                                <div class="invoice-meta">Kitchen Extension - Didsbury</div>
-                            </div>
-                            <div class="invoice-amount">£12,500</div>
-                            <div class="invoice-status status-paid">Paid</div>
-                        </div>
-                        
-                        <div class="invoice-item">
-                            <div class="invoice-info">
-                                <div class="invoice-title">INV-2025-088</div>
-                                <div class="invoice-meta">Bathroom Fitting - Liverpool</div>
-                            </div>
-                            <div class="invoice-amount">£6,750</div>
-                            <div class="invoice-status status-paid">Paid</div>
-                        </div>
-                        
-                        <div class="invoice-item">
-                            <div class="invoice-info">
-                                <div class="invoice-title">INV-2025-087</div>
-                                <div class="invoice-meta">House Extension - Cheshire</div>
-                            </div>
-                            <div class="invoice-amount">£28,900</div>
-                            <div class="invoice-status status-overdue">Overdue</div>
-                        </div>
-                        
-                        <div class="invoice-item">
-                            <div class="invoice-info">
-                                <div class="invoice-title">INV-2025-086</div>
-                                <div class="invoice-meta">Loft Conversion - Leeds</div>
-                            </div>
-                            <div class="invoice-amount">£15,200</div>
-                            <div class="invoice-status status-draft">Draft</div>
+                        <div class="loading-placeholder">
+                            <div class="loading-spinner"></div>
+                            <span>Loading invoices...</span>
                         </div>
                     </div>
                 </div>
@@ -1418,45 +1484,10 @@
                     <div class="section-header">
                         <h2 class="section-title">Recent Activity</h2>
                     </div>
-                    <div class="section-content">
-                        <div class="activity-item">
-                            <div class="activity-icon job">
-                                <i class="fas fa-hammer"></i>
-                            </div>
-                            <div class="activity-content">
-                                <div class="activity-text">Kitchen Extension job started in Didsbury</div>
-                                <div class="activity-time">2 hours ago</div>
-                            </div>
-                        </div>
-                        
-                        <div class="activity-item">
-                            <div class="activity-icon invoice">
-                                <i class="fas fa-receipt"></i>
-                            </div>
-                            <div class="activity-content">
-                                <div class="activity-text">Invoice INV-2025-089 marked as paid</div>
-                                <div class="activity-time">4 hours ago</div>
-                            </div>
-                        </div>
-                        
-                        <div class="activity-item">
-                            <div class="activity-icon quote">
-                                <i class="fas fa-file-alt"></i>
-                            </div>
-                            <div class="activity-content">
-                                <div class="activity-text">New quote sent for Bathroom Fitting in Manchester</div>
-                                <div class="activity-time">Yesterday</div>
-                            </div>
-                        </div>
-                        
-                        <div class="activity-item">
-                            <div class="activity-icon job">
-                                <i class="fas fa-check-circle"></i>
-                            </div>
-                            <div class="activity-content">
-                                <div class="activity-text">House Extension completed in Knutsford</div>
-                                <div class="activity-time">2 days ago</div>
-                            </div>
+                    <div class="section-content" id="recentActivityContent">
+                        <div class="loading-placeholder">
+                            <div class="loading-spinner"></div>
+                            <span>Loading activity...</span>
                         </div>
                     </div>
                 </div>
@@ -1466,53 +1497,10 @@
                     <div class="section-header">
                         <h2 class="section-title">Service Areas</h2>
                     </div>
-                    <div class="section-content">
-                        <div class="job-item">
-                            <div class="job-item-icon extension">
-                                <i class="fas fa-map-marker-alt"></i>
-                            </div>
-                            <div class="job-item-details">
-                                <div class="job-name">Manchester</div>
-                                <div class="job-client">42 Active Jobs</div>
-                                <div class="job-date">£180k Revenue YTD</div>
-                            </div>
-                            <div class="job-status status-active">Active</div>
-                        </div>
-                        
-                        <div class="job-item">
-                            <div class="job-item-icon renovation">
-                                <i class="fas fa-map-marker-alt"></i>
-                            </div>
-                            <div class="job-item-details">
-                                <div class="job-name">Liverpool</div>
-                                <div class="job-client">38 Active Jobs</div>
-                                <div class="job-date">£165k Revenue YTD</div>
-                            </div>
-                            <div class="job-status status-active">Active</div>
-                        </div>
-                        
-                        <div class="job-item">
-                            <div class="job-item-icon new-build">
-                                <i class="fas fa-map-marker-alt"></i>
-                            </div>
-                            <div class="job-item-details">
-                                <div class="job-name">Cheshire</div>
-                                <div class="job-client">35 Active Jobs</div>
-                                <div class="job-date">£195k Revenue YTD</div>
-                            </div>
-                            <div class="job-status status-active">Active</div>
-                        </div>
-                        
-                        <div class="job-item">
-                            <div class="job-item-icon loft">
-                                <i class="fas fa-map-marker-alt"></i>
-                            </div>
-                            <div class="job-item-details">
-                                <div class="job-name">Leeds</div>
-                                <div class="job-client">29 Active Jobs</div>
-                                <div class="job-date">£142k Revenue YTD</div>
-                            </div>
-                            <div class="job-status status-active">Active</div>
+                    <div class="section-content" id="serviceAreasContent">
+                        <div class="loading-placeholder">
+                            <div class="loading-spinner"></div>
+                            <span>Loading service areas...</span>
                         </div>
                     </div>
                 </div>
@@ -1521,6 +1509,26 @@
     </main>
 
     <script>
+        // Firebase configuration (you should replace with your actual config)
+        const firebaseConfig = {
+          apiKey: "AIzaSyBI1M38HZH8-xY3nfoKmqoitmggq3C8zKE",
+          authDomain: "buildinggroup-4f8b9.firebaseapp.com",
+          projectId: "buildinggroup-4f8b9",
+          storageBucket: "buildinggroup-4f8b9.firebasestorage.app",
+          messagingSenderId: "353000992011",
+          appId: "1:353000992011:web:c834310d7d79dd1bf0c60e",
+          measurementId: "G-DF11Q5PZRT"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        
+        // Global variables
+        let currentUser = null;
+        let userData = null;
+
         // Theme Management
         const themeToggle = document.getElementById('themeToggle');
         const html = document.documentElement;
@@ -1596,58 +1604,739 @@
         // Update time immediately and then every second
         updateCurrentTime();
         setInterval(updateCurrentTime, 1000);
-        
-        // Dashboard Data Management
-        const dashboardData = {
-            jobs: {
-                active: 8,
-                completed: 156,
-                pending: 12,
-                quoted: 23
-            },
-            stats: {
-                revenue: '£485k',
-                invoices: 89,
-                quotes: 145,
-                customers: 234
-            }
-        };
-        
-        // Animate numbers on load
-        function animateNumber(elementId, targetNumber, suffix = '') {
-            const element = document.getElementById(elementId);
-            if (!element) return;
-            
-            const duration = 2000;
-            const steps = 60;
-            const increment = targetNumber / steps;
-            let current = 0;
-            
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= targetNumber) {
-                    current = targetNumber;
-                    clearInterval(timer);
+
+        // Check authentication
+        // Replace the existing auth.onAuthStateChanged in my-dash.html with this:
+
+        // Check authentication
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                try {
+                    // Reload user to get latest email verification status
+                    await user.reload();
+                    
+                    // Check if email is verified
+                    if (!user.emailVerified) {
+                        console.log('Email not verified');
+                        hideLoadingOverlay();
+                        showNotification('Please verify your email address before accessing the dashboard. Check your inbox for the verification link.', 'warning');
+                        
+                        // Sign out and redirect after showing message
+                        setTimeout(async () => {
+                            await auth.signOut();
+                            window.location.href = '/account/login.html';
+                        }, 3000);
+                        return;
+                    }
+                    
+                    currentUser = user;
+                    console.log('User authenticated and verified:', user.uid);
+                    
+                    // Load user data and dashboard
+                    await loadUserData();
+                    await loadDashboardData();
+                    hideLoadingOverlay();
+                    
+                } catch (error) {
+                    console.error('Error checking user status:', error);
+                    hideLoadingOverlay();
+                    showNotification('Error loading user data. Please try logging in again.', 'error');
+                    setTimeout(() => {
+                        window.location.href = '/account/login.html';
+                    }, 2000);
                 }
-                
-                if (suffix === 'k' && current >= 1000) {
-                    element.textContent = `£${Math.round(current/1000)}k`;
-                } else {
-                    element.textContent = Math.round(current) + suffix;
-                }
-            }, duration / steps);
-        }
-        
-        // Logout functionality
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            if (confirm('Are you sure you want to logout?')) {
-                // Clear any stored user data
-                localStorage.removeItem('userSession');
-                // Redirect to login page
-                window.location.href = '/login';
+            } else {
+                console.log('No user authenticated, redirecting to login...');
+                window.location.href = '/account/login.html';
             }
         });
+
+        // Load user data
+        async function loadUserData() {
+            try {
+                const userDoc = await db.collection('users').doc(currentUser.uid).get();
+                if (userDoc.exists) {
+                    userData = userDoc.data();
+                    updateUserInterface();
+                } else {
+                    console.warn('No user document found');
+                    // Create a basic user document
+                    userData = {
+                        displayName: currentUser.displayName || 'User',
+                        email: currentUser.email,
+                        role: 'Building Manager',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    };
+                    await db.collection('users').doc(currentUser.uid).set(userData);
+                    updateUserInterface();
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+                showNotification('Error loading user data', 'error');
+            }
+        }
+
+        // Update user interface with user data
+        function updateUserInterface() {
+            const displayName = userData?.displayName || currentUser.displayName || 'User';
+            const initials = displayName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+            
+            document.getElementById('userAvatar').textContent = initials;
+            document.getElementById('userName').textContent = displayName;
+            document.getElementById('userRole').textContent = userData?.role || 'Building Manager';
+            document.getElementById('welcomeName').textContent = displayName.split(' ')[0];
+        }
+
+        // Load dashboard data from Firebase
+        async function loadDashboardData() {
+            try {
+                // Load jobs data
+                await loadJobsData();
+                
+                // Load financial data
+                await loadFinancialData();
+                
+                // Load recent jobs
+                await loadRecentJobs();
+                
+                // Load recent invoices
+                await loadRecentInvoices();
+                
+                // Load recent activity
+                await loadRecentActivity();
+                
+                // Load service areas
+                await loadServiceAreas();
+                await loadPublicSubmissions();
+
+                
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                showNotification('Error loading dashboard data', 'error');
+            }
+        }
+
+        async function loadJobsData() {
+          try {
+            const jobsRef = db.collection('users').doc(currentUser.uid).collection('jobs');
+            const snapshot = await jobsRef.get();
+
+            let activeCount = 0;
+            let completedCount = 0;
+            let pendingCount = 0;
+            let quotedCount = 0;
+
+            const currentYear = new Date().getFullYear();
+
+            snapshot.forEach(doc => {
+              const job = doc.data();
+              switch (job.status) {
+                case 'active': activeCount++; break;
+                case 'completed': {
+                  const completedAt = asDate(job.completedAt);
+                  if (completedAt && completedAt.getFullYear() === currentYear) {
+                    completedCount++;
+                  }
+                  break;
+                }
+                case 'pending': pendingCount++; break;
+                case 'quoted': quotedCount++; break;
+              }
+            });
+
+            document.getElementById('activeJobs').textContent = activeCount;
+            document.getElementById('completedJobs').textContent = completedCount;
+            document.getElementById('pendingJobs').textContent = pendingCount;
+            document.getElementById('quotedJobs').textContent = quotedCount;
+          } catch (error) {
+            console.error('Error loading jobs data:', error);
+            document.getElementById('activeJobs').textContent = '0';
+            document.getElementById('completedJobs').textContent = '0';
+            document.getElementById('pendingJobs').textContent = '0';
+            document.getElementById('quotedJobs').textContent = '0';
+          }
+        }
+
+        // Load financial data
+        async function loadFinancialData() {
+          try {
+            // Invoices
+            const invoicesSnapshot = await db
+              .collection('users').doc(currentUser.uid).collection('invoices')
+              .get();
+
+            let totalRevenue = 0;
+            let outstandingAmount = 0;
+            let invoiceCount = 0;
+
+            invoicesSnapshot.forEach(doc => {
+              const invoice = doc.data();
+              invoiceCount++;
+              if (invoice.status === 'paid') {
+                totalRevenue += invoice.amount || 0;
+              } else if (invoice.status === 'pending' || invoice.status === 'overdue') {
+                outstandingAmount += invoice.amount || 0;
+              }
+            });
+
+            // Quotes
+            const quotesSnapshot = await db
+              .collection('users').doc(currentUser.uid).collection('quotes')
+              .get();
+
+            let quotesCount = 0;
+            let acceptedQuotes = 0;
+
+            quotesSnapshot.forEach(doc => {
+              const quote = doc.data();
+              quotesCount++;
+              if (quote.status === 'accepted') acceptedQuotes++;
+            });
+
+            const conversionRate = quotesCount > 0 ? Math.round((acceptedQuotes / quotesCount) * 100) : 0;
+
+            // Customers
+            const customersSnapshot = await db
+              .collection('users').doc(currentUser.uid).collection('customers')
+              .get();
+            const customersCount = customersSnapshot.size;
+
+            // UI
+            document.getElementById('totalRevenue').textContent = formatCurrency(totalRevenue);
+            document.getElementById('totalInvoices').textContent = invoiceCount;
+            document.getElementById('totalQuotes').textContent = quotesCount;
+            document.getElementById('totalCustomers').textContent = customersCount;
+
+            document.getElementById('invoiceChange').textContent = `${formatCurrency(outstandingAmount)} outstanding`;
+            document.getElementById('quoteChange').textContent = `${conversionRate}% conversion rate`;
+            document.getElementById('customerChange').textContent = `4.8★ average rating`;
+
+            document.getElementById('revenueChange').textContent = calculateRevenueChange(totalRevenue);
+          } catch (error) {
+            console.error('Error loading financial data:', error);
+            document.getElementById('totalRevenue').textContent = '£0';
+            document.getElementById('totalInvoices').textContent = '0';
+            document.getElementById('totalQuotes').textContent = '0';
+            document.getElementById('totalCustomers').textContent = '0';
+          }
+        }
+
+        // Load recent jobs
+        async function loadRecentJobs() {
+          try {
+            const snapshot = await db
+              .collection('users').doc(currentUser.uid).collection('jobs')
+              .orderBy('createdAt', 'desc')
+              .limit(5)
+              .get();
+
+            const recentJobsContent = document.getElementById('recentJobsContent');
+
+            if (snapshot.empty) {
+              recentJobsContent.innerHTML = `
+                <div class="empty-state">
+                  <div class="empty-state-icon"><i class="fas fa-hammer"></i></div>
+                  <div class="empty-state-text">No jobs yet</div>
+                  <a href="/account/add-job.html" class="empty-state-action">Create your first job</a>
+                </div>`;
+              return;
+            }
+
+            recentJobsContent.innerHTML = '';
+            snapshot.forEach(doc => {
+              const job = doc.data();
+              const jobIcon = getJobIcon(job.type);
+              const statusClass = getStatusClass(job.status);
+
+              recentJobsContent.innerHTML += `
+                <div class="job-item" onclick="window.location.href='/account/job-details.html?id=${doc.id}'">
+                  <div class="job-item-icon ${jobIcon.class}">
+                    <i class="fas fa-${jobIcon.icon}"></i>
+                  </div>
+                  <div class="job-item-details">
+                    <div class="job-name">${job.title || 'Untitled Job'}</div>
+                    <div class="job-client">${job.customerName || 'No customer'}</div>
+                    <div class="job-date">${getJobDateText(job)}</div>
+                  </div>
+                  <div class="job-status ${statusClass}">${job.status || 'Unknown'}</div>
+                </div>`;
+            });
+          } catch (error) {
+            console.error('Error loading recent jobs:', error);
+            document.getElementById('recentJobsContent').innerHTML = `
+              <div class="empty-state">
+                <div class="empty-state-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="empty-state-text">Error loading jobs</div>
+              </div>`;
+          }
+        }
+
+        // Load recent invoices
+        async function loadRecentInvoices() {
+          try {
+            const snapshot = await db
+              .collection('users').doc(currentUser.uid).collection('invoices')
+              .orderBy('createdAt', 'desc')
+              .limit(5)
+              .get();
+
+            const recentInvoicesContent = document.getElementById('recentInvoicesContent');
+
+            if (snapshot.empty) {
+              recentInvoicesContent.innerHTML = `
+                <div class="empty-state">
+                  <div class="empty-state-icon"><i class="fas fa-receipt"></i></div>
+                  <div class="empty-state-text">No invoices yet</div>
+                  <a href="/account/add-invoice.html" class="empty-state-action">Create your first invoice</a>
+                </div>`;
+              return;
+            }
+
+            recentInvoicesContent.innerHTML = '';
+            snapshot.forEach(doc => {
+              const invoice = doc.data();
+              const invoiceId = doc.id;
+              const statusClass = getInvoiceStatusClass(invoice.status);
+
+              recentInvoicesContent.innerHTML += `
+                <div class="invoice-item" onclick="window.location.href='/account/invoice-details.html?id=${invoiceId}'">
+                  <div class="invoice-info">
+                    <div class="invoice-title">INV-${invoice.number || invoiceId.slice(-6).toUpperCase()}</div>
+                    <div class="invoice-meta">${invoice.jobTitle || invoice.description || 'No description'}</div>
+                  </div>
+                  <div class="invoice-amount">${formatCurrency(invoice.amount || 0)}</div>
+                  <div class="invoice-status ${statusClass}">${invoice.status || 'Draft'}</div>
+                </div>`;
+            });
+          } catch (error) {
+            console.error('Error loading recent invoices:', error);
+            document.getElementById('recentInvoicesContent').innerHTML = `
+              <div class="empty-state">
+                <div class="empty-state-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="empty-state-text">Error loading invoices</div>
+              </div>`;
+          }
+        }
+
+        async function loadRecentActivity() {
+          try {
+            const activities = [];
+
+            // Jobs
+            const jobsSnap = await db
+              .collection('users').doc(currentUser.uid).collection('jobs')
+              .orderBy('createdAt', 'desc')
+              .limit(3)
+              .get();
+
+            jobsSnap.forEach(doc => {
+              const job = doc.data();
+              const ts =
+                asDate(job.updatedAt) ||
+                asDate(job.completedAt) ||
+                asDate(job.createdAt);
+
+              activities.push({
+                type: 'job',
+                text: `${job.status === 'completed' ? 'Completed' : 'Started'} ${job.title || 'job'}`,
+                timestamp: ts,
+                icon: 'hammer',
+                iconClass: 'job'
+              });
+            });
+
+            // Invoices
+            const invSnap = await db
+              .collection('users').doc(currentUser.uid).collection('invoices')
+              .orderBy('createdAt', 'desc')
+              .limit(3)
+              .get();
+
+            invSnap.forEach(doc => {
+              const invoice = doc.data();
+              const ts = asDate(invoice.updatedAt) || asDate(invoice.createdAt);
+              activities.push({
+                type: 'invoice',
+                text: `Invoice ${invoice.number || doc.id.slice(-6).toUpperCase()} ${invoice.status === 'paid' ? 'paid' : 'created'}`,
+                timestamp: ts,
+                icon: 'receipt',
+                iconClass: 'invoice'
+              });
+            });
+
+            // Quotes
+            const quotesSnap = await db
+              .collection('users').doc(currentUser.uid).collection('quotes')
+              .orderBy('createdAt', 'desc')
+              .limit(3)
+              .get();
+
+            quotesSnap.forEach(doc => {
+              const quote = doc.data();
+              const ts = asDate(quote.updatedAt) || asDate(quote.createdAt);
+              activities.push({
+                type: 'quote',
+                text: `Quote sent for ${quote.jobTitle || 'project'}`,
+                timestamp: ts,
+                icon: 'file-alt',
+                iconClass: 'quote'
+              });
+            });
+
+            // Sort newest first
+            activities.sort((a, b) => {
+              const aT = a.timestamp ? a.timestamp.getTime() : 0;
+              const bT = b.timestamp ? b.timestamp.getTime() : 0;
+              return bT - aT;
+            });
+
+            const activityContent = document.getElementById('recentActivityContent');
+            if (activities.length === 0) {
+              activityContent.innerHTML = `
+                <div class="empty-state">
+                  <div class="empty-state-icon"><i class="fas fa-clock"></i></div>
+                  <div class="empty-state-text">No recent activity</div>
+                </div>`;
+              return;
+            }
+
+            activityContent.innerHTML = '';
+            activities.slice(0, 5).forEach(activity => {
+              const timeAgo = activity.timestamp ? getTimeAgo(activity.timestamp) : 'Unknown time';
+              activityContent.innerHTML += `
+                <div class="activity-item">
+                  <div class="activity-icon ${activity.iconClass}">
+                    <i class="fas fa-${activity.icon}"></i>
+                  </div>
+                  <div class="activity-content">
+                    <div class="activity-text">${activity.text}</div>
+                    <div class="activity-time">${timeAgo}</div>
+                  </div>
+                </div>`;
+            });
+          } catch (error) {
+            console.error('Error loading recent activity:', error);
+            document.getElementById('recentActivityContent').innerHTML = `
+              <div class="empty-state">
+                <div class="empty-state-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="empty-state-text">Error loading activity</div>
+              </div>`;
+          }
+        }
+        // Load service areas
+        async function loadServiceAreas() {
+          try {
+            const snapshot = await db
+              .collection('users').doc(currentUser.uid).collection('jobs')
+              .get();
+
+            const areaStats = {
+              'Manchester': { count: 0, revenue: 0 },
+              'Liverpool': { count: 0, revenue: 0 },
+              'Cheshire': { count: 0, revenue: 0 },
+              'Leeds': { count: 0, revenue: 0 }
+            };
+
+            snapshot.forEach(doc => {
+              const job = doc.data();
+              const location = job.location || job.city || 'Manchester';
+              Object.keys(areaStats).forEach(area => {
+                if (location.toLowerCase().includes(area.toLowerCase())) {
+                  areaStats[area].count++;
+                  if (job.status === 'completed' && job.totalAmount) {
+                    areaStats[area].revenue += job.totalAmount;
+                  }
+                }
+              });
+            });
+
+            const serviceAreasContent = document.getElementById('serviceAreasContent');
+            serviceAreasContent.innerHTML = '';
+            Object.entries(areaStats).forEach(([area, stats]) => {
+              const iconColor = getAreaIconColor(area);
+              serviceAreasContent.innerHTML += `
+                <div class="job-item">
+                  <div class="job-item-icon ${iconColor}"><i class="fas fa-map-marker-alt"></i></div>
+                  <div class="job-item-details">
+                    <div class="job-name">${area}</div>
+                    <div class="job-client">${stats.count} Active Jobs</div>
+                    <div class="job-date">${formatCurrency(stats.revenue)} Revenue YTD</div>
+                  </div>
+                  <div class="job-status status-active">Active</div>
+                </div>`;
+            });
+          } catch (error) {
+            console.error('Error loading service areas:', error);
+            const defaultAreas = ['Manchester', 'Liverpool', 'Cheshire', 'Leeds'];
+            const serviceAreasContent = document.getElementById('serviceAreasContent');
+            serviceAreasContent.innerHTML = '';
+            defaultAreas.forEach(area => {
+              const iconColor = getAreaIconColor(area);
+              serviceAreasContent.innerHTML += `
+                <div class="job-item">
+                  <div class="job-item-icon ${iconColor}"><i class="fas fa-map-marker-alt"></i></div>
+                  <div class="job-item-details">
+                    <div class="job-name">${area}</div>
+                    <div class="job-client">-- Active Jobs</div>
+                    <div class="job-date">£-- Revenue YTD</div>
+                  </div>
+                  <div class="job-status status-active">Active</div>
+                </div>`;
+            });
+          }
+        }
+        // Load public submissions data (contacts and quotes)
+        async function loadPublicSubmissions() {
+            try {
+                // Only load if user is the admin
+                if (currentUser.uid === '2sBxzDGRO9Z3GDSTSF6DsRTkcDv2') {
+                    // Load public contacts
+                    const contactsQuery = db.collection('public_contact')
+                        .orderBy('createdAt', 'desc');
+                    const contactsSnapshot = await contactsQuery.get();
+                    
+                    let totalContacts = 0;
+                    let unreadContacts = 0;
+                    
+                    contactsSnapshot.forEach(doc => {
+                        const contact = doc.data();
+                        totalContacts++;
+                        if (contact.status === 'new' || !contact.status) {
+                            unreadContacts++;
+                        }
+                    });
+                    
+                    // Load public quotes
+                    const quotesQuery = db.collection('public_quotes')
+                        .orderBy('createdAt', 'desc');
+                    const quotesSnapshot = await quotesQuery.get();
+                    
+                    let totalQuotes = 0;
+                    let todayQuotes = 0;
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    
+                    quotesSnapshot.forEach(doc => {
+                        const quote = doc.data();
+                        totalQuotes++;
+                        
+                        // Check if quote is from today
+                        if (quote.createdAt) {
+                            const quoteDate = quote.createdAt.toDate();
+                            if (quoteDate >= today) {
+                                todayQuotes++;
+                            }
+                        }
+                    });
+                    
+                    // Update UI
+                    document.getElementById('totalContacts').textContent = totalContacts;
+                    document.getElementById('totalPublicQuotes').textContent = totalQuotes;
+                    document.getElementById('contactChange').textContent = `${unreadContacts} unread`;
+                    document.getElementById('publicQuoteChange').textContent = `${todayQuotes} new today`;
+                    
+                    // Make cards clickable
+                    document.querySelector('.stat-card.contacts').style.cursor = 'pointer';
+                    document.querySelector('.stat-card.public-quotes').style.cursor = 'pointer';
+                    
+                    // Add click handlers
+                    document.querySelector('.stat-card.contacts').onclick = () => {
+                        window.location.href = '/account/customer-contacts.html';
+                    };
+                    document.querySelector('.stat-card.public-quotes').onclick = () => {
+                        window.location.href = '/account/quote-requests.html';
+                    };
+                    
+                } else {
+                    // Hide these cards for non-admin users
+                    document.querySelector('.stat-card.contacts').style.display = 'none';
+                    document.querySelector('.stat-card.public-quotes').style.display = 'none';
+                }
+                
+            } catch (error) {
+                console.error('Error loading public submissions:', error);
+                // Set default values on error
+                document.getElementById('totalContacts').textContent = '0';
+                document.getElementById('totalPublicQuotes').textContent = '0';
+                document.getElementById('contactChange').textContent = '0 unread';
+                document.getElementById('publicQuoteChange').textContent = '0 new today';
+            }
+        }
+        // Helper functions
+        function formatCurrency(amount) {
+            if (amount >= 1000) {
+                return `£${Math.round(amount / 1000)}k`;
+            }
+            return `£${amount.toLocaleString()}`;
+        }
+
+        function formatDate(date) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return date.toLocaleDateString('en-GB', options);
+        }
+
+        function getJobIcon(type) {
+            const icons = {
+                'extension': { icon: 'plus', class: 'extension' },
+                'renovation': { icon: 'tools', class: 'renovation' },
+                'new-build': { icon: 'home', class: 'new-build' },
+                'loft-conversion': { icon: 'stairs', class: 'loft' },
+                'bathroom': { icon: 'bath', class: 'renovation' },
+                'kitchen': { icon: 'utensils', class: 'renovation' }
+            };
+            
+            return icons[type] || { icon: 'hammer', class: 'extension' };
+        }
+
+        function getStatusClass(status) {
+            const classes = {
+                'active': 'status-active',
+                'completed': 'status-completed',
+                'pending': 'status-pending',
+                'quoted': 'status-quoted'
+            };
+            
+            return classes[status] || 'status-pending';
+        }
+
+        function getInvoiceStatusClass(status) {
+            const classes = {
+                'paid': 'status-paid',
+                'overdue': 'status-overdue',
+                'pending': 'status-pending',
+                'draft': 'status-draft'
+            };
+            
+            return classes[status] || 'status-draft';
+        }
+        // Normalize Firestore Timestamp | Date | millis | ISO string to a JS Date
+        function asDate(value) {
+          if (!value) return null;
+          if (typeof value.toDate === 'function') return value.toDate(); // Firestore Timestamp
+          if (value instanceof Date) return value;                       // JS Date
+          if (typeof value === 'number') return new Date(value);         // millis
+          if (typeof value === 'string') {
+            const d = new Date(value);
+            return isNaN(d) ? null : d;                                  // ISO or parseable string
+          }
+          return null;
+        }
         
+        function getJobDateText(job) {
+          const completedAt = asDate(job.completedAt);
+          const startDate   = asDate(job.startDate);
+          const createdAt   = asDate(job.createdAt);
+
+          if (job.status === 'completed' && completedAt) {
+            return `Completed: ${formatDate(completedAt)}`;
+          } else if (startDate) {
+            return `Started: ${formatDate(startDate)}`;
+          } else if (createdAt) {
+            return `Created: ${formatDate(createdAt)}`;
+          }
+          return 'Date unknown';
+        }
+
+        function getTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            
+            let interval = seconds / 31536000;
+            if (interval > 1) return Math.floor(interval) + ' years ago';
+            
+            interval = seconds / 2592000;
+            if (interval > 1) return Math.floor(interval) + ' months ago';
+            
+            interval = seconds / 86400;
+            if (interval > 1) return Math.floor(interval) + ' days ago';
+            
+            interval = seconds / 3600;
+            if (interval > 1) return Math.floor(interval) + ' hours ago';
+            
+            interval = seconds / 60;
+            if (interval > 1) return Math.floor(interval) + ' minutes ago';
+            
+            return 'Just now';
+        }
+
+        function getAreaIconColor(area) {
+            const colors = {
+                'Manchester': 'extension',
+                'Liverpool': 'renovation',
+                'Cheshire': 'new-build',
+                'Leeds': 'loft'
+            };
+            
+            return colors[area] || 'extension';
+        }
+
+        function calculateRevenueChange(currentRevenue) {
+            // This would normally compare with previous period
+            // For now, return a positive trend
+            return '+12% this month';
+        }
+
+        function hideLoadingOverlay() {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.classList.add('hidden');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 300);
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: var(--card-background);
+                color: var(--text-color);
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: var(--shadow);
+                z-index: 9999;
+                border-left: 4px solid var(--${type === 'success' ? 'success' : type === 'warning' ? 'warning' : type === 'error' ? 'danger' : 'info'}-color);
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                max-width: 300px;
+            `;
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : type === 'error' ? 'times-circle' : 'info-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Remove after 5 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 5000);
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            if (confirm('Are you sure you want to logout?')) {
+                try {
+                    await auth.signOut();
+                    window.location.href = '/account/login.html';  // <- Fixed path
+                } catch (error) {
+                    console.error('Error signing out:', error);
+                    showNotification('Error signing out. Please try again.', 'error');
+                }
+            }
+        });
+
         // Add click handlers for cards
         document.querySelectorAll('.job-card, .stat-card').forEach(card => {
             card.addEventListener('click', function() {
@@ -1656,31 +2345,10 @@
                 // Add navigation logic here
             });
         });
-        
-        // Simulate real-time updates
-        function simulateRealTimeUpdates() {
-            // Simulate occasional updates to dashboard data
-            setInterval(() => {
-                const randomUpdate = Math.random();
-                if (randomUpdate < 0.1) { // 10% chance every 30 seconds
-                    // Update a random stat
-                    const stats = ['activeJobs', 'completedJobs', 'totalInvoices'];
-                    const randomStat = stats[Math.floor(Math.random() * stats.length)];
-                    const element = document.getElementById(randomStat);
-                    if (element) {
-                        const currentValue = parseInt(element.textContent);
-                        element.textContent = currentValue + (Math.random() > 0.5 ? 1 : -1);
-                    }
-                }
-            }, 30000);
-        }
-        
+
         // Initialize dashboard
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Building Group Dashboard Loaded - Dad-Link - 2025-01-19T11:50:59Z');
-            
-            // Start real-time updates
-            simulateRealTimeUpdates();
+            console.log('Building Group Dashboard Loading - Firebase Integration Active');
             
             // Add smooth scrolling to sections container
             const sectionsContainer = document.querySelector('.sections-container');
@@ -1724,330 +2392,53 @@
                     card.style.transform = 'translateY(0)';
                 }, index * 100);
             });
-            
-            // Initialize tooltips for better UX
-            initializeTooltips();
         });
-        
-        // Enhanced Dashboard Features
-        function initializeTooltips() {
-            const tooltipElements = [
-                { selector: '.theme-toggle', text: 'Toggle theme (Auto/Light/Dark)' },
-                { selector: '.job-card.active', text: 'Click to view active jobs' },
-                { selector: '.job-card.completed', text: 'Click to view completed jobs' },
-                { selector: '.job-card.pending', text: 'Click to view pending jobs' },
-                { selector: '.job-card.quoted', text: 'Click to view quoted jobs' },
-                { selector: '.stat-card.revenue', text: 'Total revenue this year' },
-                { selector: '.stat-card.invoices', text: 'Total invoices sent' },
-                { selector: '.stat-card.quotes', text: 'Total quotes generated' },
-                { selector: '.stat-card.customers', text: 'Total customer base' }
-            ];
-            
-            tooltipElements.forEach(({ selector, text }) => {
-                const element = document.querySelector(selector);
-                if (element) {
-                    element.setAttribute('title', text);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(event) {
+            // Alt + shortcuts for quick navigation
+            if (event.altKey) {
+                switch(event.key) {
+                    case 'j':
+                        event.preventDefault();
+                        window.location.href = '/account/jobs.html';
+                        break;
+                    case 'i':
+                        event.preventDefault();
+                        window.location.href = '/account/invoices.html';
+                        break;
+                    case 'q':
+                        event.preventDefault();
+                        window.location.href = '/account/quotes.html';
+                        break;
+                    case 't':
+                        event.preventDefault();
+                        themeToggle.click();
+                        break;
                 }
-            });
-        }
-        
-        // Building Company Specific Features
-        const buildingCompanyData = {
-            services: [
-                'House Extensions',
-                'Bathroom Fitting',
-                'Kitchen Installation',
-                'Loft Conversions',
-                'New Build Construction',
-                'Renovations',
-                'Planning Permission'
-            ],
-            locations: [
-                { name: 'Manchester', jobs: 42, revenue: 180000 },
-                { name: 'Liverpool', jobs: 38, revenue: 165000 },
-                { name: 'Cheshire', jobs: 35, revenue: 195000 },
-                { name: 'Leeds', jobs: 29, revenue: 142000 }
-            ],
-            staff: [
-                { name: 'John Smith', role: 'Project Manager', status: 'active' },
-                { name: 'Mike Wilson', role: 'Site Foreman', status: 'active' },
-                { name: 'Sarah Brown', role: 'Architect', status: 'active' },
-                { name: 'Tom Davis', role: 'Electrician', status: 'active' },
-                { name: 'Lisa Johnson', role: 'Plumber', status: 'active' }
-            ]
-        };
-        
-        // Advanced Dashboard Analytics
-        function generateDashboardAnalytics() {
-            const analytics = {
-                jobTypes: {
-                    'House Extensions': 45,
-                    'Bathroom Fitting': 32,
-                    'Kitchen Installation': 28,
-                    'Loft Conversions': 24,
-                    'New Builds': 18,
-                    'Renovations': 35
-                },
-                monthlyRevenue: {
-                    'Jan': 42000,
-                    'Feb': 38000,
-                    'Mar': 45000,
-                    'Apr': 48000,
-                    'May': 52000,
-                    'Jun': 55000
-                },
-                customerSatisfaction: {
-                    average: 4.9,
-                    reviews: 234,
-                    recommendations: 96
-                }
-            };
-            
-            return analytics;
-        }
-        
-        // Real-time notifications
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.style.cssText = `
-                position: fixed;
-                top: 100px;
-                right: 20px;
-                background: var(--card-background);
-                color: var(--text-color);
-                padding: 1rem 1.5rem;
-                border-radius: 8px;
-                box-shadow: var(--shadow);
-                z-index: 9999;
-                border-left: 4px solid var(--${type === 'success' ? 'success' : type === 'warning' ? 'warning' : type === 'error' ? 'danger' : 'info'}-color);
-                transform: translateX(100%);
-                transition: transform 0.3s ease;
-                max-width: 300px;
-            `;
-            
-            notification.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : type === 'error' ? 'times-circle' : 'info-circle'}"></i>
-                    <span>${message}</span>
-                </div>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            // Animate in
-            setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-            }, 100);
-            
-            // Remove after 5 seconds
-            setTimeout(() => {
-                notification.style.transform = 'translateX(100%)';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 5000);
-        }
-        
-        // Simulate building company notifications
-        function simulateBuildingNotifications() {
-            const notifications = [
-                { message: 'New job inquiry from Manchester', type: 'info' },
-                { message: 'Invoice #INV-2025-090 has been paid', type: 'success' },
-                { message: 'Material delivery scheduled for tomorrow', type: 'info' },
-                { message: 'Quote approval received from Cheshire client', type: 'success' },
-                { message: 'Weather delay reported on Liverpool site', type: 'warning' }
-            ];
-            
-            let notificationIndex = 0;
-            
-            setInterval(() => {
-                if (Math.random() < 0.3) { // 30% chance every 60 seconds
-                    const notification = notifications[notificationIndex % notifications.length];
-                    showNotification(notification.message, notification.type);
-                    notificationIndex++;
-                }
-            }, 60000);
-        }
-        
-        // Enhanced job management
-        function updateJobStatus(jobId, status) {
-            console.log(`Updating job ${jobId} to status: ${status}`);
-            
-            // Update UI
-            const jobCards = document.querySelectorAll('.job-card');
-            jobCards.forEach(card => {
-                const number = card.querySelector('.job-number');
-                if (number) {
-                    const currentValue = parseInt(number.textContent);
-                    
-                    switch(status) {
-                        case 'active':
-                            if (card.classList.contains('active')) {
-                                number.textContent = currentValue + 1;
-                            }
-                            break;
-                        case 'completed':
-                            if (card.classList.contains('completed')) {
-                                number.textContent = currentValue + 1;
-                            }
-                            if (card.classList.contains('active')) {
-                                number.textContent = Math.max(0, currentValue - 1);
-                            }
-                            break;
-                    }
-                }
-            });
-            
-            // Show notification
-            showNotification(`Job status updated to ${status}`, 'success');
-        }
-        
-        // Enhanced invoice management
-        function createInvoice(jobData) {
-            const invoiceNumber = `INV-2025-${String(Date.now()).slice(-3)}`;
-            
-            console.log(`Creating invoice ${invoiceNumber} for job:`, jobData);
-            
-            // Update invoice count
-            const invoiceCountElement = document.getElementById('totalInvoices');
-            if (invoiceCountElement) {
-                const currentCount = parseInt(invoiceCountElement.textContent);
-                invoiceCountElement.textContent = currentCount + 1;
             }
-            
-            showNotification(`Invoice ${invoiceNumber} created successfully`, 'success');
-            
-            return invoiceNumber;
-        }
-        
-        // Building materials management
-        const materialsData = {
-            'Brick (per 1000)': { stock: 45, cost: 420, supplier: 'Manchester Brick Co' },
-            'Cement (25kg bags)': { stock: 120, cost: 8.50, supplier: 'Builder Depot' },
-            'Plasterboard (sheets)': { stock: 78, cost: 12.99, supplier: 'Plaster World' },
-            'Timber 2x4 (per meter)': { stock: 200, cost: 4.50, supplier: 'Timber Direct' },
-            'Roof Tiles (per m²)': { stock: 340, cost: 25.00, supplier: 'Roofing Supplies Ltd' }
-        };
-        
-        function checkMaterialStock() {
-            const lowStockItems = [];
-            
-            Object.entries(materialsData).forEach(([item, data]) => {
-                if (data.stock < 50) {
-                    lowStockItems.push(item);
-                }
-            });
-            
-            if (lowStockItems.length > 0) {
-                showNotification(`Low stock alert: ${lowStockItems.join(', ')}`, 'warning');
-            }
-        }
-        
-        // Quote calculator for building services
-        function calculateQuote(serviceType, area, complexity = 'standard') {
-            const basePrices = {
-                'house-extension': 1200, // per m²
-                'bathroom-fitting': 4500,  // base price
-                'kitchen-installation': 8000, // base price
-                'loft-conversion': 15000, // base price
-                'new-build': 1500, // per m²
-                'renovation': 800 // per m²
+        });
+
+        // Auto-save dashboard preferences
+        function saveDashboardPreferences() {
+            const preferences = {
+                theme: currentTheme,
+                lastVisit: new Date().toISOString(),
+                userId: currentUser?.uid
             };
             
-            const complexityMultipliers = {
-                'simple': 0.8,
-                'standard': 1.0,
-                'complex': 1.3,
-                'luxury': 1.8
-            };
-            
-            const basePrice = basePrices[serviceType] || 1000;
-            const multiplier = complexityMultipliers[complexity] || 1.0;
-            
-            let totalPrice;
-            
-            if (['house-extension', 'new-build', 'renovation'].includes(serviceType)) {
-                totalPrice = basePrice * area * multiplier;
-            } else {
-                totalPrice = basePrice * multiplier;
-            }
-            
-            return {
-                serviceType,
-                area,
-                complexity,
-                basePrice,
-                multiplier,
-                totalPrice: Math.round(totalPrice),
-                breakdown: {
-                    materials: Math.round(totalPrice * 0.4),
-                    labor: Math.round(totalPrice * 0.45),
-                    overhead: Math.round(totalPrice * 0.15)
-                }
-            };
+            localStorage.setItem('dashboardPreferences', JSON.stringify(preferences));
         }
-        
-        // Customer feedback system
-        const customerFeedback = {
-            recent: [
-                { name: 'John Smith', rating: 5, comment: 'Excellent work on our kitchen extension', date: '2025-01-18' },
-                { name: 'Sarah Brown', rating: 5, comment: 'Professional team, great quality', date: '2025-01-17' },
-                { name: 'Mike Wilson', rating: 4, comment: 'Good value for money, minor delays', date: '2025-01-15' },
-                { name: 'Lisa Davis', rating: 5, comment: 'Highly recommend for bathroom fitting', date: '2025-01-14' }
-            ]
-        };
-        
-        // Weather integration for construction planning
-        function checkWeatherConditions() {
-            // Simulate weather check
-            const conditions = ['sunny', 'cloudy', 'rainy', 'windy'];
-            const currentCondition = conditions[Math.floor(Math.random() * conditions.length)];
-            
-            if (currentCondition === 'rainy') {
-                showNotification('Weather alert: Rain expected. Consider rescheduling outdoor work.', 'warning');
-            }
-            
-            return currentCondition;
-        }
-        
-        // Staff scheduling system
-        function getStaffSchedule() {
-            const schedule = {
-                'Monday': ['John Smith - Manchester Site', 'Mike Wilson - Liverpool Project'],
-                'Tuesday': ['Sarah Brown - Design Meeting', 'Tom Davis - Electrical Work'],
-                'Wednesday': ['Lisa Johnson - Plumbing Install', 'John Smith - Site Visit'],
-                'Thursday': ['Mike Wilson - Project Management', 'Tom Davis - Cheshire Job'],
-                'Friday': ['All Staff - Weekly Review Meeting']
-            };
-            
-            return schedule;
-        }
-        
-        // Initialize building-specific features
-        setTimeout(() => {
-            simulateBuildingNotifications();
-            
-            // Check material stock on load
-            setTimeout(() => {
-                checkMaterialStock();
-            }, 5000);
-            
-            // Weather check
-            checkWeatherConditions();
-            
-            console.log('Building Company Dashboard Features Initialized');
-            console.log('Services Available:', buildingCompanyData.services);
-            console.log('Active Locations:', buildingCompanyData.locations);
-            console.log('Staff Members:', buildingCompanyData.staff.length);
-        }, 2000);
-        
+
+        // Auto-save preferences when leaving page
+        window.addEventListener('beforeunload', saveDashboardPreferences);
+
         // Enhanced error handling
         window.addEventListener('error', function(event) {
             console.error('Dashboard Error:', event.error);
             showNotification('An error occurred. Please refresh the page if problems persist.', 'error');
         });
-        
+
         // Performance monitoring
         function monitorDashboardPerformance() {
             const loadTime = performance.now();
@@ -2057,70 +2448,14 @@
                 showNotification('Dashboard is loading slower than usual', 'warning');
             }
         }
-        
-        // Keyboard shortcuts
-        document.addEventListener('keydown', function(event) {
-            // Alt + shortcuts for quick navigation
-            if (event.altKey) {
-                switch(event.key) {
-                    case 'j':
-                        event.preventDefault();
-                        window.location.href = '/jobs';
-                        break;
-                    case 'i':
-                        event.preventDefault();
-                        window.location.href = '/invoices';
-                        break;
-                    case 'q':
-                        event.preventDefault();
-                        window.location.href = '/quotes';
-                        break;
-                    case 't':
-                        event.preventDefault();
-                        themeToggle.click();
-                        break;
-                }
-            }
+
+        // Monitor performance after page load
+        window.addEventListener('load', () => {
+            monitorDashboardPerformance();
         });
-        
-        // Auto-save dashboard preferences
-        function saveDashboardPreferences() {
-            const preferences = {
-                theme: currentTheme,
-                lastVisit: new Date().toISOString(),
-                sections: {
-                    showJobs: true,
-                    showInvoices: true,
-                    showQuotes: true,
-                    showActivity: true
-                }
-            };
-            
-            localStorage.setItem('dashboardPreferences', JSON.stringify(preferences));
-        }
-        
-        // Auto-save preferences when leaving page
-        window.addEventListener('beforeunload', saveDashboardPreferences);
-        
-        // Update current time with correct timestamp
-        function updateCurrentTimeCorrect() {
-            const now = new Date('2025-01-19T11:54:22Z');
-            const utcTime = now.toISOString().replace('T', ' ').substring(0, 19);
-            document.getElementById('currentTime').textContent = `Current Time: ${utcTime} UTC`;
-        }
-        
-        // Update with correct time immediately
-        updateCurrentTimeCorrect();
-        
-        // Building Group Dashboard Ready
-        console.log('Building Group Dashboard Loaded Successfully - Dad-Link - 2025-01-19T11:54:22Z');
-        console.log('Dashboard Features: ✓ Job Management ✓ Invoice Tracking ✓ Quote Generation ✓ Real-time Updates');
-        console.log('Service Areas: Manchester, Liverpool, Leeds, Cheshire');
-        console.log('Active Jobs: 8 | Completed: 156 | Revenue: £485k');
-        console.log('Theme: ' + currentTheme + ' | Mobile Menu: Ready | Notifications: Active');
-        
-        // Performance monitoring
-        monitorDashboardPerformance();
+
+        console.log('Building Group Dashboard - Firebase Integration Ready');
+        console.log('Current Time:', new Date().toISOString());
     </script>
 </body>
 </html>

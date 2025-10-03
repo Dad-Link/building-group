@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Quote Details | Building Group | Quote Management</title>
+    <meta name="description" content="Detailed view of a website-submitted quote request with customer info, project details, budget, and attachments.">
+
+    <!-- FIREBASE-COMPATIBLE CSP -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self' 'unsafe-inline' 'unsafe-eval'
+            https://www.gstatic.com
+            https://www.googleapis.com
+            https://apis.google.com
+            https://cdn.jsdelivr.net;
+        connect-src 'self'
+            https://identitytoolkit.googleapis.com
+            https://www.googleapis.com
+            https://securetoken.googleapis.com
+            https://buildinggroup-4f8b9-default-rtdb.firebaseio.com
+            https://firestore.googleapis.com
+            https://buildinggroup-4f8b9.firebasestorage.app
+            https://www.gstatic.com
+            https://*.gstatic.com;
+        img-src 'self' data: https://www.gstatic.com https://fonts.gstatic.com https://firebasestorage.googleapis.com;
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+        font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+        frame-src 'self' https://buildinggroup-4f8b9.firebaseapp.com;
+    ">
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <!-- PDF generator (bundled: html2canvas + jsPDF) -->
+    <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js" defer></script>
+
+    <!-- Last Updated -->
+    <meta name="last-modified" content="2025-10-03T03:35:40Z">
+
+    <style>
+        /* Base styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary-color: #e74c3c;
+            --primary-dark: #c0392b;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #17a2b8;
+            --text-color: #2c3e50;
+            --text-secondary: #6c757d;
+            --text-light: #95a5a6;
+            --background-color: #f8fafc;
+            --background-secondary: #ecf0f1;
+            --card-background: #ffffff;
+            --border-color: #dee2e6;
+            --border-light: #f1f3f4;
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.15);
+            --gradient-quotes: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            --gradient-success: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            --gradient-info: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        }
+
+        [data-theme="dark"] {
+            --text-color: #ffffff;
+            --text-secondary: #bdc3c7;
+            --text-light: #95a5a6;
+            --background-color: #0f0f0f;
+            --background-secondary: #1a1a1a;
+            --card-background: #1e1e1e;
+            --border-color: #333333;
+            --border-light: #2a2a2a;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root[data-theme="auto"] {
+                --text-color: #ffffff;
+                --text-secondary: #bdc3c7;
+                --text-light: #95a5a6;
+                --background-color: #0f0f0f;
+                --background-secondary: #1a1a1a;
+                --card-background: #1e1e1e;
+                --border-color: #333333;
+                --border-light: #2a2a2a;
+            }
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* Loading State */
+        .loading-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 50vh;
+        }
+        .spinner {
+            width: 50px; height: 50px; border: 4px solid var(--border-color); border-top: 4px solid var(--primary-color);
+            border-radius: 50%; animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg);} 100%{ transform: rotate(360deg);} }
+
+        /* Header card */
+        .quote-header {
+            background: var(--card-background);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 1rem; right: 1rem;
+            background: var(--primary-color); color: #fff; border: none;
+            padding: 0.5rem 1rem; border-radius: 8px; text-decoration: none;
+            display: inline-flex; align-items: center; gap: .5rem; font-weight: 600;
+        }
+        .back-btn:hover { background: var(--primary-dark); transform: translateY(-1px); }
+
+        .web-badge {
+            display: inline-flex; align-items: center; gap: .5rem;
+            font-weight: 800; font-size: 0.8rem; text-transform: uppercase;
+            color: #fff; background: var(--gradient-info); padding: .35rem .7rem; border-radius: 999px;
+            letter-spacing: .4px;
+        }
+        .status-badge {
+            display: inline-block; padding: 0.4rem 0.8rem; border-radius: 999px; font-weight: 700; text-transform: uppercase; font-size: 0.8rem; margin-left: .5rem;
+        }
+        .status-badge.pending { background: rgba(243,156,18,.1); color: var(--warning-color); }
+        .status-badge.accepted { background: rgba(39,174,96,.1); color: var(--success-color); }
+        .status-badge.rejected { background: rgba(231,76,60,.1); color: var(--danger-color); }
+        .status-badge.expired { background: rgba(149,165,166,.1); color: var(--text-light); }
+
+        .quote-title {
+            font-size: 2.2rem; font-weight: 800; margin-top: .75rem; line-height: 1.2;
+        }
+        .quote-sub {
+            color: var(--text-secondary); font-weight: 600; margin-top: .25rem;
+        }
+
+        .quote-meta {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem; margin-top: 1.5rem;
+        }
+        .meta-item {
+            text-align: center; padding: 1rem; background: var(--background-secondary); border-radius: 10px;
+        }
+        .meta-value { font-size: 1.25rem; font-weight: 800; color: var(--primary-color); }
+        .meta-label { font-size: .9rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .5px; margin-top: .25rem; }
+
+        /* Content layout */
+        .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
+        @media (max-width: 900px) { .content-grid { grid-template-columns: 1fr; } }
+
+        .card, .quote-section {
+            background: var(--card-background); padding: 1.5rem; border-radius: 16px; box-shadow: var(--shadow-md); margin-bottom: 2rem;
+        }
+        .section-title {
+            font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; gap: .6rem; margin-bottom: 1rem;
+        }
+        .section-icon {
+            width: 28px; height: 28px; border-radius: 6px; color: #fff;
+            display: inline-flex; align-items: center; justify-content: center; font-size: .9rem; background: var(--gradient-quotes);
+        }
+
+        .kv-row {
+            display: grid; grid-template-columns: 180px 1fr; gap: .75rem; padding: .6rem .8rem; background: var(--background-secondary); border-radius: 8px; margin-bottom: .5rem;
+        }
+        .kv-label { font-weight: 700; color: var(--text-secondary); }
+        .kv-value { font-weight: 600; color: var(--text-color); }
+
+        .notes-box {
+            background: var(--background-secondary); padding: 1rem; border-radius: 8px; border-left: 4px solid var(--warning-color);
+            white-space: pre-wrap;
+        }
+
+        /* Files */
+        .file-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem;
+        }
+        .file-card {
+            border: 1px solid var(--border-light); border-radius: 10px; overflow: hidden; background: var(--background-secondary);
+        }
+        .file-thumb {
+            width: 100%; height: 140px; object-fit: cover; display: block; background: #f2f2f2;
+        }
+        .file-info {
+            padding: .6rem .75rem; display: flex; align-items: center; justify-content: space-between; gap: .5rem;
+        }
+        .file-name {
+            font-size: .9rem; font-weight: 600; color: var(--text-color); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1;
+        }
+        .file-link {
+            background: var(--secondary-color); color: #fff; border: none; padding: .35rem .6rem; border-radius: 6px; font-size: .8rem; text-decoration: none;
+        }
+
+        /* Actions */
+        .action-buttons {
+            display: flex; flex-wrap: wrap; gap: .75rem; margin-top: .5rem;
+        }
+        .btn {
+            padding: .75rem 1rem; border: none; border-radius: 8px; font-weight: 700; display: inline-flex; align-items: center; gap: .5rem; cursor: pointer;
+        }
+        .btn-primary { background: var(--primary-color); color: #fff; }
+        .btn-secondary { background: var(--background-secondary); color: var(--text-color); border: 1px solid var(--border-color); }
+        .btn-success { background: var(--gradient-success); color: #fff; }
+        .btn-danger { background: var(--danger-color); color: #fff; }
+        .btn:disabled { opacity: .6; cursor: not-allowed; }
+
+        /* Alerts */
+        .alert { padding: 1rem; border-radius: 8px; margin-bottom: 1rem; font-weight: 600; display: none; }
+        .alert.show { display: block; }
+        .alert-success { background: rgba(39,174,96,.12); color: var(--success-color); border: 1px solid rgba(39,174,96,.25); }
+        .alert-error { background: rgba(231,76,60,.12); color: var(--danger-color); border: 1px solid rgba(231,76,60,.25); }
+        .alert-info { background: rgba(52,152,219,.12); color: #2980b9; border: 1px solid rgba(52,152,219,.25); }
+
+        /* Accessibility */
+        *:focus-visible { outline: 2px solid var(--primary-color); outline-offset: 2px; }
+
+        /* Print */
+        @media print {
+            .back-btn, .action-buttons, .alert, .status-badge { display: none !important; }
+            body { background: #fff; }
+            .container { max-width: 100%; padding: 0; }
+            .quote-header, .card, .quote-section { box-shadow: none; border: 1px solid #eee; border-radius: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Alerts -->
+        <div class="alert alert-error" id="errorAlert" role="alert"></div>
+        <div class="alert alert-success" id="successAlert" role="alert"></div>
+        <div class="alert alert-info" id="infoAlert" role="alert"></div>
+
+        <!-- Loading -->
+        <div class="loading-container" id="loadingContainer">
+            <div class="spinner"></div>
+        </div>
+
+        <!-- Content -->
+        <div id="content" style="display:none;">
+            <div class="quote-header">
+                <a href="/account/quotes.html" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Quotes
+                </a>
+
+                <div>
+                    <span class="web-badge"><i class="fas fa-globe"></i> Website Lead</span>
+                    <span class="status-badge" id="statusBadge">PENDING</span>
+                </div>
+
+                <h1 class="quote-title" id="title">Web Quote</h1>
+                <div class="quote-sub" id="subtitle">Submitted via website</div>
+
+                <div class="quote-meta">
+                    <div class="meta-item">
+                        <div class="meta-value" id="budget">£0</div>
+                        <div class="meta-label">Estimated Budget</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-value" id="submittedAt">-</div>
+                        <div class="meta-label">Submitted</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-value" id="city">-</div>
+                        <div class="meta-label">City</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-value" id="source">Website</div>
+                        <div class="meta-label">Source</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                <div>
+                    <!-- Project Details -->
+                    <div class="card">
+                        <div class="section-title">
+                            <span class="section-icon"><i class="fas fa-tools"></i></span>
+                            Project Details
+                        </div>
+
+                        <div class="kv-row">
+                            <div class="kv-label">Service Type</div>
+                            <div class="kv-value" id="serviceType">-</div>
+                        </div>
+                        <div class="kv-row">
+                            <div class="kv-label">Preferred Timeline</div>
+                            <div class="kv-value" id="timeline">-</div>
+                        </div>
+                        <div class="kv-row">
+                            <div class="kv-label">Property Type</div>
+                            <div class="kv-value" id="propertyType">-</div>
+                        </div>
+
+                        <div class="section-title" style="margin-top:1rem;">
+                            <span class="section-icon"><i class="fas fa-align-left"></i></span>
+                            Project Description
+                        </div>
+                        <div class="notes-box" id="projectDescription">No description provided.</div>
+
+                        <div class="section-title" style="margin-top:1rem;">
+                            <span class="section-icon"><i class="fas fa-circle-info"></i></span>
+                            Additional Information
+                        </div>
+                        <div class="notes-box" id="additionalInfo">None</div>
+
+                        <div class="section-title" style="margin-top:1rem;">
+                            <span class="section-icon"><i class="fas fa-sterling-sign"></i></span>
+                            Budget Notes
+                        </div>
+                        <div class="notes-box" id="budgetNotes">None</div>
+                    </div>
+
+                    <!-- Attachments -->
+                    <div class="card">
+                        <div class="section-title">
+                            <span class="section-icon"><i class="fas fa-paperclip"></i></span>
+                            Attachments
+                        </div>
+                        <div id="filesEmpty" class="muted" style="padding:.25rem 0 .75rem 0;">No files uploaded.</div>
+                        <div class="file-grid" id="fileGrid"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <!-- Customer -->
+                    <div class="card">
+                        <div class="section-title">
+                            <span class="section-icon"><i class="fas fa-user"></i></span>
+                            Customer Details
+                        </div>
+
+                        <div class="kv-row">
+                            <div class="kv-label">Name</div>
+                            <div class="kv-value" id="customerName">-</div>
+                        </div>
+                        <div class="kv-row">
+                            <div class="kv-label">Email</div>
+                            <div class="kv-value" id="customerEmail">-</div>
+                        </div>
+                        <div class="kv-row">
+                            <div class="kv-label">Phone</div>
+                            <div class="kv-value" id="customerPhone">-</div>
+                        </div>
+                        <div class="kv-row">
+                            <div class="kv-label">Address</div>
+                            <div class="kv-value" id="customerAddress">-</div>
+                        </div>
+                        <div class="kv-row">
+                            <div class="kv-label">How Heard</div>
+                            <div class="kv-value" id="hearAbout">-</div>
+                        </div>
+                        <div class="kv-row">
+                            <div class="kv-label">Preferred Contact</div>
+                            <div class="kv-value" id="preferredContact">-</div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="card">
+                        <div class="section-title">
+                            <span class="section-icon"><i class="fas fa-cogs"></i></span>
+                            Actions
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" id="editBtn">
+                                <i class="fas fa-edit"></i> Edit (Web)
+                            </button>
+                            <button class="btn btn-success" id="acceptBtn">
+                                <i class="fas fa-check"></i> Accept & Create Job
+                            </button>
+                            <button class="btn btn-secondary" id="downloadPdfBtn">
+                                <i class="fas fa-file-pdf"></i> Download PDF
+                            </button>
+                            <button class="btn btn-secondary" id="printBtn">
+                                <i class="fas fa-print"></i> Print
+                            </button>
+                            <button class="btn btn-danger" id="deleteBtn">
+                                <i class="fas fa-trash"></i> Delete Web Quote
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBI1M38HZH8-xY3nfoKmqoitmggq3C8zKE",
+            authDomain: "buildinggroup-4f8b9.firebaseapp.com",
+            projectId: "buildinggroup-4f8b9",
+            storageBucket: "buildinggroup-4f8b9.firebasestorage.app",
+            messagingSenderId: "353000992011",
+            appId: "1:353000992011:web:c834310d7d79dd1bf0c60e",
+            measurementId: "G-DF11Q5PZRT"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Globals
+        let currentUser = null;
+        let webQuoteId = null;
+        let webQuote = null;
+
+        // Helpers
+        function showAlert(type, msg) {
+            const el = document.getElementById(type + 'Alert');
+            if (!el) return;
+            el.textContent = msg;
+            el.classList.add('show');
+            setTimeout(() => el.classList.remove('show'), 6000);
+        }
+        function asDate(v) {
+            if (!v) return null;
+            if (typeof v.toDate === 'function') return v.toDate();
+            if (v instanceof Date) return v;
+            if (typeof v === 'number') return new Date(v);
+            if (typeof v === 'string') {
+                const d = new Date(v);
+                return isNaN(d) ? null : d;
+            }
+            return null;
+        }
+        function humanizeService(s) {
+            if (!s) return 'Project';
+            return s.replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        }
+        function getParamOrStorage() {
+            const p = new URLSearchParams(window.location.search).get('id');
+            return p || localStorage.getItem('selectedWebQuoteId') || '';
+        }
+        function setStatusBadge(s) {
+            const badge = document.getElementById('statusBadge');
+            const status = (s || 'pending').toLowerCase();
+            badge.textContent = status.toUpperCase();
+            badge.className = 'status-badge ' + status;
+        }
+        function moneyGBP(n) {
+            const v = parseFloat(n || 0);
+            return '£' + (isNaN(v) ? 0 : v).toLocaleString();
+        }
+
+        // Auth gate
+        function checkAuth() {
+            return new Promise((resolve) => {
+                const un = auth.onAuthStateChanged(u => {
+                    un();
+                    if (u && u.emailVerified) {
+                        currentUser = u;
+                        resolve(true);
+                    } else {
+                        showAlert('error', 'Please login to view web quote details');
+                        setTimeout(() => { window.location.href = '/account/login.html'; }, 1800);
+                        resolve(false);
+                    }
+                });
+            });
+        }
+
+        // Load web quote doc
+        async function loadWebQuote() {
+            try {
+                const doc = await db.collection('public_quotes').doc(webQuoteId).get();
+                if (!doc.exists) {
+                    showAlert('error', 'Web quote not found');
+                    setTimeout(() => { window.location.href = '/account/quotes.html'; }, 1800);
+                    return false;
+                }
+                webQuote = { id: doc.id, ...doc.data() };
+                renderWebQuote();
+                return true;
+            } catch (e) {
+                console.error('Error loading web quote', e);
+                showAlert('error', 'Failed to load web quote');
+                return false;
+            }
+        }
+
+        // Render UI
+        function renderWebQuote() {
+            const fullName = [webQuote.firstName, webQuote.lastName].filter(Boolean).join(' ').trim() || 'Web Customer';
+            const title = `${humanizeService(webQuote.serviceType || 'project')} - ${fullName}`;
+            document.getElementById('title').textContent = title;
+            document.getElementById('subtitle').textContent = `Submitted via website`;
+            setStatusBadge(webQuote.status);
+
+            const created = asDate(webQuote.createdAt) || asDate(webQuote.timestamp);
+            document.getElementById('submittedAt').textContent = created ? created.toLocaleString() : 'Unknown';
+            document.getElementById('city').textContent = (webQuote.city || 'Unknown').toString().charAt(0).toUpperCase() + (webQuote.city || 'Unknown').toString().slice(1);
+            document.getElementById('budget').textContent = moneyGBP(webQuote.budget);
+            document.getElementById('source').textContent = webQuote.source ? humanizeService(webQuote.source) : 'Website';
+
+            document.getElementById('serviceType').textContent = humanizeService(webQuote.serviceType || 'project');
+            document.getElementById('timeline').textContent = humanizeService(webQuote.timeline || 'unspecified');
+            document.getElementById('propertyType').textContent = humanizeService(webQuote.propertyType || 'unspecified');
+
+            const desc = (webQuote.projectDescription || '').trim();
+            document.getElementById('projectDescription').textContent = desc || 'No description provided.';
+
+            const addl = (webQuote.additionalInfo || '').trim();
+            document.getElementById('additionalInfo').textContent = addl || 'None';
+
+            const bNotes = (webQuote.budgetNotes || '').trim();
+            document.getElementById('budgetNotes').textContent = bNotes || 'None';
+
+            // Customer
+            document.getElementById('customerName').textContent = fullName;
+            document.getElementById('customerEmail').textContent = webQuote.email || 'Not provided';
+            document.getElementById('customerPhone').textContent = webQuote.phone || 'Not provided';
+            const addr = [webQuote.address, webQuote.postcode].filter(Boolean).join(', ');
+            document.getElementById('customerAddress').textContent = addr || 'Not provided';
+            document.getElementById('hearAbout').textContent = humanizeService(webQuote.hearAbout || 'unspecified');
+            document.getElementById('preferredContact').textContent = humanizeService(webQuote.preferredContact || 'any');
+
+            // Files
+            const grid = document.getElementById('fileGrid');
+            const empty = document.getElementById('filesEmpty');
+            grid.innerHTML = '';
+            const files = Array.isArray(webQuote.files) ? webQuote.files : [];
+            if (!files.length) {
+                empty.style.display = 'block';
+            } else {
+                empty.style.display = 'none';
+                files.forEach((f, idx) => {
+                    const url = f.url || '#';
+                    const name = f.name || `file_${idx+1}`;
+                    const type = (f.type || '').toLowerCase();
+                    const isImage = type.startsWith('image/');
+                    const isVideo = type.startsWith('video/');
+                    const thumb = isImage ? url : (isVideo ? '' : '');
+
+                    const card = document.createElement('div');
+                    card.className = 'file-card';
+
+                    if (thumb) {
+                        const img = document.createElement('img');
+                        img.src = thumb;
+                        img.alt = name;
+                        img.className = 'file-thumb';
+                        card.appendChild(img);
+                    } else {
+                        const ph = document.createElement('div');
+                        ph.className = 'file-thumb';
+                        ph.style.display = 'flex';
+                        ph.style.alignItems = 'center';
+                        ph.style.justifyContent = 'center';
+                        ph.style.color = 'var(--text-secondary)';
+                        ph.style.fontSize = '2rem';
+                        ph.innerHTML = '<i class="fas fa-file"></i>';
+                        card.appendChild(ph);
+                    }
+
+                    const info = document.createElement('div');
+                    info.className = 'file-info';
+                    const fn = document.createElement('div');
+                    fn.className = 'file-name';
+                    fn.title = name;
+                    fn.textContent = name;
+                    const a = document.createElement('a');
+                    a.className = 'file-link';
+                    a.href = url;
+                    a.target = '_blank';
+                    a.rel = 'noopener';
+                    a.textContent = 'Open';
+                    info.appendChild(fn);
+                    info.appendChild(a);
+                    card.appendChild(info);
+
+                    grid.appendChild(card);
+                });
+            }
+
+            // Show content
+            document.getElementById('loadingContainer').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+        }
+
+        // Actions
+        function goToWebEdit() {
+            localStorage.setItem('selectedWebQuoteId', webQuoteId);
+            window.location.href = `/account/web-quote-edit.html?id=${encodeURIComponent(webQuoteId)}`;
+        }
+
+        async function acceptAndCreateJob() {
+            if (!currentUser || !webQuote) return;
+            const btn = document.getElementById('acceptBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Working...';
+
+            try {
+                // 1) Mark the public web quote as accepted
+                const publicRef = db.collection('public_quotes').doc(webQuoteId);
+                await publicRef.update({
+                    status: 'accepted',
+                    acceptedBy: currentUser.uid,
+                    acceptedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                // 2) Create a Job under the current user's jobs collection
+                const fullName = [webQuote.firstName, webQuote.lastName].filter(Boolean).join(' ').trim() || 'Web Customer';
+                const jobDoc = await db.collection('users').doc(currentUser.uid).collection('jobs').add({
+                    // Job identity
+                    jobId: null, // will be set to doc id after add
+                    title: `${humanizeService(webQuote.serviceType || 'project')} - ${fullName}`,
+                    status: 'open',
+
+                    // Links
+                    source: 'website_quote_form',
+                    publicQuoteId: webQuoteId,
+                    publicQuoteRef: `public_quotes/${webQuoteId}`,
+
+                    // Customer
+                    customer: {
+                        firstName: webQuote.firstName || '',
+                        lastName: webQuote.lastName || '',
+                        fullName,
+                        email: webQuote.email || '',
+                        phone: webQuote.phone || '',
+                        address: [webQuote.address, webQuote.postcode].filter(Boolean).join(', ')
+                    },
+
+                    // Project
+                    location: (webQuote.city || 'unknown').toString().toLowerCase(),
+                    budget: parseFloat(webQuote.budget || 0) || 0,
+                    notes: (webQuote.projectDescription || ''),
+                    attachments: Array.isArray(webQuote.files) ? webQuote.files : [],
+
+                    // Timestamps
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                // Set jobId field to the Firestore doc id
+                await jobDoc.update({ jobId: jobDoc.id });
+
+                // 3) Back-link job on the public quote (optional but useful)
+                await publicRef.update({
+                    jobRef: `users/${currentUser.uid}/jobs/${jobDoc.id}`,
+                    jobId: jobDoc.id
+                });
+
+                // Update UI
+                setStatusBadge('accepted');
+                showAlert('success', `Quote accepted and Job created.`);
+            } catch (e) {
+                console.error('Accept/create job error', e);
+                showAlert('error', e.message || 'Failed to accept and create job');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-check"></i> Accept & Create Job';
+            }
+        }
+
+        async function deleteWebQuote() {
+            if (!currentUser || !webQuoteId) return;
+            const ok = confirm('Delete this web quote? This action cannot be undone.');
+            if (!ok) return;
+
+            const btn = document.getElementById('deleteBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+
+            try {
+                await db.collection('public_quotes').doc(webQuoteId).delete();
+                showAlert('success', 'Web quote deleted.');
+                setTimeout(() => { window.location.href = '/account/quotes.html'; }, 800);
+            } catch (e) {
+                console.error('Delete web quote error', e);
+                showAlert('error', e.message || 'Failed to delete web quote');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-trash"></i> Delete Web Quote';
+            }
+        }
+
+        function downloadPdf() {
+            const el = document.getElementById('content');
+            if (!el) return;
+
+            // Wait a tick to ensure fonts/icons are painted
+            setTimeout(() => {
+                const opt = {
+                    margin:       10,
+                    filename:     `Web-Quote-${webQuoteId}.pdf`,
+                    image:        { type: 'jpeg', quality: 0.95 },
+                    html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                    pagebreak:    { mode: ['css', 'legacy'] }
+                };
+                // html2pdf bundle handles multi-page automatically
+                // Only include the main content area (excludes hidden elements)
+                html2pdf().set(opt).from(el).save();
+            }, 50);
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', async () => {
+            webQuoteId = getParamOrStorage();
+            if (!webQuoteId) {
+                showAlert('error', 'Missing web quote ID');
+                setTimeout(() => { window.location.href = '/account/quotes.html'; }, 1500);
+                return;
+            }
+
+            const ok = await checkAuth();
+            if (!ok) return;
+
+            const loaded = await loadWebQuote();
+            if (!loaded) return;
+
+            // Wire actions
+            document.getElementById('editBtn').addEventListener('click', goToWebEdit);
+            document.getElementById('acceptBtn').addEventListener('click', acceptAndCreateJob);
+            document.getElementById('downloadPdfBtn').addEventListener('click', downloadPdf);
+            document.getElementById('printBtn').addEventListener('click', () => window.print());
+            document.getElementById('deleteBtn').addEventListener('click', deleteWebQuote);
+        });
+    </script>
+</body>
+</html>
