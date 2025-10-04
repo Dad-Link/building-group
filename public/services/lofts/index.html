@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loft Conversions by Area | All UK Locations | Building Group</title>
+    <meta name="description" content="Professional loft conversions across the UK. Find expert loft conversion specialists in your area. Manchester, Liverpool, Leeds, Cheshire and 200+ UK locations covered.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary-color: #e74c3c;
+            --primary-dark: #c0392b;
+            --secondary-color: #3498db;
+            --dark-color: #2c3e50;
+            --light-gray: #f8f9fa;
+            --white: #ffffff;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background: var(--light-gray);
+        }
+        
+        .header {
+            background: var(--white);
+            padding: 1rem 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            color: var(--primary-color);
+            font-size: 24px;
+            font-weight: 800;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .main {
+            padding-top: 100px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #6c757d;
+            margin-bottom: 3rem;
+        }
+        
+        .areas-section {
+            margin-bottom: 4rem;
+        }
+        
+        .areas-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+        }
+        
+        .areas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+        
+        .area-link {
+            background: white;
+            padding: 1.2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 2px solid transparent;
+        }
+        
+        .area-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(231, 76, 60, 0.15);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .area-link::before {
+            content: '🏗️';
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        .search-box {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 2rem;
+            padding: 1rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 50px;
+            font-size: 1rem;
+            display: block;
+        }
+        
+        .stats {
+            background: var(--primary-color);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+        
+        .stat-item h3 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-item p {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <a href="/" class="logo">
+                <i class="fas fa-building"></i>
+                Building Group
+            </a>
+        </nav>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <a href="/services/loft-conversions" class="back-link">← Back to Loft Conversions</a>
+            
+            <h1>Loft Conversions Across the UK</h1>
+            <p class="subtitle">Find professional loft conversion specialists in your area. Expert dormer, hip-to-gable, and mansard conversions.</p>
+            
+            <input type="text" class="search-box" id="searchBox" placeholder="Search for your area..." onkeyup="filterAreas()">
+            
+            <div class="stats">
+                <h2>Trusted Loft Conversion Specialists</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <h3>200+</h3>
+                        <p>UK Areas Covered</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>5,000+</h3>
+                        <p>Lofts Converted</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>4.9★</h3>
+                        <p>Customer Rating</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>15+</h3>
+                        <p>Years Experience</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="areas-section">
+                <h2>🏙️ Greater Manchester</h2>
+                <div class="areas-grid" id="manchester-areas">
+                    <a href="manchester-loft-conversions.html" class="area-link">Manchester</a>
+                    <a href="salford-loft-conversions.html" class="area-link">Salford</a>
+                    <a href="bolton-loft-conversions.html" class="area-link">Bolton</a>
+                    <a href="bury-loft-conversions.html" class="area-link">Bury</a>
+                    <a href="oldham-loft-conversions.html" class="area-link">Oldham</a>
+                    <a href="rochdale-loft-conversions.html" class="area-link">Rochdale</a>
+                    <a href="stockport-loft-conversions.html" class="area-link">Stockport</a>
+                    <a href="tameside-loft-conversions.html" class="area-link">Tameside</a>
+                    <a href="trafford-loft-conversions.html" class="area-link">Trafford</a>
+                    <a href="wigan-loft-conversions.html" class="area-link">Wigan</a>
+                    <a href="altrincham-loft-conversions.html" class="area-link">Altrincham</a>
+                    <a href="sale-loft-conversions.html" class="area-link">Sale</a>
+                    <a href="stretford-loft-conversions.html" class="area-link">Stretford</a>
+                    <a href="urmston-loft-conversions.html" class="area-link">Urmston</a>
+                    <a href="partington-loft-conversions.html" class="area-link">Partington</a>
+                    <a href="denton-loft-conversions.html" class="area-link">Denton</a>
+                    <a href="hyde-loft-conversions.html" class="area-link">Hyde</a>
+                    <a href="ashton-under-lyne-loft-conversions.html" class="area-link">Ashton-under-Lyne</a>
+                    <a href="stalybridge-loft-conversions.html" class="area-link">Stalybridge</a>
+                    <a href="droylsden-loft-conversions.html" class="area-link">Droylsden</a>
+                    <a href="failsworth-loft-conversions.html" class="area-link">Failsworth</a>
+                    <a href="prestwich-loft-conversions.html" class="area-link">Prestwich</a>
+                    <a href="whitefield-loft-conversions.html" class="area-link">Whitefield</a>
+                    <a href="radcliffe-loft-conversions.html" class="area-link">Radcliffe</a>
+                    <a href="swinton-loft-conversions.html" class="area-link">Swinton</a>
+                    <a href="eccles-loft-conversions.html" class="area-link">Eccles</a>
+                    <a href="walkden-loft-conversions.html" class="area-link">Walkden</a>
+                    <a href="worsley-loft-conversions.html" class="area-link">Worsley</a>
+                    <a href="irlam-loft-conversions.html" class="area-link">Irlam</a>
+                    <a href="farnworth-loft-conversions.html" class="area-link">Farnworth</a>
+                    <a href="kearsley-loft-conversions.html" class="area-link">Kearsley</a>
+                    <a href="horwich-loft-conversions.html" class="area-link">Horwich</a>
+                    <a href="westhoughton-loft-conversions.html" class="area-link">Westhoughton</a>
+                    <a href="atherton-loft-conversions.html" class="area-link">Atherton</a>
+                    <a href="tyldesley-loft-conversions.html" class="area-link">Tyldesley</a>
+                    <a href="leigh-loft-conversions.html" class="area-link">Leigh</a>
+                    <a href="hindley-loft-conversions.html" class="area-link">Hindley</a>
+                    <a href="cheadle-loft-conversions.html" class="area-link">Cheadle</a>
+                    <a href="gatley-loft-conversions.html" class="area-link">Gatley</a>
+                    <a href="bramhall-loft-conversions.html" class="area-link">Bramhall</a>
+                    <a href="hazel-grove-loft-conversions.html" class="area-link">Hazel Grove</a>
+                    <a href="marple-loft-conversions.html" class="area-link">Marple</a>
+                    <a href="romiley-loft-conversions.html" class="area-link">Romiley</a>
+                    <a href="bredbury-loft-conversions.html" class="area-link">Bredbury</a>
+                    <a href="woodley-loft-conversions.html" class="area-link">Woodley</a>
+                    <a href="reddish-loft-conversions.html" class="area-link">Reddish</a>
+                    <a href="heaton-chapel-loft-conversions.html" class="area-link">Heaton Chapel</a>
+                    <a href="heaton-moor-loft-conversions.html" class="area-link">Heaton Moor</a>
+                    <a href="heaton-norris-loft-conversions.html" class="area-link">Heaton Norris</a>
+                    <a href="didsbury-loft-conversions.html" class="area-link">Didsbury</a>
+                    <a href="chorlton-loft-conversions.html" class="area-link">Chorlton</a>
+                    <a href="withington-loft-conversions.html" class="area-link">Withington</a>
+                    <a href="fallowfield-loft-conversions.html" class="area-link">Fallowfield</a>
+                </div>
+            </div>
+            
+            <div class="areas-section">
+                <h2>⚓ Liverpool & Merseyside</h2>
+                <div class="areas-grid">
+                    <a href="liverpool-loft-conversions.html" class="area-link">Liverpool</a>
+                    <a href="birkenhead-loft-conversions.html" class="area-link">Birkenhead</a>
+                    <a href="wallasey-loft-conversions.html" class="area-link">Wallasey</a>
+                    <a href="bootle-loft-conversions.html" class="area-link">Bootle</a>
+                    <a href="crosby-loft-conversions.html" class="area-link">Crosby</a>
+                    <a href="formby-loft-conversions.html" class="area-link">Formby</a>
+                    <a href="southport-loft-conversions.html" class="area-link">Southport</a>
+                    <a href="st-helens-loft-conversions.html" class="area-link">St Helens</a>
+                </div>
+            </div>
+            
+            <div class="areas-section">
+                <h2>🏛️ Leeds & West Yorkshire</h2>
+                <div class="areas-grid">
+                    <a href="leeds-loft-conversions.html" class="area-link">Leeds</a>
+                    <a href="bradford-loft-conversions.html" class="area-link">Bradford</a>
+                    <a href="wakefield-loft-conversions.html" class="area-link">Wakefield</a>
+                    <a href="huddersfield-loft-conversions.html" class="area-link">Huddersfield</a>
+                    <a href="halifax-loft-conversions.html" class="area-link">Halifax</a>
+                    <a href="dewsbury-loft-conversions.html" class="area-link">Dewsbury</a>
+                    <a href="batley-loft-conversions.html" class="area-link">Batley</a>
+                    <a href="keighley-loft-conversions.html" class="area-link">Keighley</a>
+                </div>
+            </div>
+            
+            <div class="areas-section">
+                <h2>🌳 Cheshire</h2>
+                <div class="areas-grid">
+                    <a href="chester-loft-conversions.html" class="area-link">Chester</a>
+                    <a href="warrington-loft-conversions.html" class="area-link">Warrington</a>
+                    <a href="crewe-loft-conversions.html" class="area-link">Crewe</a>
+                    <a href="macclesfield-loft-conversions.html" class="area-link">Macclesfield</a>
+                    <a href="wilmslow-loft-conversions.html" class="area-link">Wilmslow</a>
+                    <a href="knutsford-loft-conversions.html" class="area-link">Knutsford</a>
+                    <a href="alderley-edge-loft-conversions.html" class="area-link">Alderley Edge</a>
+                    <a href="congleton-loft-conversions.html" class="area-link">Congleton</a>
+                </div>
+            </div>
+            
+            <p style="text-align: center; margin-top: 3rem; font-size: 1.1rem;">
+                ...and 150+ more locations across the UK. Can't find your area? 
+                <a href="../../contact.html" style="color: var(--primary-color); font-weight: 600;">Contact us</a> - we cover all UK locations!
+            </p>
+        </div>
+    </main>
+    
+    <script>
+        function filterAreas() {
+            const searchBox = document.getElementById('searchBox');
+            const filter = searchBox.value.toLowerCase();
+            const areaLinks = document.querySelectorAll('.area-link');
+            
+            areaLinks.forEach(link => {
+                const text = link.textContent.toLowerCase();
+                if (text.includes(filter)) {
+                    link.style.display = 'flex';
+                } else {
+                    link.style.display = 'none';
+                }
+            });
+        }
+        
+        console.log('Loft Conversions Area Index - Building Group - 2025-10-04T19:00:50Z');
+    </script>
+</body>
+</html>
