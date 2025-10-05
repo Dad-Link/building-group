@@ -606,7 +606,7 @@ for area in "${areas[@]}"; do
             content: "";
             position: absolute;
             inset: 0;
-            background-image: url('/assets/${filename}-loft-hero.jpg');
+            background-image: url('../../assets/loft-extension-dormer.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -965,13 +965,33 @@ for area in "${areas[@]}"; do
             border-top: 1px solid #34495e;
             color: #7f8c8d;
         }
+        .loft-image {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .loft-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .loft-type:hover .loft-image img {
+            transform: scale(1.05);
+        }
 
         /* Responsive Design */
         @media (max-width: 768px) {
             .hero-content h1 {
                 font-size: 2.5rem;
             }
-
+            .loft-image {
+                height: 250px;
+            }
             .two-column {
                 grid-template-columns: 1fr;
                 gap: 2rem;
@@ -1108,7 +1128,7 @@ for area in "${areas[@]}"; do
                 <div class="content-image">
                     <div style="position: relative; height: 400px; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);">
                         <img
-                            src="/assets/${filename}-loft-work.jpg"
+                            src="../../assets/building-services.jpg"
                             alt="${escaped_area} loft conversion specialist at work"
                             loading="lazy"
                             style="width: 100%; height: 100%; object-fit: cover;">
@@ -1135,7 +1155,7 @@ for area in "${areas[@]}"; do
                 <div class="loft-type">
                     <div class="loft-image">
                         <img
-                            src="/assets/${filename}-velux.jpg"
+                            src="../../assets/velux-loft-conversion.jpg"
                             alt="Velux Loft Conversion in ${escaped_area}"
                             loading="lazy"
                             style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
@@ -1155,7 +1175,7 @@ for area in "${areas[@]}"; do
                 <div class="loft-type">
                     <div class="loft-image">
                         <img
-                            src="/assets/${filename}-dormer.jpg"
+                            src="../../assets/dormer-loft-conversion.jpg"
                             alt="Dormer Loft Conversion in ${escaped_area}"
                             loading="lazy"
                             style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
@@ -1175,7 +1195,7 @@ for area in "${areas[@]}"; do
                 <div class="loft-type">
                     <div class="loft-image">
                         <img
-                            src="/assets/${filename}-hip-gable.jpg"
+                            src="../../assets/hip-to-gable-conversion.jpg"
                             alt="Hip-to-Gable Conversion in ${escaped_area}"
                             loading="lazy"
                             style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
@@ -1195,7 +1215,7 @@ for area in "${areas[@]}"; do
                 <div class="loft-type">
                     <div class="loft-image">
                         <img
-                            src="/assets/${filename}-mansard.jpg"
+                            src="../../assets/mansard-loft-conversion.jpg"
                             alt="Mansard Loft Conversion in ${escaped_area}"
                             loading="lazy"
                             style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
@@ -1450,46 +1470,52 @@ for area in "${areas[@]}"; do
         </div>
     </section>
 
-    <!-- Recent Projects -->
-    <section class="content-section">
-        <div class="container">
-            <h2 class="section-title">Recent ${escaped_area} Loft Conversion Projects</h2>
-            <div class="loft-types">
-                <div class="loft-type">
-                    <div class="loft-image">
-                        <i class="fas fa-home"></i>
-                    </div>
-                    <div class="loft-content">
-                        <h4>Victorian Terrace - ${escaped_area}</h4>
-                        <p>Hip-to-gable conversion creating master bedroom with ensuite in a Victorian ${escaped_area} terrace. Added 30sqm of living space.</p>
-                        <p style="color: var(--primary-color); font-weight: 600;">Project Value: £48,000</p>
-                    </div>
+<!-- Recent Projects -->
+<section class="content-section">
+    <div class="container">
+        <h2 class="section-title">Recent ${escaped_area} Loft Conversion Projects</h2>
+        <div class="loft-types">
+            <div class="loft-type">
+                <div class="loft-image">
+                    <img src="../../assets/hip-to-gable-conversion-2.jpg"
+                         alt="Hip to Gable Loft Conversion in ${escaped_area}"
+                         loading="lazy">
                 </div>
-
-                <div class="loft-type">
-                    <div class="loft-image">
-                        <i class="fas fa-building"></i>
-                    </div>
-                    <div class="loft-content">
-                        <h4>Modern Semi - ${escaped_area}</h4>
-                        <p>Dormer loft conversion in modern ${escaped_area} semi-detached. Created two bedrooms and bathroom for growing family.</p>
-                        <p style="color: var(--primary-color); font-weight: 600;">Project Value: £42,000</p>
-                    </div>
+                <div class="loft-content">
+                    <h4>Victorian Terrace - ${escaped_area}</h4>
+                    <p>Hip-to-gable conversion creating master bedroom with ensuite in a Victorian ${escaped_area} terrace. Added 30sqm of living space.</p>
+                    <p style="color: var(--primary-color); font-weight: 600;">Project Value: £48,000</p>
                 </div>
+            </div>
 
-                <div class="loft-type">
-                    <div class="loft-image">
-                        <i class="fas fa-city"></i>
-                    </div>
-                    <div class="loft-content">
-                        <h4>Period Property - ${escaped_area}</h4>
-                        <p>Mansard conversion in ${escaped_area} conservation area. Luxury master suite with dressing room and ensuite.</p>
-                        <p style="color: var(--primary-color); font-weight: 600;">Project Value: £65,000</p>
-                    </div>
+            <div class="loft-type">
+                <div class="loft-image">
+                    <img src="../../assets/dormer-loft-conversion-2.jpg"
+                         alt="Dormer Loft Conversion in ${escaped_area}"
+                         loading="lazy">
+                </div>
+                <div class="loft-content">
+                    <h4>Modern Semi - ${escaped_area}</h4>
+                    <p>Dormer loft conversion in modern ${escaped_area} semi-detached. Created two bedrooms and bathroom for growing family.</p>
+                    <p style="color: var(--primary-color); font-weight: 600;">Project Value: £42,000</p>
+                </div>
+            </div>
+
+            <div class="loft-type">
+                <div class="loft-image">
+                    <img src="../../assets/mansard-loft-conversion-2.jpg"
+                         alt="Mansard Loft Conversion in ${escaped_area}"
+                         loading="lazy">
+                </div>
+                <div class="loft-content">
+                    <h4>Period Property - ${escaped_area}</h4>
+                    <p>Mansard conversion in ${escaped_area} conservation area. Luxury master suite with dressing room and ensuite.</p>
+                    <p style="color: var(--primary-color); font-weight: 600;">Project Value: £65,000</p>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- Testimonials -->
     <section class="content-section">
